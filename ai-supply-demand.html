@@ -1,0 +1,2403 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI供需研究 · 问题推导链</title>
+  <style>
+    :root {
+      --bg: #f4f1eb;
+      --paper: #fffdf8;
+      --ink: #17211e;
+      --muted: #62706a;
+      --line: #d8d0c2;
+      --green: #1f5a43;
+      --green-dark: #1f4530;
+      --green-mid: #2e6b45;
+      --blue: #235d7d;
+      --amber: #b87030;
+      --red: #9e3a1e;
+      --purple: #6d4a7a;
+      --green-soft: #e6f0ea;
+      --blue-soft: #e5eef3;
+      --amber-soft: #f4ead8;
+      --red-soft: #f5e7e2;
+      --purple-soft: #f0e8f3;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Noto Sans SC", -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(90deg, rgba(31,90,67,0.04) 1px, transparent 1px),
+        linear-gradient(rgba(31,90,67,0.04) 1px, transparent 1px),
+        var(--bg);
+      background-size: 30px 30px;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 28px 18px 60px;
+    }
+
+    /* ── Header ── */
+    .header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .header .eyebrow {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--red);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .header h1 {
+      font-family: "Noto Serif SC", Georgia, serif;
+      font-size: clamp(28px, 4.5vw, 44px);
+      color: var(--green-dark);
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+    .header .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* ── Tabs ── */
+    .tab-bar {
+      display: flex;
+      gap: 2px;
+      border-bottom: 2px solid var(--line);
+      margin-bottom: 24px;
+    }
+    .tab-btn {
+      padding: 10px 22px;
+      border: 1px solid var(--line);
+      border-bottom: none;
+      border-radius: 6px 6px 0 0;
+      background: rgba(255,253,248,0.5);
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover { background: rgba(255,253,248,0.85); }
+    .tab-btn.active {
+      background: var(--paper);
+      color: var(--green-dark);
+      border-color: var(--line);
+      position: relative;
+      top: 2px;
+      border-bottom: 2px solid var(--paper);
+    }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── Cards ── */
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255,253,248,0.96);
+      box-shadow: 0 4px 16px rgba(30,31,27,0.06);
+      margin-bottom: 18px;
+      overflow: hidden;
+    }
+    .card-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 18px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .card-head:hover { background: rgba(230,240,234,0.3); }
+    .card-arrow {
+      font-size: 11px;
+      color: var(--muted);
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+    .card.open .card-arrow { transform: rotate(90deg); }
+    .card-tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+    .tag-phase0 { background: var(--purple-soft); color: var(--purple); }
+    .tag-phase1 { background: var(--green-soft); color: var(--green); }
+    .tag-phase2 { background: var(--blue-soft); color: var(--blue); }
+    .tag-phase3 { background: var(--amber-soft); color: var(--amber); }
+    .tag-phase4 { background: var(--red-soft); color: var(--red); }
+    .tag-phase5 { background: #f0e8f3; color: var(--purple); }
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--ink);
+      flex: 1;
+    }
+    .card-status {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      flex-shrink: 0;
+    }
+    .status-empty { background: #f0ece4; color: var(--muted); }
+    .status-wip { background: var(--amber-soft); color: var(--amber); }
+    .status-done { background: var(--green-soft); color: var(--green); }
+    .card-body {
+      display: none;
+      padding: 0 18px 16px;
+      border-top: 1px solid var(--line);
+    }
+    .card.open .card-body { display: block; padding-top: 14px; }
+
+    /* ── Body content ── */
+    .q-answer {
+      font-size: 14px;
+      color: var(--green-dark);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .q-transition {
+      font-size: 13.5px;
+      color: var(--green-dark);
+      font-weight: 600;
+      margin-top: 14px;
+      padding: 10px 14px;
+      background: var(--amber-soft);
+      border-left: 3px solid var(--amber);
+      border-radius: 0 6px 6px 0;
+    }
+    .data-point {
+      font-family: "JetBrains Mono", "SF Mono", monospace;
+      font-size: 13px;
+      background: var(--green-soft);
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+    .source-tag {
+      font-size: 11px;
+      color: var(--blue);
+      background: var(--blue-soft);
+      padding: 1px 6px;
+      border-radius: 3px;
+    }
+    .placeholder {
+      color: var(--muted);
+      font-style: italic;
+      font-size: 13px;
+      padding: 12px;
+      background: #f8f6f1;
+      border-radius: 4px;
+      text-align: center;
+    }
+    .note-box {
+      font-size: 13px;
+      padding: 12px 14px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      line-height: 1.65;
+    }
+    .note-green { background: var(--green-soft); border-left: 3px solid var(--green); }
+    .note-amber { background: var(--amber-soft); border-left: 3px solid var(--amber); }
+    .note-red { background: var(--red-soft); border-left: 3px solid var(--red); }
+    .note-blue { background: var(--blue-soft); border-left: 3px solid var(--blue); }
+    .note-purple { background: var(--purple-soft); border-left: 3px solid var(--purple); }
+
+    /* ── Handoff tab ── */
+    .handoff-section {
+      margin-bottom: 24px;
+    }
+    .handoff-section h3 {
+      font-family: "Noto Serif SC", Georgia, serif;
+      font-size: 16px;
+      color: var(--green-dark);
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--line);
+    }
+    .decision-item {
+      padding: 10px 14px;
+      background: rgba(255,253,248,0.7);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    .decision-item strong { color: var(--green-dark); }
+    .decision-date { color: var(--muted); font-size: 11px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin: 8px 0;
+    }
+    th, td {
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      text-align: left;
+    }
+    th {
+      background: var(--green-soft);
+      color: var(--green-dark);
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    /* ── Phase divider ── */
+    .phase-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 28px 0 16px;
+      font-family: "Noto Serif SC", Georgia, serif;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .phase-divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+    .phase-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 40px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+    }
+  
+    .formula-band {
+      display: flex;
+      gap: 0;
+      margin: 10px 0 12px;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .formula-band .fb-left {
+      flex: 1;
+      padding: 12px 14px;
+      background: var(--green-soft);
+      border-right: 1px solid var(--border);
+      font-size: 13px;
+      line-height: 1.9;
+    }
+    .formula-band .fb-right {
+      flex: 1;
+      padding: 12px 14px;
+      background: #f9f6f0;
+      font-size: 14px;
+      line-height: 1.9;
+    }
+    .formula-band .fb-label {
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    @media (max-width: 600px) {
+      .formula-band { flex-direction: column; }
+      .formula-band .fb-left { border-right: none; border-bottom: 1px solid var(--border); }
+    }
+    </style>
+</head>
+<body>
+<a class="site-home-link" href="index.html" aria-label="返回首页">← 返回首页</a>
+<style>
+  .site-home-link{position:fixed;z-index:9999;top:16px;left:16px;display:inline-flex;align-items:center;gap:6px;padding:9px 12px;border:1px solid rgba(32,36,30,.18);border-radius:999px;background:rgba(255,255,255,.88);backdrop-filter:blur(12px);color:#20241e;text-decoration:none;font:600 14px/1.2 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;box-shadow:0 10px 28px rgba(0,0,0,.08)}
+  .site-home-link:hover{background:#fff}
+  @media(max-width:640px){.site-home-link{top:10px;left:10px;padding:8px 10px;font-size:13px}}
+</style>
+
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="eyebrow">09 AI泡沫全景 &middot; Q3前置工具</div>
+    <h1>AI供需研究<br>问题推导链</h1>
+    <div class="subtitle">S0-S18 &middot; 19个问题 &middot; 每个数据经搜索核验后进入 &middot; v0.4</div>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('handoff')">交接</button>
+    <button class="tab-btn" onclick="switchTab('data')">数据基础</button>
+    <button class="tab-btn" onclick="switchTab('supply')">供给</button>
+    <button class="tab-btn" onclick="switchTab('demand')">需求</button>
+    <button class="tab-btn" onclick="switchTab('conclusion')">结论</button>
+  </div>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- TAB 1: 交接                                   -->
+  <!-- ════════════════════════════════════════════ -->
+  <div id="tab-handoff" class="tab-panel active">
+
+    <div class="handoff-section">
+      <h3>本文档是什么</h3>
+      <div class="note-box note-green">
+        <strong>定位</strong>：Q3的前置定量工具。回答"$7100亿买了什么、产出多少、够不够用"。<br>
+        <strong>工作方式</strong>：问题链驱动，每个问题先在对话中讨论确认，数据搜索核验后才进入HTML。<br>
+        <strong>结构</strong>：供给(S0-S12) &#8594; 需求Act 1静态(S13-S16) &#8594; 结论(S17-S18)，共19个问题。Act 2动态(S17-S21)待数据核验后填入。<br>
+        <strong>数据基础</strong>：独立tab，供给+需求侧全部关键概念和数据来源，随时查阅。
+      </div>
+    </div>
+
+    <div class="handoff-section">
+      <h3>问题链全览</h3>
+      <table>
+        <thead>
+          <tr><th>阶段</th><th>编号</th><th>问题</th><th>一句话回答</th><th>状态</th></tr>
+        </thead>
+        <tbody>
+          <tr style="background:var(--purple-soft)"><td colspan="5" style="font-weight:600;color:var(--purple);border:none;padding:6px 10px">阶段零 &middot; 为什么</td></tr>
+          <tr><td>0</td><td>S0</td><td>为什么研究AI供给？</td><td>留空，待定义</td><td>留空</td></tr>
+
+          <tr style="background:var(--green-soft)"><td colspan="5" style="font-weight:600;color:var(--green);border:none;padding:6px 10px">阶段一 &middot; 定义</td></tr>
+          <tr><td>1</td><td>S1</td><td>用户买AI，买的是什么？</td><td>智力（通用认知能力）</td><td>已填</td></tr>
+          <tr><td>1</td><td>S2</td><td>凭什么用Token计量？</td><td>所有任务底层都是token处理，行业已按$/Mtoken定价</td><td>已填</td></tr>
+          <tr><td>1</td><td>S3</td><td>怎么理解Token衡量智力？</td><td>质量×数量：模型档次×Token</td><td>已填</td></tr>
+          <tr><td>1</td><td>S4</td><td>Token产能怎么分析？</td><td>分训练（质量）和推理（数量），重点看推理</td><td>已填</td></tr>
+
+                    <tr><td>1</td><td>S5</td><td>用什么基准衡量推理产能？</td><td>活跃线程（1M上下文）= AI的"人·时"</td><td>已填</td></tr>
+
+          <tr style="background:var(--blue-soft)"><td colspan="5" style="font-weight:600;color:var(--blue);border:none;padding:6px 10px">阶段二 &middot; Token物理成本</td></tr>
+                    <tr><td>2</td><td>S6</td><td>推理token怎么占用硬件？</td><td>KV cache持续占HBM，员工笔记=KV向量</td><td style="color:var(--green);font-weight:600">已填</td></tr>
+          <tr><td>2</td><td>S7</td><td>KV cache怎么算？</td><td>GQA/MLA/CSA+HCA三条公式，V4 Pro仅0.007 MB/token</td><td style="color:var(--green);font-weight:600">已填</td></tr>
+          <tr><td>2</td><td>S8</td><td>服务1个1M任务的完整物料清单？</td><td>权重+KV+激活+系统，V4 Pro并发1,121 vs Llama 16</td><td style="color:var(--green);font-weight:600">已填</td></tr>
+          
+          
+          
+
+          <tr style="background:var(--amber-soft)"><td colspan="5" style="font-weight:600;color:var(--amber);border:none;padding:6px 10px">阶段三 &middot; 从单机到全球</td></tr>
+          <tr><td>3</td><td>S9</td><td>一台NVL72能同时服务多少？</td><td>6约束取最小值，前沿闭源约30/60/120条</td><td style="color:var(--green);font-weight:600">已填</td></tr>
+          <tr><td>3</td><td>S10</td><td>全球有多少台等效AI机器？</td><td>电力反推，8.8万-11.4万台NVL72等效</td><td>已填</td></tr>
+          <tr><td>3</td><td>S11</td><td>其中多少用于推理？</td><td>推理占比50-70%，4.4万-8.0万台</td><td>已填</td></tr>
+          <tr><td>3</td><td>S12</td><td>全球推理供给上限？</td><td>132万-960万条，分三层（前沿紧/混合中/轻量宽）</td><td>已填</td></tr>
+
+          <tr style="background:var(--red-soft)"><td colspan="5" style="font-weight:600;color:var(--red);border:none;padding:6px 10px">阶段四 &middot; 需求侧</td></tr>
+          <tr><td>4</td><td>S13</td><td>需求到底是什么，怎么和供给比？</td><td>token/day不够，必须折成NVL72机器数</td><td>已填</td></tr>
+          <tr><td>4</td><td>S14</td><td>全球每天大概跑多少token？</td><td>四路交叉验证收敛，100-300T tokens/day</td><td>已填</td></tr>
+          <tr><td>4</td><td>S15</td><td>怎么把token翻译成机器数？</td><td>任务有轻重，同一台NVL72差100倍(89万vs1.4万tokens/s)</td><td>已填</td></tr>
+          <tr><td>4</td><td>S16</td><td>折成机器数，和供给比什么结论？</td><td>需求0.8万-6.9万台 vs 供给4.4万-8.0万台，静态快照</td><td>已填</td></tr>
+
+          <tr style="background:var(--purple-soft)"><td colspan="5" style="font-weight:600;color:var(--purple);border:none;padding:6px 10px">阶段五 &middot; 审计与结论</td></tr>
+          <tr><td>5</td><td>S17</td><td>结论的边界是什么？</td><td>六项假设边界 + 六项需求低估审计</td><td>已填</td></tr>
+          <tr><td>5</td><td>S18</td><td>过剩在哪？不足在哪？</td><td>三层定位 + 四个已知未知 + 结论</td><td>已填</td></tr>
+</tbody>
+      </table>
+    </div>
+
+    <div class="handoff-section">
+      <h3>关键决策记录</h3>
+      <div class="decision-item">
+        <strong>供给 = 可被调用的能力</strong>，不是GPU数量，不是参数量。用户买的是当下完成任务的能力。<br>
+        <span class="decision-date">2026-07-01 确认</span>
+      </div>
+      <div class="decision-item">
+        <strong>Token = AI的kWh</strong>，是工业计价/计量单位。Token不等于能力，但是能力的最佳可计量代理。<br>
+        <span class="decision-date">2026-07-01 确认</span>
+      </div>
+      <div class="decision-item">
+        <strong>以1M上下文为基准衡量单位</strong>。理由：Agent工作流将以1M为主要需求，甚至可能是过渡产物。实际衡量时可折算。<br>
+        <span class="decision-date">2026-07-01 确认</span>
+      </div>
+      <div class="decision-item">
+        <strong>每个数据和结论必须搜索核验后才能进入本文档</strong>。此前研究笔记中的结论暂不可信，需重新验证。<br>
+        <span class="decision-date">2026-07-01 确认</span>
+      </div>
+      <div class="decision-item">
+        <strong>从4份HTML合并</strong>：Token物料清单(13Q) + 问题链(Q1-Q9) + 干净推导图(12步) + 从能力到硬件(Q0-Q5)。去重后形成S0-S18。<br>
+        <span class="decision-date">2026-07-03 确认</span>
+      </div>
+      <div class="decision-item">
+        <strong>公式即问题链</strong>：AI供给 = 质量 × 数量 可递归分解，每个子方程对应S链中的一个问题。所有等式等价，只是不同视角拆分。公式是骨架，问题链是血肉。<br>
+        <span class="decision-date">2026-07-03 确认</span>
+      </div>
+      <div class="decision-item">
+        <strong>同时内化两份源文件</strong>：Token物料清单 + 从能力到硬件，去重整合到统一S链。物料清单侧重硬件BOM，从能力到硬件侧重公式推导和并发分析。<br>
+        <span class="decision-date">2026-07-03 确认</span>
+      </div>
+      <div class="decision-item">
+        <strong>训练是护城河</strong>：训练是大模型企业的能力壁垒，千万到亿美元级固定成本。训练决定质量（模型档次），推理决定数量（Token产能）。<br>
+        <span class="decision-date">2026-07-03 确认</span>
+      </div>
+      <div class="decision-item">
+        <strong>合并S7+S8为新S7</strong>：per-token KV和上下文放大本质是同一公式两步，合并后问题链从19题减为18题。新增DeepSeek V4 Pro数据，硬件基线换为NVL72/GB200。停车场类比统一替换为人力类比。<br>
+        <span class="decision-date">2026-07-03 确认</span>
+      </div>
+    </div>
+      <div class="decision-item">
+        <strong>S9-S16重组问题链</strong>：整合"AI供给是否过剩_问题链.html"的全局视角。原S10-S17（翻台/模型差/全球算力/全球产能/需求×2/比较/结论）重组为新S10-S16（全球机器数/推理占比/供给上限/需求/供需对比/边界/定位）。后续需求侧再拆分为S13-S16。每张卡片增加公式位置+人话版本。<br>
+        <span class="decision-date">2026-07-03 确认</span>
+      </div>
+      <div class="decision-item">
+        <strong>需求侧拆分S13&rarr;S13-S16</strong>：供给侧12个问题逐步拆解，需求侧对称拆分：S13总量(100-300T/day, 四路交叉验证) &rarr; S14结构(token变重) &rarr; S15转换系数(差100倍) &rarr; S16供需对比(总量松/前沿紧)。结论为S17-S18。总问题19题。<br>
+        <span class="decision-date">2026-07-03 确认</span>
+      </div>
+      <div class="decision-item">
+        <strong>S10-S12供给侧落地</strong>：三个数据点经搜索核验（Gartner 93-95TWh、IEA 485TWh、NVL72 120kW）。S10电力反推8.8万-11.4万台，S11推理占比50-70%（Deloitte/Gartner/Epoch三家口径辨析），S12供给矩阵132万-960万条。供给侧推导链完成。<br>
+        <span class="decision-date">2026-07-03 确认</span>
+      </div>
+      <div class="decision-item">
+        <strong>需求侧重构：从5题压缩为4题</strong>：诊断根因——旧S13问"怎么衡量"是方法论当答案，供给侧从来没有"怎么分析"的卡片。重构后每个问题问"多少"，每个回答是下一个公式的输入变量，和供给侧对称。S13总量&rarr;S14构成&rarr;S15转换系数&rarr;S16汇总对比。<br>
+        <span class="decision-date">2026-07-05 确认</span>
+      </div>
+      <div class="decision-item">
+        <strong>需求侧Act 1重写：从slot-filling到question-driving</strong>：Codex审计诊断根因——需求侧"结构正确，但阅读驱动力不够"，是分析师填表式，不是读者跟着问题推导。重写为：S13需求到底是什么（行业用token/day&rarr;为什么不够&rarr;我们的公式）&rarr; S14全球多少token（结论先行+四路验证）&rarr; S15怎么翻译成机器数（任务有轻重）&rarr; S16静态对比（敏感性矩阵0.8万-6.9万 vs 4.4万-8万）。公式+人话合为左右横块。静态快照不能回答根问题，引出Act 2动态分析。<br>
+        <span class="decision-date">2026-07-06 确认</span>
+      </div>
+      <div class="decision-item">
+        <strong>数据基础独立为第五个tab</strong>：数据源和概念是参考资料，覆盖供给侧和需求侧全部来源和关键概念。读者随时可查阅。S13-S16维持纯问题推导。<br>
+        <span class="decision-date">2026-07-05 确认</span>
+      </div>
+
+    <div class="handoff-section">
+      <h3>核心公式：递归分解框架</h3>
+      <div class="note-box note-green" style="font-family:'JetBrains Mono',monospace;line-height:2.2;font-size:13px">
+        <b style="font-size:15px;color:var(--green-dark)">Level 0 · 产品视角（S1-S3）</b><br>
+        &nbsp;&nbsp;AI 供给 = 质量（模型档次）× 数量（Token）<br><br>
+        <b style="font-size:15px;color:var(--green-dark)">Level 1 · 五因子分解（S3→S4 公式框）</b><br>
+        &nbsp;&nbsp;AI 供给 = Token 产出量 × Token 价值<br>
+        &nbsp;&nbsp;Token 产出量 = 通电算力 × 利用率 × 推理效率 &nbsp;<span style="color:var(--muted);font-size:11px">← 数量</span><br>
+        &nbsp;&nbsp;Token 价值 &nbsp;&nbsp;= 模型能力 × 任务转化率 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--muted);font-size:11px">← 质量</span><br><br>
+        <b style="font-size:15px;color:var(--green-dark)">Level 2 · 质量侧递归（S4 训练）</b><br>
+        &nbsp;&nbsp;模型能力 = f(训练数据, 训练算力, 架构设计)<br>
+        &nbsp;&nbsp;训练算力 = 6N × 训练Token数 &nbsp;<span style="color:var(--muted);font-size:11px">← 固定成本，千万到亿美元级</span><br><br>
+        <b style="font-size:15px;color:var(--green-dark)">Level 2 · 数量侧递归（S5-S12）</b><br>
+        &nbsp;&nbsp;Token产能 = 并发数 × 吞吐量<br>
+        &nbsp;&nbsp;并发数 = 可用HBM &#247; KV cache/用户 &nbsp;<span style="color:var(--muted);font-size:11px">&#8592; S6-S8</span><br>
+        &nbsp;&nbsp;可用HBM = 总HBM &#8722; 权重占用 &nbsp;<span style="color:var(--muted);font-size:11px">&#8592; S8-S9</span><br>
+        &nbsp;&nbsp;总HBM = GPU数 &#215; 每GPU HBM &#8594; 数据中心 &#8594; 电力 &nbsp;<span style="color:var(--muted);font-size:11px">&#8592; S9-S12</span>
+      </div>
+      <div class="note-box note-amber">
+        <strong>关键洞察：所有等式等价，只是不同视角拆分同一个供给。</strong><br>
+        每个子方程对应S链中的一个问题。公式是骨架，问题链是血肉。<br>
+        硬件视角、成本视角、电力视角、效率视角——不同维度切入解决不同问题。
+      </div>
+      <div class="note-box note-blue">
+        <strong>转化链（反推路径）</strong><br>
+        电力(MW) → 算力(GPU-hours) → HBM容量(TB) → 并发数 → Token产能 → 能力<br>
+        $7100亿的投入沿这条链走，供给分析沿这条链反推。
+      </div>
+    </div>
+
+    <div class="handoff-section">
+      <h3>源文件内化进度</h3>
+      <table>
+        <thead>
+          <tr><th>源文件</th><th>章节</th><th>内容</th><th>→ 目标</th><th>状态</th></tr>
+        </thead>
+        <tbody>
+          <tr style="background:var(--green-soft)"><td colspan="5" style="font-weight:600;color:var(--green);border:none;padding:6px 10px">Token物料清单_从智力到硬件.html（1047行）</td></tr>
+          <tr><td>物料清单</td><td>&sect;1</td><td>为什么智力=Token + API定价卡</td><td>S1 + S2</td><td style="color:var(--green);font-weight:600">&#10003; 已内化</td></tr>
+          <tr><td>物料清单</td><td>&sect;2</td><td>为什么Token分训练和推理</td><td>S4</td><td style="color:var(--green);font-weight:600">&#10003; 已内化</td></tr>
+          <tr><td>物料清单</td><td>&sect;3</td><td>训练1个Token消耗多少硬件（6N公式+表格）</td><td>S4（保留结论+数据卡，丢弃详细表格）</td><td style="color:var(--green);font-weight:600">&#10003; 已内化</td></tr>
+          <tr><td>物料清单</td><td>&sect;4</td><td>推理1个Token占多少硬件（KV cache公式+6模型表）</td><td>S6-S8</td><td style="color:var(--green);font-weight:600">&#10003; 已内化</td></tr>
+          <tr><td>物料清单</td><td>&sect;5</td><td>从1个Token到1座数据中心（溯源链）</td><td>S9 + S11</td><td style="color:var(--amber);font-weight:600">待内化</td></tr>
+          <tr><td>物料清单</td><td>&sect;6</td><td>训练 vs 推理对照表</td><td>S4 附录或丢弃</td><td style="color:var(--amber);font-weight:600">待内化</td></tr>
+
+          <tr style="background:var(--blue-soft)"><td colspan="5" style="font-weight:600;color:var(--blue);border:none;padding:6px 10px">AI供给研究_从能力到硬件.html（1530行）</td></tr>
+          <tr><td>从能力到硬件</td><td>Core Ref</td><td>五因子公式 + NVL72基准 + BOM表 + 并发容量</td><td>S5 + S9</td><td style="color:var(--green);font-weight:600">&#10003; 公式已提取</td></tr>
+          <tr><td>从能力到硬件</td><td>Part I</td><td>问题推导链 Q0-Q5（定义→Token）</td><td>S0-S2（重叠，已覆盖）</td><td style="color:var(--green);font-weight:600">&#10003; 已覆盖</td></tr>
+          <tr><td>从能力到硬件</td><td>Part II &sect;1</td><td>为什么智力=Token + 定价卡</td><td>S1-S2（重叠）</td><td style="color:var(--green);font-weight:600">&#10003; 已覆盖</td></tr>
+          <tr><td>从能力到硬件</td><td>Part II &sect;2</td><td>为什么分训练和推理</td><td>S4（重叠）</td><td style="color:var(--green);font-weight:600">&#10003; 已覆盖</td></tr>
+          <tr><td>从能力到硬件</td><td>Part II &sect;3</td><td>训练1个Token（6N公式+完整BOM表）</td><td>S4（重叠，有更详细数据）</td><td style="color:var(--amber);font-weight:600">待比对</td></tr>
+          <tr><td>从能力到硬件</td><td>Part II &sect;4</td><td>推理1个Token（KV cache公式+HBM三层+6模型表+溯源链）</td><td>S6-S8</td><td style="color:var(--green);font-weight:600">&#10003; 已内化</td></tr>
+          <tr><td>从能力到硬件</td><td>Part II &sect;5</td><td>从1个Token到1座数据中心</td><td>S9-S13</td><td style="color:var(--amber);font-weight:600">待内化</td></tr>
+        <tr style="background:var(--purple-soft)"><td colspan="5" style="font-weight:600;color:var(--purple);border:none;padding:6px 10px">从能力到硬件 · 6张讲解板（素材/AI供给研究/）</td></tr>
+          <tr><td>讲解板</td><td>图0</td><td>供给全链路总览：从电力到有效智能产能</td><td>交接tab 或 S0</td><td style="color:var(--amber);font-weight:600">待分配</td></tr>
+          <tr><td>讲解板</td><td>图1</td><td>五因子供给公式树</td><td>S3&rarr;S4 公式框</td><td style="color:var(--amber);font-weight:600">待引用</td></tr>
+          <tr><td>讲解板</td><td>图2</td><td>Vera Rubin NVL72 硬件拆解</td><td>S5 或 S8</td><td style="color:var(--amber);font-weight:600">待引用</td></tr>
+          <tr><td>讲解板</td><td>图3</td><td>1M Active Context 的硬件账单</td><td>S8</td><td style="color:var(--amber);font-weight:600">待引用</td></tr>
+          <tr><td>讲解板</td><td>图4</td><td>MLA vs Dense 并发容量 5 倍差</td><td>S8</td><td style="color:var(--amber);font-weight:600">待引用</td></tr>
+          <tr><td>讲解板</td><td>图5</td><td>双天花板：容量 vs 吞吐</td><td>S7</td><td style="color:var(--amber);font-weight:600">待引用</td></tr>
+          <tr><td>讲解板</td><td>图6</td><td>从能力到硬件的推导链全景</td><td>交接tab</td><td style="color:var(--amber);font-weight:600">待引用</td></tr>
+        </tbody>
+      </table>
+      <div style="font-size:12px;color:var(--muted);margin-top:6px">
+        &#8226; &ldquo;已内化&rdquo; = 内容已整合进供给tab对应S节，数据已核验<br>
+        &#8226; &ldquo;已覆盖&rdquo; = 两份源文件重叠，该内容已被另一份覆盖<br>
+        &#8226; &ldquo;待内化&rdquo; = 源内容已读取但尚未整合，下一步工作<br>
+        &#8226; &ldquo;待比对&rdquo; = 两份源文件有同主题但不同深度的内容，需合并取优
+      </div>
+    </div>
+
+    <div class="handoff-section">
+      <h3>四个已知未知</h3>
+      <div class="note-box note-red">
+        每个未知找两个可辩护的极端值，四层复合出宽区间，宽区间本身就是诚实的认知状态。
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>未知</th><th>影响</th><th>应对</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>闭源模型KV cache架构</td><td>单token HBM占用可能差8倍</td><td>三场景估算法（开源锚点+定价/吞吐量反推）</td></tr>
+          <tr><td>2</td><td>全球GPU代际混合比</td><td>不同代硬件HBM容量/带宽差异大</td><td>用电力反推总HBM，绕开GPU清点</td></tr>
+          <tr><td>3</td><td>用户上下文长度分布</td><td>同一硬件：0.06x不足 到 206x过剩</td><td>不猜分布，做参数化：给出短/中/长三档结论</td></tr>
+          <tr><td>4</td><td>HBM翻台效率</td><td>时分复用让实际容量倍增或不变</td><td>翻台模型 vs 独占模型的区间</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="handoff-section">
+      <h3>硬件基准</h3>
+      <div class="note-box note-purple">
+        <strong>当前代</strong>：GB200 NVL72 — 13.5 TB HBM3e<br>
+        <strong>下一代</strong>：Vera Rubin NVL72 — 20.7 TB HBM4, 1.6 PB/s带宽, 260 TB/s NVLink 6<br>
+        本文档以当前代GB200为主要计算基准，Vera Rubin作为前瞻对照。
+      </div>
+    </div>
+
+    <div class="handoff-section">
+      <h3>数据来源约定</h3>
+      <table>
+        <thead><tr><th>数据类型</th><th>优先来源</th><th>标注格式</th></tr></thead>
+        <tbody>
+          <tr><td>全球AI用电</td><td>IEA / Epoch AI / Goldman Sachs</td><td>[来源, 日期, 口径]</td></tr>
+          <tr><td>硬件规格</td><td>NVIDIA官方 / AnandTech / ServeTheHome</td><td>[型号, 参数, 来源]</td></tr>
+          <tr><td>模型架构</td><td>论文 / 技术报告</td><td>[模型, 版本, 参数]</td></tr>
+          <tr><td>市场数据</td><td>公司财报 / 分析师报告</td><td>[公司, 季度, 指标]</td></tr>
+          <tr><td>需求数据</td><td>公司公开声明 / 第三方测量</td><td>[来源, 日期, 方法]</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- TAB: 数据基础                                  -->
+  <!-- ════════════════════════════════════════════ -->
+  <div id="tab-data" class="tab-panel">
+
+    <div class="handoff-section">
+      <h3>关于本页</h3>
+      <div class="note-box note-green">
+        本文分析依赖的全部数据源和关键概念汇总在这里。供给侧和需求侧各有独立的数据来源和分析概念。<br>
+        阅读供给/需求tab时遇到不理解的术语或想确认数据出处，可以回到这里查阅。
+      </div>
+    </div>
+
+    <!-- ──────── 关键概念 ──────── -->
+    <div class="handoff-section">
+      <h3>关键概念 &#183; 供给侧</h3>
+      <table>
+        <thead>
+          <tr><th style="width:14%">概念</th><th style="width:30%">是什么</th><th style="width:36%">人话</th><th style="width:8%">用在</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Token</strong></td>
+            <td>AI处理和生成的最小文本单元。所有AI任务底层都是接收token、生成token。行业按$/M token定价。</td>
+            <td>AI世界的&#8220;字&#8221;。不管让AI写代码还是聊天，底层都是token进出。就像电力按kWh计费，AI按token计费。</td>
+            <td>S1-S2</td>
+          </tr>
+          <tr>
+            <td><strong>活跃线程<br>(1M上下文)</strong></td>
+            <td>一个用户任务从开始到结束，持续占用的GPU资源。以1M token上下文为标准衡量单位。</td>
+            <td>AI工厂里的一个&#8220;工位&#8221;。被一个任务占着，任务不结束就不能给别人用。活跃线程数 = 工厂能同时开多少工位。</td>
+            <td>S5</td>
+          </tr>
+          <tr>
+            <td><strong>KV cache</strong></td>
+            <td>推理时每个token生成的Key和Value向量，驻留GPU显存直到会话结束。推理占用硬件的主要机制。</td>
+            <td>AI处理对话时积累的&#8220;工作笔记&#8221;。对话越长笔记越厚，占的桌面&#65288;显存&#65289;越大。笔记不清，新任务就坐不下。</td>
+            <td>S6-S8</td>
+          </tr>
+          <tr>
+            <td><strong>NVL72 / GB200</strong></td>
+            <td>NVIDIA当前代AI服务器平台。72块GPU，13.5TB HBM3e显存，120kW功耗。本文的硬件计算基准。</td>
+            <td>AI工厂里的&#8220;标准车间&#8221;。所有产能计算都折算成&#8220;多少个这样的车间&#8221;来比较。</td>
+            <td>S5,S8-S12</td>
+          </tr>
+          <tr>
+            <td><strong>电力反推法</strong></td>
+            <td>从全球AI用电量&#65288;公开数据&#65289;反推已部署的服务器数量。路径：电力(TWh) &#247; 8760h &#247; 单机功耗(kW) = 机器数。</td>
+            <td>统计全城有多少工厂，不用一家家去数&#8212;&#8212;看总用电量除以每家工厂的用电量就行。</td>
+            <td>S10</td>
+          </tr>
+          <tr>
+            <td><strong>供给矩阵<br>(三层)</strong></td>
+            <td>按负载复杂度分三层&#65288;前沿重/混合/轻量&#65289;估算供给上限。三层&#215;三场景 = 3&#215;3矩阵。</td>
+            <td>工厂能接多少活取决于活的难度。简单活能接很多，困难活只能接几个。分层报数比笼统说&#8220;能接X个&#8221;更诚实。</td>
+            <td>S12</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="handoff-section">
+      <h3>关键概念 &#183; 需求侧</h3>
+      <table>
+        <thead>
+          <tr><th style="width:14%">概念</th><th style="width:30%">是什么</th><th style="width:36%">人话</th><th style="width:8%">用在</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Token口径差异</strong></td>
+            <td>不同来源对&#8220;token&#8221;定义不同。API token、消费端token、reasoning token、多模态折算token各有口径。</td>
+            <td>每家公司说的&#8220;一件活&#8221;大小不一样。Google的包含搜索和办公，OpenAI的只算API。拿来直接比就像拿公里和英里比大小。</td>
+            <td>S13-S14</td>
+          </tr>
+          <tr>
+            <td><strong>四路对账</strong></td>
+            <td>四条互不依赖的路径估算需求：A.数流水(token量)、B.数钱(收入反推)、C.看行情(价格信号)、D.标定(DeepSeek全透明样本)。</td>
+            <td>要知道全城一天有多少活，不能只问一家。分别看快递单量、营业额、招工价格、再拿一家全透明小店当标尺&#8212;&#8212;四个数对得上才信。</td>
+            <td>S13</td>
+          </tr>
+          <tr>
+            <td><strong>三层负载分类</strong></td>
+            <td>按对硬件的消耗分三层：轻量&#65288;翻译/摘要/客服&#65289;、前沿&#65288;coding/reasoning&#65289;、超重&#65288;长文档/agent/多轮&#65289;。三层消耗差100倍。</td>
+            <td>同样叫&#8220;一个需求&#8221;，回一封邮件5分钟，做调研报告一周，驻场项目占人几个月。不分层就没法算需要多少人手。</td>
+            <td>S15-S17</td>
+          </tr>
+          <tr>
+            <td><strong>有效吞吐<br>vs 基准吞吐</strong></td>
+            <td>MLPerf等基准测试是实验室最优条件，生产环境要扣路由、冗余、峰值预留、延迟约束等开销。</td>
+            <td>实验室里一个人一天能搬100箱货。真上班要排队、等电梯、午休、处理突发&#8212;&#8212;实际60箱就不错了。</td>
+            <td>S16</td>
+          </tr>
+          <tr>
+            <td><strong>四个折扣因子</strong></td>
+            <td>从基准吞吐到有效吞吐的四层折扣：模型重量(2-5x) &#215; 上下文(5-50x) &#215; 延迟(2-5x) &#215; 调度(1.5-3x)，连乘约100x。</td>
+            <td>同一台机器，跑轻量翻译每秒出89万token，跑重型agent只出1.4万。四个因素叠加，同一台机器的&#8220;实际产出&#8221;差100倍。</td>
+            <td>S16</td>
+          </tr>
+          <tr>
+            <td><strong>需求机器数<br>公式</strong></td>
+            <td>需求机器数 = &#931;(某类token/day &#247; 86400 &#247; 该类单台token/s)。将token需求转换为等效机器数，可与供给直接对比。</td>
+            <td>算全城需要多少工人：每种活的总量 &#247; 每天工时 &#247; 每人每秒能干多少 = 需要多少人。按轻/中/重分别算再加总。</td>
+            <td>S16-S17</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ──────── 数据来源 ──────── -->
+    <div class="handoff-section">
+      <h3>数据来源 &#183; 供给侧</h3>
+      <table>
+        <thead>
+          <tr><th style="width:15%">来源</th><th style="width:25%">数据</th><th style="width:40%">口径与盲区</th><th style="width:8%">用在</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Gartner<br><span style="font-size:11px;color:var(--muted)">2025-05</span></td>
+            <td><strong>AI服务器全球用电<br>93-95 TWh</strong></td>
+            <td>主流数据中心分析机构。AI专项用电估算，不含通用IT</td>
+            <td>S10</td>
+          </tr>
+          <tr>
+            <td>IEA<br><span style="font-size:11px;color:var(--muted)">2024</span></td>
+            <td><strong>全球数据中心总用电<br>485 TWh</strong></td>
+            <td>全球口径，包含非AI用途。作为AI用电的上界参照</td>
+            <td>S10</td>
+          </tr>
+          <tr>
+            <td>NVIDIA 官方规格</td>
+            <td><strong>NVL72: 13.5TB HBM3e<br>72 GPU, 120kW</strong></td>
+            <td>厂商自报，最权威硬件参数。本文计算基准</td>
+            <td>S5,S8,S9</td>
+          </tr>
+          <tr>
+            <td>NVIDIA MLPerf<br><span style="font-size:11px;color:var(--muted)">Inference v5.0</span></td>
+            <td>Llama2-70B <strong>890K</strong> /<br>DeepSeek R1 <strong>336K</strong> /<br>Llama3.1-405B <strong>15K</strong> tokens/s</td>
+            <td>标准化基准，实验室最优条件。代表性能上界，非生产实际值</td>
+            <td>S9,S16</td>
+          </tr>
+          <tr>
+            <td>Deloitte<br><span style="font-size:11px;color:var(--muted)">2025</span></td>
+            <td><strong>推理占比约50%</strong></td>
+            <td>行业估算。口径含模糊地带&#65288;SFT/RLHF算训练还是推理&#65289;</td>
+            <td>S11</td>
+          </tr>
+          <tr>
+            <td>Epoch AI</td>
+            <td><strong>GPU小时推理份额<br>历史趋势</strong></td>
+            <td>学术研究，基于公开集群数据。推理占比从25%升至50%+</td>
+            <td>S11</td>
+          </tr>
+          <tr>
+            <td>模型论文<br><span style="font-size:11px;color:var(--muted)">DeepSeek/Llama等</span></td>
+            <td><strong>架构参数</strong><br>&#65288;层数/头数/维度/精度&#65289;</td>
+            <td>开源模型参数已知。闭源模型部分推测&#65288;三场景估算&#65289;</td>
+            <td>S7,S8</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="handoff-section">
+      <h3>数据来源 &#183; 需求侧</h3>
+      <table>
+        <thead>
+          <tr><th style="width:15%">来源</th><th style="width:25%">数据</th><th style="width:40%">口径与盲区</th><th style="width:8%">用在</th></tr>
+        </thead>
+        <tbody>
+          <tr style="background:var(--green-soft)"><td colspan="4" style="font-weight:600;color:var(--green);border:none;padding:6px 10px">公司披露</td></tr>
+          <tr>
+            <td>Google I/O<br><span style="font-size:11px;color:var(--muted)">2025-05</span></td>
+            <td><strong>&#8776;105T/天</strong>，同比7x</td>
+            <td>全产品含搜索+办公+多模态折算。最大口径，含非推理用途。&#8220;Token&#8221;定义与纯推理不同</td>
+            <td>S14</td>
+          </tr>
+          <tr>
+            <td>OpenAI<br><span style="font-size:11px;color:var(--muted)">2025-03</span></td>
+            <td><strong>&#8776;21.6T/天</strong></td>
+            <td>仅API，不含ChatGPT消费端。纯推理口径但缺最大流量入口</td>
+            <td>S14</td>
+          </tr>
+          <tr>
+            <td>豆包/火山引擎<br><span style="font-size:11px;color:var(--muted)">2025-06</span></td>
+            <td><strong>180T/天</strong></td>
+            <td>含图/视频/语音折算，构成未拆分。中国最大单体平台</td>
+            <td>S14</td>
+          </tr>
+          <tr>
+            <td>DeepSeek<br><span style="font-size:11px;color:var(--muted)">2025</span></td>
+            <td><strong>776B/天，1,814块H800</strong></td>
+            <td>唯一同时公开需求量和硬件配置的样本。规模小但100%透明</td>
+            <td>S13</td>
+          </tr>
+
+          <tr style="background:var(--blue-soft)"><td colspan="4" style="font-weight:600;color:var(--blue);border:none;padding:6px 10px">政府统计</td></tr>
+          <tr>
+            <td>国家数据局<br><span style="font-size:11px;color:var(--muted)">2025-03</span></td>
+            <td><strong>140T+/天</strong></td>
+            <td>全国汇总，含重复计数可能。政府统计口径，覆盖面广但精度存疑</td>
+            <td>S14</td>
+          </tr>
+
+          <tr style="background:var(--amber-soft)"><td colspan="4" style="font-weight:600;color:var(--amber);border:none;padding:6px 10px">第三方平台</td></tr>
+          <tr>
+            <td>OpenRouter &#215; a16z<br><span style="font-size:11px;color:var(--muted)">2025-05, 100T实证</span></td>
+            <td><strong>4.1T/天</strong>，reasoning&gt;50%，seq 2K&#8594;5.4K+</td>
+            <td>聚合平台，100%透明但全球占比&lt;2%。偏向开发者群体</td>
+            <td>S14+S15</td>
+          </tr>
+
+          <tr style="background:var(--purple-soft)"><td colspan="4" style="font-weight:600;color:var(--purple);border:none;padding:6px 10px">市场信号</td></tr>
+          <tr>
+            <td>Menlo Ventures<br><span style="font-size:11px;color:var(--muted)">2025</span></td>
+            <td><strong>企业GenAI支出 ~$37B</strong></td>
+            <td>投资视角，不直接对应token量。证明付费需求规模</td>
+            <td>S13</td>
+          </tr>
+          <tr>
+            <td>H100二级市场<br><span style="font-size:11px;color:var(--muted)">2025 H1</span></td>
+            <td><strong>前沿段全额认购，+40%</strong></td>
+            <td>定性价格信号，反映前沿段供需紧张</td>
+            <td>S13+S17</td>
+          </tr>
+
+          <tr style="background:var(--red-soft)"><td colspan="4" style="font-weight:600;color:var(--red);border:none;padding:6px 10px">硬件吞吐基准</td></tr>
+          <tr>
+            <td>SemiAnalysis<br><span style="font-size:11px;color:var(--muted)">InferenceX</span></td>
+            <td>DeepSeek R1 交互约束<br><strong>59K-417K</strong> tokens/s</td>
+            <td>含延迟约束，更接近生产环境。仅覆盖部分模型</td>
+            <td>S16</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="font-size:12px;color:var(--muted);margin-top:8px">
+        注：NVIDIA MLPerf数据同时服务供给侧(S9单机产能)和需求侧(S16转换系数)，见上方供给侧数据源表。<br>
+        本文S11-S12的供给结论&#65288;4.4万-8.0万台推理机器，132万-960万条1M线程&#65289;作为S17供需对比的另一半。
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- TAB 3: 供给                                   -->
+  <!-- ════════════════════════════════════════════ -->
+  <div id="tab-supply" class="tab-panel">
+
+    <!-- Phase 0 -->
+    <div class="phase-divider">
+      <span class="phase-num" style="background:var(--purple)">0</span>
+      <span style="color:var(--purple)">为什么</span>
+    </div>
+
+    <div class="card" id="s0">
+      <div class="card-head" onclick="toggleCard(this)">
+        <span class="card-arrow">&#9654;</span>
+        <span class="card-tag tag-phase0">S0</span>
+        <span class="card-title">为什么研究AI供给？</span>
+        <span class="card-status status-empty">待填</span>
+      </div>
+      <div class="card-body">
+        <div class="placeholder">留空。待讨论后定义。</div>
+        <div class="q-transition">过渡 &#8594; 不论动机如何，要研究供需，第一个问题：供给是什么？</div>
+      </div>
+    </div>
+
+    <!-- Phase 1 -->
+    <div class="phase-divider">
+      <span class="phase-num" style="background:var(--green)">1</span>
+      <span style="color:var(--green)">定义</span>
+    </div>
+
+    <div class="card" id="s1">
+      <div class="card-head" onclick="toggleCard(this)">
+        <span class="card-arrow">&#9654;</span>
+        <span class="card-tag tag-phase1">S1</span>
+        <span class="card-title">用户买AI，买的是什么？</span>
+        <span class="card-status status-done">已填</span>
+      </div>
+      <div class="card-body">
+        <div class="q-answer">&#8594; 智力。用户买的不是芯片，不是服务器，是能完成任务的通用认知能力。</div>
+        <div class="note-box note-green" style="margin-top:10px;margin-bottom:10px">
+          <div style="font-size:12px;font-weight:700;color:var(--green-dark);margin-bottom:4px">&#128205; 公式位置</div>
+          <div style="font-size:13px">AI供给 = ？ &larr; 先定义等号左边是什么</div>
+        </div>
+        <div class="note-box" style="margin-top:0;margin-bottom:12px;background:#f9f6f0;border-left:3px solid var(--amber)">
+          <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:4px">&#128172; 人话版本</div>
+          <div style="font-size:14px;line-height:1.7">你花钱买AI，买的不是GPU、不是模型&mdash;&mdash;买的是&ldquo;现在就帮你干活的能力&rdquo;。</div>
+        </div>
+
+        <div class="prose" style="font-size:14px;line-height:1.8;margin-top:12px">
+          <p>
+            用户购买 AI 服务时，买的是一种<b>能力</b>——帮我写代码、帮我分析合同、帮我做研究。这种能力的本质是<b>通用认知能力</b>，也就是智力。
+          </p>
+          <p>
+            写作、编程、推理、翻译、分析、决策辅助、流程执行……这些的共同点是：它们过去只能由人类大脑提供。AI 供给的本质，是机器提供的<b>可规模化的智力</b>。
+          </p>
+          <p>
+            AI 供给的核心产品不是芯片、不是服务器，是智力。
+          </p>
+        </div>
+
+        <div class="note-box note-green" style="margin-top:14px">
+          <b>AI供给 = 可被调用的智力（通用认知能力）。</b>
+        </div>
+
+        <div class="q-transition">过渡 &#8594; 智力无法直接计量。要做供给分析，需要找到一个可称量的物理单位。凭什么用Token？</div>
+      </div>
+    </div>
+
+    
+    <div class="card" id="s2">
+      <div class="card-head" onclick="toggleCard(this)">
+        <span class="card-arrow">&#9654;</span>
+        <span class="card-tag tag-phase1">S2</span>
+        <span class="card-title">凭什么用Token计量？</span>
+        <span class="card-status status-done">已填</span>
+      </div>
+      <div class="card-body">
+        <div class="q-answer">&#8594; 因为所有AI任务底层都是同一件事：接收token，生成token。行业已按$/Mtoken定价交易。</div>
+        <div class="note-box note-green" style="margin-top:10px;margin-bottom:10px">
+          <div style="font-size:12px;font-weight:700;color:var(--green-dark);margin-bottom:4px">&#128205; 公式位置</div>
+          <div style="font-size:13px">能力用什么单位量？&rarr; Token</div>
+        </div>
+        <div class="note-box" style="margin-top:0;margin-bottom:12px;background:#f9f6f0;border-left:3px solid var(--amber)">
+          <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:4px">&#128172; 人话版本</div>
+          <div style="font-size:14px;line-height:1.7">电用度数卖，劳动用工时卖，AI用token卖&mdash;&mdash;因为所有AI公司已经按$/Mtoken标价了。</div>
+        </div>
+
+        <div class="prose" style="font-size:14px;line-height:1.8;margin-top:12px">
+          <p>
+            观察大模型的工作方式：不管任务是什么，底层操作都是同一件事——<b>接收一串 token，生成一串 token</b>。
+          </p>
+          <p>
+            &ldquo;帮我写一封邮件&rdquo; &#8594; 读入 20 个 token 的指令 &#8594; 输出 200 个 token 的邮件。<br>
+            &ldquo;帮我审这份 50 页合同&rdquo; &#8594; 读入 30,000 个 token &#8594; 输出 2,000 个 token 的分析。<br>
+            &ldquo;帮我做一个数据分析&rdquo; &#8594; 读入 5,000 个 token &#8594; 输出 1,000 个 token 的报告。
+          </p>
+          <p>
+            所有智力输出，无论多复杂，最终都还原为：<b>处理 X 个 input token &#8594; 生成 Y 个 output token</b>。Token 就是智力的原子生产/交付单位。
+          </p>
+        </div>
+
+        <div class="note-box note-green" style="margin-top:12px">
+          <b>Token 之于 AI，相当于 kWh 之于电力。</b><br>
+          不管你用电来照明、加热还是驱动工厂，消耗的都是 kWh。不管你用 AI 来写作、编程还是分析，消耗的都是 token。kWh 让电力可以被计量、定价、交易；token 让智力可以被计量、定价、交易。
+        </div>
+
+        <div class="prose" style="font-size:14px;line-height:1.8;margin-top:14px">
+          <p>这不只是类比——看看 AI 服务<b>真实的定价方式</b>：</p>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0">
+          <div style="background:var(--green-soft);border:1px solid var(--line);border-radius:8px;padding:14px;text-align:center">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:600;color:var(--green-dark)">$5 / $25</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-top:2px">per 1M tokens</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:8px">Claude Opus 4.8<br>input / output</div>
+          </div>
+          <div style="background:var(--blue-soft);border:1px solid var(--line);border-radius:8px;padding:14px;text-align:center">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:600;color:var(--blue)">$5 / $30</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-top:2px">per 1M tokens</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:8px">GPT-5.5<br>input / output</div>
+          </div>
+          <div style="background:var(--amber-soft);border:1px solid var(--line);border-radius:8px;padding:14px;text-align:center">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:600;color:var(--amber)">$0.44 / $0.87</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-top:2px">per 1M tokens</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:8px">DeepSeek V4 Pro<br>input / output</div>
+          </div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-top:4px">
+          来源：Anthropic / OpenAI / DeepSeek 官方 API 定价页（2026-07 核验）
+        </div>
+
+        <div class="prose" style="font-size:14px;line-height:1.8;margin-top:14px">
+          <p>
+            整个行业已经用 <b>$/Mtoken</b>（美元每百万 token）来定价和交易 AI 智力。Token 不只是技术概念，它已经是 AI 供给的工业标准计量和定价单位。
+          </p>
+        </div>
+
+        <div class="q-transition">过渡 &#8594; 确认了Token是计量单位。但怎么理解&ldquo;用Token衡量智力&rdquo;这件事？需要一个框架。</div>
+      </div>
+    </div>
+
+    <div class="card" id="s3">
+      <div class="card-head" onclick="toggleCard(this)">
+        <span class="card-arrow">&#9654;</span>
+        <span class="card-tag tag-phase1">S3</span>
+        <span class="card-title">怎么理解Token衡量智力？</span>
+        <span class="card-status status-done">已填</span>
+      </div>
+      <div class="card-body">
+        <div class="q-answer">&#8594; 质量 × 数量：人类用学历×小时衡量，AI用模型档次×Token衡量。</div>
+        <div class="note-box note-green" style="margin-top:10px;margin-bottom:10px">
+          <div style="font-size:12px;font-weight:700;color:var(--green-dark);margin-bottom:4px">&#128205; 公式位置</div>
+          <div style="font-size:13px">AI供给 = 质量(模型档次) × 数量(Token) &larr; 核心公式建立</div>
+        </div>
+        <div class="note-box" style="margin-top:0;margin-bottom:12px;background:#f9f6f0;border-left:3px solid var(--amber)">
+          <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:4px">&#128172; 人话版本</div>
+          <div style="font-size:14px;line-height:1.7">同样干10小时活，高级工程师和实习生产出不同。Token是工时，模型档次是人的水平。买AI = 买多少小时 × 什么水平的人。</div>
+        </div>
+
+        <!-- 双栏对比：人类 vs AI -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">
+          <div style="background:var(--green-soft);border:1px solid var(--line);border-radius:8px;padding:16px;text-align:center">
+            <div style="font-family:var(--serif,'Noto Serif SC',serif);font-size:15px;font-weight:600;color:var(--green-dark);margin-bottom:12px">人类智力</div>
+            <div style="font-size:28px;margin-bottom:4px">&#129504;</div>
+            <div style="font-size:13px;color:var(--muted);margin-bottom:10px">质量：<b style="color:var(--ink)">学历 / 资质</b></div>
+            <div style="font-size:13px;color:var(--muted);margin-bottom:10px">数量：<b style="color:var(--ink)">小时</b></div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--green-dark);font-weight:600;margin-bottom:10px">$/hour</div>
+            <div style="font-size:12px;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px">购买一个人的时间<br>= 占用其<b style="color:var(--ink)">大脑</b></div>
+            <div style="font-size:11px;color:var(--green-dark);margin-top:6px;font-weight:500">持续学习深造 &#8594; 提升资质等级</div>
+          </div>
+          <div style="background:var(--blue-soft);border:1px solid var(--line);border-radius:8px;padding:16px;text-align:center">
+            <div style="font-family:var(--serif,'Noto Serif SC',serif);font-size:15px;font-weight:600;color:var(--blue);margin-bottom:12px">AI 智力</div>
+            <div style="font-size:28px;margin-bottom:4px">&#129302;</div>
+            <div style="font-size:13px;color:var(--muted);margin-bottom:10px">质量：<b style="color:var(--ink)">模型档次</b>（Opus / Haiku）</div>
+            <div style="font-size:13px;color:var(--muted);margin-bottom:10px">数量：<b style="color:var(--ink)">Token</b></div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--blue);font-weight:600;margin-bottom:10px">$/Mtoken</div>
+            <div style="font-size:12px;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px">购买一次 AI 服务<br>= 占用<b style="color:var(--ink)">大模型 + 硬件</b>的一定使用时长</div>
+            <div style="font-size:11px;color:var(--blue);margin-top:6px;font-weight:500">持续投入算力训练 &#8594; 提升模型档次</div>
+          </div>
+        </div>
+
+        <div class="note-box note-green" style="margin-top:12px">
+          <b>Token 之于 AI，相当于工时之于人类劳动。</b><br>
+          Token &#8800; 智力本身，但是智力的最佳可计量代理。
+        </div>
+
+        <!-- ── 公式推导框架：从S3结论到五因子分解 ── -->
+        <div style="margin-top:20px;padding:20px;background:linear-gradient(135deg,var(--green-dark),#2a5c3f);border-radius:12px;color:#fff">
+          <div style="font-family:var(--serif,'Noto Serif SC',serif);font-size:13px;color:rgba(255,255,255,.55);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">Supply Formula &#183; 逐步推导</div>
+
+          <!-- Step 1: 从S3结论出发 -->
+          <div style="font-family:'JetBrains Mono',monospace;font-size:15px;color:#fff;background:rgba(255,255,255,.08);padding:14px 18px;border-radius:8px;line-height:2;border:1px solid rgba(255,255,255,.1)"><b style="color:#e8c97a;font-size:17px">AI 供给 = 质量 &#215; 数量</b>
+<span style="color:rgba(255,255,255,.5);font-size:12px">&#8593; S3 结论：模型档次 &#215; Token</span></div>
+
+          <!-- Step 2: 展开 -->
+          <div style="text-align:center;color:rgba(255,255,255,.4);font-size:11px;margin:8px 0">&#9660; 展开：质量和数量各由什么决定？</div>
+
+          <div style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#fff;background:rgba(255,255,255,.08);padding:14px 18px;border-radius:8px;line-height:2.2;border:1px solid rgba(255,255,255,.1)"><b style="color:#e8c97a">AI 供给 = Token 产出量 &#215; Token 价值</b>
+
+Token 产出量 = 通电算力 &#215; 利用率 &#215; 推理效率 <span style="color:rgba(255,255,255,.45);font-size:12px">&#8592; 数量：推理产能</span>
+Token 价值&nbsp;&nbsp;&nbsp;= 模型能力 &#215; 任务转化率 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:rgba(255,255,255,.45);font-size:12px">&#8592; 质量：能力变现</span></div>
+
+          <!-- 五因子说明 -->
+          <div style="font-size:12px;color:rgba(255,255,255,.55);margin-top:12px;line-height:1.7">
+            <b style="color:rgba(255,255,255,.8)">五因子正交</b> &#8212; 改善任何一个不影响其他四个：<br>
+            通电算力（基础设施 &#183; NVDA/TSMC）&#183; 利用率（运营 &#183; 云厂商）&#183; 推理效率（算法 &#183; 推理框架）&#183; 模型能力（训练 &#183; OpenAI/Anthropic/DeepSeek）&#183; 任务转化率（应用 &#183; Cursor/Harvey）
+          </div>
+        </div>
+
+        <!-- 公式→问题链映射 -->
+        <div style="margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div style="background:var(--green-soft);border:1px solid var(--line);border-radius:8px;padding:12px 14px">
+            <div style="font-size:12px;font-weight:600;color:var(--green-dark);margin-bottom:6px">质量维度 &#8594; S4 训练</div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.6">
+              模型能力 = f(训练数据, 训练算力, 架构)<br>
+              训练算力 = 6N &#215; 训练Token数<br>
+              <span style="color:var(--green-dark);font-weight:500">固定成本，决定模型档次</span>
+            </div>
+          </div>
+          <div style="background:var(--blue-soft);border:1px solid var(--line);border-radius:8px;padding:12px 14px">
+            <div style="font-size:12px;font-weight:600;color:var(--blue);margin-bottom:6px">数量维度 &#8594; S5&#8211;S12</div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.6">
+              Token产能 = 并发数 &#215; 吞吐量<br>
+              并发数 = 可用HBM &#247; KV cache/用户<br>
+              <span style="color:var(--blue);font-weight:500">边际成本，决定产能天花板</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="note-box note-green" style="margin-top:12px">
+          <b>公式即问题链。</b>每个因子的拆解对应S链中的一个问题。质量侧解决"模型有多聪明"（S4），数量侧解决"能同时服务多少用户"（S5&#8211;S12）。所有等式等价，只是从不同维度拆解同一个供给。
+        </div>
+
+        <div class="q-transition">过渡 &#8594; 公式建立了分析骨架。质量 &#215; 数量的两个维度背后是两种完全不同的硬件消耗方式 &#8212; 训练烧算力提质量，推理占显存拼数量。</div>
+      </div>
+    </div>
+
+    <div class="card" id="s4">
+      <div class="card-head" onclick="toggleCard(this)">
+        <span class="card-arrow">&#9654;</span>
+        <span class="card-tag tag-phase1">S4</span>
+        <span class="card-title">Token产能怎么分析？</span>
+        <span class="card-status status-done">已填</span>
+      </div>
+      <div class="card-body">
+        <div class="q-answer">&#8594; 必须分训练和推理两个场景。训练提升质量（模型档次），推理产出数量（Token产能）。供给分析重点在推理。</div>
+        <div class="note-box note-green" style="margin-top:10px;margin-bottom:10px">
+          <div style="font-size:12px;font-weight:700;color:var(--green-dark);margin-bottom:4px">&#128205; 公式位置</div>
+          <div style="font-size:13px">Token = 训练(决定质量) + 推理(决定数量) &rarr; 重点拆推理</div>
+        </div>
+        <div class="note-box" style="margin-top:0;margin-bottom:12px;background:#f9f6f0;border-left:3px solid var(--amber)">
+          <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:4px">&#128172; 人话版本</div>
+          <div style="font-size:14px;line-height:1.7">训练是培养人才&mdash;&mdash;花几个亿、几个月，造出一个能力等级。推理是人才上班&mdash;&mdash;每天消耗硬件产出token。供给看推理，因为它决定每天能产多少。</div>
+        </div>
+
+        <div style="margin-top:12px;padding:14px 16px;background:linear-gradient(135deg,var(--green-dark),#2a5c3f);border-radius:8px;color:#fff">
+          <div style="font-family:var(--serif,'Noto Serif SC',serif);font-size:15px;font-weight:600;color:#e8c97a;margin-bottom:6px">训练是大模型企业的护城河</div>
+          <div style="font-size:13.5px;line-height:1.7;color:rgba(255,255,255,.88)">
+            训练面向大模型企业（OpenAI、Anthropic、DeepSeek……），是它们投入数千万到数亿美元、烧掉海量算力才建立起来的<b style="color:#e8c97a">能力壁垒</b>。训练决定模型"有多聪明"——这是AI供给的质量维度，也是竞争的核心门槛。
+          </div>
+          <div style="margin-top:8px;padding:8px 12px;background:rgba(255,255,255,.1);border-radius:6px;border-left:3px solid #e8c97a">
+            <span style="font-size:12px;color:rgba(255,255,255,.7)"><b style="color:#e8c97a">&#9888; Q3 待解决</b>：训练护城河正在被压缩（DeepSeek V4 Pro 以 1/14 训练成本达到接近前沿质量，定价仅 Opus 的 1/10）。训练侧是否也存在供需失衡——巨额训练 CapEx 的回报率是否正在坍塌？</span>
+          </div>
+        </div>
+
+        <div class="prose" style="font-size:14px;line-height:1.8;margin-top:12px">
+          <p>
+            公式已经给出了骨架：质量由训练决定，数量由推理决定。这两个维度背后是两种完全不同的硬件消耗方式——先看训练如何提升质量，再看推理如何产出数量。
+          </p>
+        </div>
+
+        <!-- ── 训练：提升质量 ── -->
+        <div style="margin-top:16px;padding:14px 16px;background:var(--green-soft);border:1px solid var(--line);border-radius:8px">
+          <div style="font-family:var(--serif,&apos;Noto Serif SC&apos;,serif);font-size:15px;font-weight:600;color:var(--green-dark);margin-bottom:10px">训练：提升质量（模型档次）</div>
+          <div class="prose" style="font-size:13.5px;line-height:1.75">
+            <p>
+              训练是创造模型的过程。模型读入海量数据（以<b>万亿Token</b>计），每个Token消耗一次GPU算力（FLOPS），更新模型参数。算完即释放，GPU接着处理下一个。
+            </p>
+            <p>
+              训练 = <b>烧算力</b>。瓶颈是GPU的浮点运算速度（FLOPS），不是内存。类比：<b>发动机烧油</b>——油烧完就没了，但发动机本身可以反复使用。
+            </p>
+            <p>
+              训练是<b>固定成本，一次性投入</b>。训练完成后，同一组模型权重可以服务无限次推理——训练投入不随用户增长而增加。
+            </p>
+          </div>
+        </div>
+
+        <!-- ── 训练成本数据 ── -->
+        <div style="margin-top:14px">
+          <div style="font-size:13px;font-weight:600;color:var(--green-dark);margin-bottom:8px">前沿模型训练成本（一次性）</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+            <div style="background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:12px;text-align:center">
+              <div style="font-family:&apos;JetBrains Mono&apos;,monospace;font-size:16px;font-weight:600;color:var(--green-dark)">~$78M</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:4px">GPT-4</div>
+            </div>
+            <div style="background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:12px;text-align:center">
+              <div style="font-family:&apos;JetBrains Mono&apos;,monospace;font-size:16px;font-weight:600;color:var(--green-dark)">~$191M</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:4px">Gemini Ultra</div>
+            </div>
+            <div style="background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:12px;text-align:center">
+              <div style="font-family:&apos;JetBrains Mono&apos;,monospace;font-size:16px;font-weight:600;color:var(--green-dark)">~$170M</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:4px">Llama 3.1 405B</div>
+            </div>
+            <div style="background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:12px;text-align:center">
+              <div style="font-family:&apos;JetBrains Mono&apos;,monospace;font-size:16px;font-weight:600;color:var(--green-dark)">~$5.6M</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:4px">DeepSeek V3</div>
+            </div>
+          </div>
+          <div style="font-family:&apos;JetBrains Mono&apos;,monospace;font-size:11px;color:var(--muted);margin-top:6px">
+            来源：Stanford AI Index 2025 / Epoch AI / DeepSeek技术报告（2026-07 核验）
+          </div>
+        </div>
+
+        <!-- ── Epoch AI 图表 ── -->
+        <div style="margin-top:14px;text-align:center">
+          <img src="assets/ai-epoch_ai_training_cost_trend.png" alt="Epoch AI: 前沿模型训练成本趋势" style="max-width:55%;border:1px solid var(--line);border-radius:8px;display:block;margin:0 auto">
+          <div style="font-size:11px;color:var(--muted);margin-top:6px;text-align:left">
+            来源：Epoch AI, &ldquo;The rising costs of training frontier AI models&rdquo; (2024), CC-BY 4.0
+          </div>
+          <div style="margin-top:10px;padding:12px 16px;background:linear-gradient(135deg,var(--green-dark),#2a5c3f);border-radius:8px;text-align:center">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:#e8c97a;letter-spacing:.02em">训练成本每年增长 2–3 倍，2024 年已达 $1–2 亿，预计 2027 年突破 $10 亿</div>
+            <div style="font-size:12px;color:rgba(255,255,255,.65);margin-top:4px">训练门槛持续抬高 → 头部集中 → 护城河加深</div>
+          </div>
+        </div>
+
+        <!-- ── 关键对比 ── -->
+        <div class="note-box note-amber" style="margin-top:14px">
+          <b>训练是千万到亿美元级（一次性），推理基础设施是千亿美元级（持续性）。</b><br>
+          2025年四大云厂商基础设施投资约$3,500亿，是同年所有主要公开模型训练预算总和的约40倍。绝大部分资本支出服务于推理。
+        </div>
+
+        <!-- ── 推理：产出数量 ── -->
+        <div style="margin-top:16px;padding:14px 16px;background:var(--blue-soft);border:1px solid var(--line);border-radius:8px">
+          <div style="font-family:var(--serif,&apos;Noto Serif SC&apos;,serif);font-size:15px;font-weight:600;color:var(--blue);margin-bottom:10px">推理：产出数量（Token产能）</div>
+          <div class="prose" style="font-size:13.5px;line-height:1.75">
+            <p>
+              推理是用户使用模型的过程。模型每生成一个Token，都要把中间计算结果（KV cache）保存在GPU显存（HBM）中，因为生成下一个Token时要回看所有之前的Token。这些缓存<b>持续占用显存</b>，直到会话结束才释放。
+            </p>
+            <p>
+              推理 = <b>占显存</b>。瓶颈是GPU的高带宽内存（HBM）容量。类比：<b>车停进车位</b>——车位被占着就不能给别人用，直到车开走。
+            </p>
+            <p>
+              推理是<b>边际成本，持续消耗</b>。每个用户的每次调用都在占用硬件资源。AI供给的物理天花板取决于：同样的硬件，能同时服务多少推理请求。
+            </p>
+          </div>
+        </div>
+
+        <!-- ── 双卡对比 ── -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px">
+          <div style="background:var(--paper);border:1px solid var(--line);border-top:3px solid var(--green);border-radius:8px;padding:14px;text-align:center">
+            <div style="font-family:&apos;JetBrains Mono&apos;,monospace;font-size:20px;font-weight:600;color:var(--green-dark)">烧算力</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:4px;font-weight:600">训练 Token</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:10px;line-height:1.6">消耗 GPU 算力（FLOPS）<br>算完释放，不占空间<br>瓶颈 = FLOPS<br><b style="color:var(--green-dark)">发动机烧油</b></div>
+          </div>
+          <div style="background:var(--paper);border:1px solid var(--line);border-top:3px solid var(--amber);border-radius:8px;padding:14px;text-align:center">
+            <div style="font-family:&apos;JetBrains Mono&apos;,monospace;font-size:20px;font-weight:600;color:var(--amber)">占显存</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:4px;font-weight:600">推理 Token</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:10px;line-height:1.6">占用 GPU 显存（HBM）<br>持续占用直到会话结束<br>瓶颈 = HBM 容量<br><b style="color:var(--amber)">车停进车位</b></div>
+          </div>
+        </div>
+
+        <!-- ── 结论 ── -->
+        <div class="note-box note-green" style="margin-top:14px">
+          <b>训练决定能力上限（模型有多聪明），推理决定产能天花板（能同时服务多少用户）。</b><br>
+          AI供给分析的重点在推理——这是真正随用量增长、决定供需平衡的部分。
+        </div>
+
+        <div class="q-transition">过渡 &#8594; 推理的核心是占用。那衡量产能，自然要问：同样的硬件，能同时撑多少个&ldquo;占用&rdquo;？</div>
+      </div>
+    </div>
+
+    <div class="card" id="s5">
+      <div class="card-head" onclick="toggleCard(this)">
+        <span class="card-arrow">&#9654;</span>
+        <span class="card-tag tag-phase1">S5</span>
+        <span class="card-title">用什么基准衡量推理产能？</span>
+        <span class="card-status status-done">已填</span>
+      </div>
+      <div class="card-body">
+        <div class="q-answer">&#8594; 活跃线程（1M上下文）。推理=占用，产能=同时能撑多少个占用。活跃线程是AI的&ldquo;人&middot;时&rdquo;。</div>
+        <div class="note-box note-green" style="margin-top:10px;margin-bottom:10px">
+          <div style="font-size:12px;font-weight:700;color:var(--green-dark);margin-bottom:4px">&#128205; 公式位置</div>
+          <div style="font-size:13px">推理产能 = 活跃线程数 &times; 每线程产出</div>
+        </div>
+        <div class="note-box" style="margin-top:0;margin-bottom:12px;background:#f9f6f0;border-left:3px solid var(--amber)">
+          <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:4px">&#128172; 人话版本</div>
+          <div style="font-size:14px;line-height:1.7">用&ldquo;能同时雇多少个全职员工&rdquo;衡量服务能力。1个1M活跃线程 = 1个深厚背景知识的全职员工。</div>
+        </div>
+
+        <div class="prose" style="font-size:14px;line-height:1.8;margin-top:12px">
+          <p>
+            S3确认了：购买一个人一小时的时间 = 购买一个大模型+硬件一定时长的占用。S4确认了：推理的本质就是<b>占用</b>&#8212;&#8212;KV cache持续驻留HBM，直到会话结束才释放。
+          </p>
+          <p>
+            那产能的原子单位就是：<b>一个正在占用着硬件的活跃会话</b>&#8212;&#8212;活跃线程（active context）。
+          </p>
+        </div>
+
+        <!-- ── 人·时 vs 活跃线程 对称卡 ── -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px">
+          <div style="background:var(--green-soft);border:1px solid var(--line);border-radius:8px;padding:16px;text-align:center">
+            <div style="font-family:var(--serif,&apos;Noto Serif SC&apos;,serif);font-size:15px;font-weight:600;color:var(--green-dark);margin-bottom:10px">人类产能</div>
+            <div style="font-family:&apos;JetBrains Mono&apos;,monospace;font-size:22px;font-weight:700;color:var(--green-dark)">人 &middot; 时</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:10px;line-height:1.7">
+              占用一个人的大脑<br>
+              工作结束才释放<br>
+              产能 = 能同时接多少案子
+            </div>
+          </div>
+          <div style="background:var(--blue-soft);border:1px solid var(--line);border-radius:8px;padding:16px;text-align:center">
+            <div style="font-family:var(--serif,&apos;Noto Serif SC&apos;,serif);font-size:15px;font-weight:600;color:var(--blue);margin-bottom:10px">AI 产能</div>
+            <div style="font-family:&apos;JetBrains Mono&apos;,monospace;font-size:22px;font-weight:700;color:var(--blue)">活跃线程</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:10px;line-height:1.7">
+              占用模型+硬件的HBM<br>
+              会话结束才释放<br>
+              产能 = 能同时撑多少线程
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 为什么要固定上下文长度 ── -->
+        <div class="prose" style="font-size:14px;line-height:1.8;margin-top:14px">
+          <p>
+            但活跃线程有大有小。1K短对话占几百MB，1M长任务占几百GB。不固定长度，&ldquo;产能&rdquo;就不可比&#8212;&#8212;如同说&ldquo;律所能接100个案子&rdquo;，不说是离婚协议还是跨国并购，毫无意义。
+          </p>
+        </div>
+
+        <!-- ── 上下文长度→占用量 可视化 ── -->
+        <div style="margin-top:12px;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:14px 16px">
+          <div style="font-size:12px;font-weight:600;color:var(--green-dark);margin-bottom:10px">同一台机器，上下文长度决定产能</div>
+          <div style="display:flex;align-items:end;gap:8px;height:100px;padding:0 4px">
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+              <div style="font-family:&apos;JetBrains Mono&apos;,monospace;font-size:11px;color:var(--green-dark);font-weight:600">~数千</div>
+              <div style="width:100%;height:12px;background:var(--green-mid);border-radius:3px 3px 0 0"></div>
+              <div style="font-size:10px;color:var(--muted)">1K</div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+              <div style="font-family:&apos;JetBrains Mono&apos;,monospace;font-size:11px;color:var(--green-dark);font-weight:600">~数百</div>
+              <div style="width:100%;height:30px;background:var(--green-mid);border-radius:3px 3px 0 0"></div>
+              <div style="font-size:10px;color:var(--muted)">8K</div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+              <div style="font-family:&apos;JetBrains Mono&apos;,monospace;font-size:11px;color:var(--amber);font-weight:600">~几十</div>
+              <div style="width:100%;height:55px;background:var(--amber);border-radius:3px 3px 0 0"></div>
+              <div style="font-size:10px;color:var(--muted)">128K</div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+              <div style="font-family:&apos;JetBrains Mono&apos;,monospace;font-size:11px;color:var(--red);font-weight:600">~个位数</div>
+              <div style="width:100%;height:95px;background:var(--red);border-radius:3px 3px 0 0"></div>
+              <div style="font-size:10px;color:var(--muted)">1M</div>
+            </div>
+          </div>
+          <div style="text-align:center;font-size:11px;color:var(--muted);margin-top:8px;border-top:1px solid var(--line);padding-top:6px">
+            &#8593; 同一台NVL72能同时服务的活跃线程数（示意，具体数值见S9）
+          </div>
+        </div>
+
+        <!-- ── 为什么选1M ── -->
+        <div class="note-box note-green" style="margin-top:14px">
+          <b>标准刻度：1M token 上下文。</b><br>
+          前沿模型已支持（Gemini、Claude），Agent工作流天然需要长上下文。用天花板做基准是保守选择：1M下够用，短上下文更不是问题；1M下不足，才是真瓶颈。
+        </div>
+
+        <div class="q-transition">过渡 &#8594; 基准确定：1M活跃线程。要算全球能撑多少条，先要知道：1个活跃线程到底占多少硬件？</div>
+      </div>
+    </div>
+
+    <div class="card open" id="s6">
+      <div class="card-head" onclick="toggleCard(this)">
+        <span class="card-arrow">&#9654;</span>
+        <span class="card-tag tag-phase2">S6</span>
+        <span class="card-title">推理token怎么占用硬件？</span>
+        <span class="card-status status-done">已填</span>
+      </div>
+      <div class="card-body">
+        <div class="q-answer">&#8594; KV cache。每个token生成的Key和Value向量持续驻留HBM直到会话结束&#8212;&#8212;如同员工为项目积累的工作笔记，项目不结束就不能清理。</div>
+        <div class="note-box note-green" style="margin-top:10px;margin-bottom:10px">
+          <div style="font-size:12px;font-weight:700;color:var(--green-dark);margin-bottom:4px">&#128205; 公式位置</div>
+          <div style="font-size:13px">单线程占用 = ？ &larr; 开始拆&ldquo;1个员工&rdquo;要多少资源</div>
+        </div>
+        <div class="note-box" style="margin-top:0;margin-bottom:12px;background:#f9f6f0;border-left:3px solid var(--amber)">
+          <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:4px">&#128172; 人话版本</div>
+          <div style="font-size:14px;line-height:1.7">员工接手项目，要先把所有背景资料内化成自己的理解&mdash;&mdash;项目历史越长，要消化的越多。这些内化的知识占着员工的&ldquo;脑容量&rdquo;，项目不结束就释放不了。KV cache就是这份内化的项目记忆，HBM就是脑容量。</div>
+        </div>
+
+        <div class="prose" style="font-size:14px;line-height:1.8;margin-top:10px">
+          <p>
+            S3中我们说：<b>买AI = 占用一个大模型+硬件在一段时间内为你工作</b>。这个&#8220;占用&#8221;在硬件层面的实体，就是<b>KV cache</b>。
+          </p>
+          <p>
+            每生成一个token，模型都要计算两个向量：<b>Key</b>（这个token的&#8220;身份标签&#8221;）和<b>Value</b>（这个token携带的信息）。所有已处理token的K和V向量必须保存在显存（HBM）中&#8212;&#8212;因为生成下一个token时，模型需要&#8220;回头看&#8221;所有前文。
+          </p>
+        </div>
+
+        <!-- 人力类比 -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px">
+          <div style="background:var(--green-soft);border-radius:8px;padding:14px;font-size:13px">
+            <div style="font-weight:700;color:var(--green-dark);margin-bottom:6px">&#128100; 人类员工</div>
+            员工接手项目后，桌上堆满工作笔记、参考资料、会议记录。<b>项目越大、笔记越多、桌子占得越满。</b>项目不结束，这些资料不能清掉&#8212;&#8212;否则接不上之前的思路。
+          </div>
+          <div style="background:var(--blue-soft);border-radius:8px;padding:14px;font-size:13px">
+            <div style="font-weight:700;color:var(--blue);margin-bottom:6px">&#129302; AI推理线程</div>
+            模型处理token后，KV向量驻留在HBM中。<b>上下文越长、KV cache越大、HBM占得越满。</b>会话不结束，KV cache不能释放&#8212;&#8212;否则模型&#8220;忘了&#8221;前文。
+          </div>
+        </div>
+
+        <!-- 为什么必须在HBM -->
+        <div class="note-box note-amber" style="margin-top:14px">
+          <strong>为什么KV cache必须放在HBM？</strong><br>
+          HBM带宽3.35 TB/s，CPU内存仅50 GB/s&#8212;&#8212;差67倍。每生成一个token都要遍历全部KV cache做注意力计算。放CPU内存 = 速度慢67倍，放SSD = 慢近500倍。用户等不了。
+        </div>
+
+        <div class="note-box note-green" style="margin-top:8px">
+          <b>所以：推理的物理瓶颈不是算力，而是HBM容量。</b>GPU的计算速度远超需要，但HBM就这么大&#8212;&#8212;KV cache填满了，再多算力也接不了新任务。如同办公室的工位数，不是员工的能力，决定了能同时接多少项目。
+        </div>
+
+        <div class="q-transition">过渡 &#8594; 知道KV cache是主要占用还不够&mdash;&mdash;&ldquo;占HBM&rdquo;是定性的，供需分析要比数字。不同模型的KV差70倍（V4 Pro vs Llama），不算出来就不知道一台机器能服务多少个任务，后面全球供给就没法估。所以下一步必须把KV cache变成一个数字。</div>
+      </div>
+    </div>
+
+    <div class="card open" id="s7">
+      <div class="card-head" onclick="toggleCard(this)">
+        <span class="card-arrow">&#9654;</span>
+        <span class="card-tag tag-phase2">S7</span>
+        <span class="card-title">KV cache怎么算？</span>
+        <span class="card-status status-done">已填</span>
+      </div>
+      <div class="card-body">
+        <div class="q-answer">&#8594; 每token = f(层数, 注意力架构, 精度) &#215; 上下文长度。三代技术跨越70倍：GQA(0.52) &#8594; MLA(0.07) &#8594; CSA/HCA(0.007 MB/token)。</div>
+        <div class="note-box note-green" style="margin-top:10px;margin-bottom:10px">
+          <div style="font-size:12px;font-weight:700;color:var(--green-dark);margin-bottom:4px">&#128205; 公式位置</div>
+          <div style="font-size:13px">单线程HBM占用 = KV_cache(架构, 上下文长度) &larr; 把&ldquo;记忆量&rdquo;变成数字</div>
+        </div>
+        <div class="note-box" style="margin-top:0;margin-bottom:12px;background:#f9f6f0;border-left:3px solid var(--amber)">
+          <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:4px">&#128172; 人话版本</div>
+          <div style="font-size:14px;line-height:1.7">不同员工内化知识的方式不同&mdash;&mdash;有人必须逐条记住所有细节（GQA），有人善于高度抽象压缩（MLA），有人开头细致后面越来越提炼（CSA+HCA）。内化效率差70倍，直接决定团队能同时接多少个项目。</div>
+        </div>
+
+        <!-- 公式 -->
+        <div style="background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-top:10px;font-family:monospace;font-size:12.5px;line-height:2.2">
+          <div style="font-size:12px;font-weight:600;color:var(--green-dark);margin-bottom:6px;font-family:inherit">S5公式展开：单线程KV = per-token KV &#215; 上下文长度</div>
+          <div><span style="color:var(--blue);font-weight:600">GQA:</span> 每token = 2 &#215; L &#215; H<sub>kv</sub> &#215; d<sub>head</sub> &#215; 2 bytes</div>
+          <div><span style="color:var(--green);font-weight:600">MLA:</span> 每token = L &#215; (d<sub>c</sub> + d<sub>rope</sub>) &#215; 2 bytes</div>
+          <div><span style="color:var(--purple);font-weight:600">CSA/HCA:</span> 每token = &#931;(每层KV &#247; compress_ratio)</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">L=层数, H<sub>kv</sub>=KV头数, d<sub>c</sub>=压缩维度(512), d<sub>rope</sub>=RoPE维度(64), compress_ratio: CSA=4x, HCA=128x</div>
+        </div>
+
+        <div class="prose" style="font-size:14px;line-height:1.8;margin-top:14px">
+          <p>
+            公式核心：<b>每层存多少 &#215; 多少层 = per-token总量。per-token &#215; 上下文长度 = 单线程KV cache。</b>&#8220;每层存多少&#8221;由注意力架构决定&#8212;&#8212;这是不同模型间差异的根源。
+          </p>
+        </div>
+
+        <!-- 7模型对比表 -->
+        <table style="width:100%;border-collapse:collapse;font-size:12px;margin:12px 0">
+          <thead>
+            <tr>
+              <th style="padding:7px 8px;border:1px solid var(--line);background:var(--green-soft);color:var(--green-dark);font-size:11px">模型</th>
+              <th style="padding:7px 8px;border:1px solid var(--line);background:var(--green-soft);color:var(--green-dark);font-size:11px">参数量</th>
+              <th style="padding:7px 8px;border:1px solid var(--line);background:var(--green-soft);color:var(--green-dark);font-size:11px">注意力</th>
+              <th style="padding:7px 8px;border:1px solid var(--line);background:var(--green-soft);color:var(--green-dark);font-size:11px;text-align:right">MB/token</th>
+              <th style="padding:7px 8px;border:1px solid var(--line);background:var(--green-soft);color:var(--green-dark);font-size:11px;text-align:right">GB @1M</th>
+              <th style="padding:7px 8px;border:1px solid var(--line);background:var(--green-soft);color:var(--green-dark);font-size:11px">意味着</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background:var(--purple-soft)">
+              <td style="padding:6px 8px;border:1px solid var(--line);font-weight:600">DeepSeek V4 Pro</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-family:monospace;font-size:11px">1.6T / 49B</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-family:monospace;font-size:11px">CSA/HCA</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right;font-weight:700;color:var(--purple)">0.007</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right;font-weight:700;color:var(--purple)">7</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-size:11px;color:var(--muted)">&#8776;1/2 块 GB200</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;border:1px solid var(--line)">GLM-4-32B</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-family:monospace;font-size:11px">32B dense</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-family:monospace;font-size:11px">GQA-2</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">0.062</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">62</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-size:11px;color:var(--muted)">&#8776;1/3 块 GB200</td>
+            </tr>
+            <tr style="background:rgba(230,240,234,0.3)">
+              <td style="padding:6px 8px;border:1px solid var(--line)">DeepSeek V3</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-family:monospace;font-size:11px">671B / 37B</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-family:monospace;font-size:11px">MLA</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">0.070</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">70</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-size:11px;color:var(--muted)">&#8776;1/3 块 GB200</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;border:1px solid var(--line)">Qwen3-235B</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-family:monospace;font-size:11px">235B / 22B</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-family:monospace;font-size:11px">GQA-4</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">0.193</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">193</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-size:11px;color:var(--muted)">1 块 GB200</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;border:1px solid var(--line)">Qwen2.5-72B</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-family:monospace;font-size:11px">72B dense</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-family:monospace;font-size:11px">GQA-8</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">0.328</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">328</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-size:11px;color:var(--muted)">&#8776;2 块 GB200</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;border:1px solid var(--line)">GLM-4.5</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-family:monospace;font-size:11px">355B / 32B</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-family:monospace;font-size:11px">GQA-8</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">0.377</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">377</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-size:11px;color:var(--muted)">&#8776;2 块 GB200</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;border:1px solid var(--line)">Llama 3.1 405B</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-family:monospace;font-size:11px">405B dense</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-family:monospace;font-size:11px">GQA-8</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">0.516</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">516</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-size:11px;color:var(--muted)">&#8776;3 块 GB200</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">
+          数据来源：config.json from Hugging Face (DeepSeek-V4-Pro, V3, Qwen3-235B, Qwen2.5-72B, GLM-4.5, GLM-4-32B)&#12288;&#183;&#12288;DeepSeek-V4 Technical Report (arXiv:2606.19348)&#12288;&#183;&#12288;Llama 3.1 (Meta)。<br>
+          GB200: 192 GB HBM3e。V4 Pro KV cache含FP8存储+BF16 RoPE，30层CSA(4x) + 31层HCA(128x)，&#8776;V3的10%。
+        </div>
+
+        <!-- DeepSeek V4 Pro 亮点 -->
+        <div class="note-box note-purple" style="margin-top:14px">
+          <strong>DeepSeek V4 Pro：KV cache的代际飞跃</strong><br>
+          V3&#8594;V4 Pro：MLA被CSA/HCA替代。61层中，30层用CSA（序列维4x压缩），31层用HCA（128x压缩），FP8存储KV（RoPE维度保留BF16）。<br>
+          <b>结果：1M上下文的KV cache从70 GB压缩到&#8776;7 GB&#8212;&#8212;降低90%。</b>这使原生1M上下文成为可能，而非靠offload勉强支撑。
+        </div>
+
+        <!-- 关键洞察 -->
+        <div class="note-box note-green" style="margin-top:8px">
+          <b>洞察：决定KV cache大小的不是模型参数量，而是注意力压缩架构。</b><br>
+          1.6T参数的V4 Pro（0.007 MB/token）比72B的Qwen2.5（0.328 MB/token）省47倍KV cache。671B的DeepSeek V3比72B的Qwen2.5更省HBM。推理成本下降的根因不是GPU便宜了，而是每一代注意力架构让同样的HBM能&#8220;装下&#8221;更多并发任务。
+        </div>
+
+        <div class="note-box note-amber" style="margin-top:8px">
+          <strong>附属：闭源模型估算法</strong><br>
+          GPT-4o、Claude等不公开架构参数。三场景估算：以开源模型为锚点，结合API定价/上下文窗口/吞吐量反推。<br>
+          下界 0.007 MB/token（V4 Pro锚）/ 中值 0.07&#8211;0.19 / 上界 0.4
+        </div>
+
+        <div class="q-transition">过渡 &#8594; KV cache只是账单的一项。模型权重是固定成本（不管服务几个用户都要加载），KV cache是边际成本（每多一个用户就多一份）。不把完整账单列出来，就不知道&ldquo;加一个用户到底要多少资源&rdquo;，也就不知道一台机器的产能上限。</div>
+      </div>
+    </div>
+
+    <div class="card open" id="s8">
+      <div class="card-head" onclick="toggleCard(this)">
+        <span class="card-arrow">&#9654;</span>
+        <span class="card-tag tag-phase2">S8</span>
+        <span class="card-title">服务1个1M任务的完整物料清单？</span>
+        <span class="card-status status-done">已填</span>
+      </div>
+      <div class="card-body">
+        <div class="q-answer">&#8594; 模型权重 + KV cache + 激活内存 + 系统开销。NVL72基准：V4 Pro占1.6 TB（权重主导），Llama 405B占1.3 TB（KV主导）。</div>
+        <div class="note-box note-green" style="margin-top:10px;margin-bottom:10px">
+          <div style="font-size:12px;font-weight:700;color:var(--green-dark);margin-bottom:4px">&#128205; 公式位置</div>
+          <div style="font-size:13px">单线程总占用 = 权重份额 + KV_cache + 激活 + 系统</div>
+        </div>
+        <div class="note-box" style="margin-top:0;margin-bottom:12px;background:#f9f6f0;border-left:3px solid var(--amber)">
+          <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:4px">&#128172; 人话版本</div>
+          <div style="font-size:14px;line-height:1.7">雇一个人不只给桌子&mdash;&mdash;还要配工具（权重，所有人共用一套，固定开支），留走廊和会议室（激活+系统，公摊）。KV随人数涨，权重不涨&mdash;&mdash;这就是MoE省钱的原因。</div>
+        </div>
+
+        <div class="prose" style="font-size:14px;line-height:1.8;margin-top:10px">
+          <p>
+            S7解决了KV cache的大小。但完整的推理线程不只需要KV cache&#8212;&#8212;模型权重本身要常驻HBM，还有激活内存和系统开销。如同雇一个员工不只需要桌子放笔记（KV cache），还需要整个办公基础设施：电脑、工具、办公室空间（权重+激活+系统）。
+          </p>
+        </div>
+
+        <!-- 完整BOM表 NVL72基准 -->
+        <table style="width:100%;border-collapse:collapse;font-size:12px;margin:12px 0">
+          <caption style="font-size:12px;color:var(--muted);text-align:left;padding:4px 0">服务1个1M线程的完整HBM清单 &#183; NVL72基准（13.5 TB HBM3e, 70%可用=9,450 GB）</caption>
+          <thead>
+            <tr>
+              <th style="padding:7px 8px;border:1px solid var(--line);background:var(--green-soft);color:var(--green-dark);font-size:11px">模型</th>
+              <th style="padding:7px 8px;border:1px solid var(--line);background:var(--green-soft);color:var(--green-dark);font-size:11px;text-align:right">权重(GB)</th>
+              <th style="padding:7px 8px;border:1px solid var(--line);background:var(--green-soft);color:var(--green-dark);font-size:11px;text-align:right">KV@1M(GB)</th>
+              <th style="padding:7px 8px;border:1px solid var(--line);background:var(--green-soft);color:var(--green-dark);font-size:11px;text-align:right">HBM总需</th>
+              <th style="padding:7px 8px;border:1px solid var(--line);background:var(--green-soft);color:var(--green-dark);font-size:11px;text-align:right">NVL72并发</th>
+              <th style="padding:7px 8px;border:1px solid var(--line);background:var(--green-soft);color:var(--green-dark);font-size:11px">瓶颈</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background:var(--purple-soft)">
+              <td style="padding:6px 8px;border:1px solid var(--line);font-weight:600">V4 Pro (FP8)</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">1,600</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right;font-weight:700;color:var(--purple)">7</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">1,607</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right;font-weight:700;color:var(--purple)">~1,121</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-size:11px;color:var(--muted)">权重 &#8811; KV</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;border:1px solid var(--line)">GLM-4-32B</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">64</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">62</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">126</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">151</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-size:11px;color:var(--muted)">KV &#8776; 权重</td>
+            </tr>
+            <tr style="background:rgba(230,240,234,0.3)">
+              <td style="padding:6px 8px;border:1px solid var(--line)">DeepSeek V3</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">1,342</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">70</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">1,412</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">115</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-size:11px;color:var(--muted)">权重 &#8811; KV</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;border:1px solid var(--line)">Qwen3-235B</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">470</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">193</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">663</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">46</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-size:11px;color:var(--muted)">权重 > KV</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;border:1px solid var(--line)">Qwen2.5-72B</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">140</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">328</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">468</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">28</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-size:11px;color:var(--muted)">KV &#8811; 权重</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;border:1px solid var(--line)">GLM-4.5</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">710</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">377</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">1,087</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">23</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-size:11px;color:var(--muted)">KV &#8776; 权重</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;border:1px solid var(--line)">Llama 3.1 405B</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">810</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">516</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">1,326</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);text-align:right">16</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-size:11px;color:var(--muted)">KV > 权重</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">
+          NVL72并发 = floor((9,450 &#8722; 权重) &#247; KV@1M)。权重：V4 Pro用FP8(1字节/参数)，V3用BF16(2字节/参数)，其余同源文件。激活内存和系统开销已含在30%余量中。<br>
+          数据来源：NVIDIA GB200 NVL72 spec (13.5 TB HBM3e, 72 GPU)&#12288;&#183;&#12288;各模型config.json (Hugging Face)。
+        </div>
+
+        <!-- 硬件各层角色 -->
+        <div style="margin-top:14px;font-size:14px;font-weight:600;color:var(--green-dark)">完整硬件角色</div>
+        <table style="width:100%;border-collapse:collapse;font-size:12px;margin:8px 0">
+          <thead>
+            <tr>
+              <th style="padding:6px 8px;border:1px solid var(--line);background:var(--green-soft);color:var(--green-dark);font-size:11px">硬件层</th>
+              <th style="padding:6px 8px;border:1px solid var(--line);background:var(--green-soft);color:var(--green-dark);font-size:11px">NVL72规格</th>
+              <th style="padding:6px 8px;border:1px solid var(--line);background:var(--green-soft);color:var(--green-dark);font-size:11px">推理角色</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-weight:500">GPU (GB200)</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-size:11.5px">72颗, FP8 2,500 TFLOPS/颗</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-size:11.5px">矩阵乘法、Attention计算</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-weight:500">HBM (显存)</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-size:11.5px">HBM3e, 192 GB/GPU, 共13.5 TB</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-size:11.5px">存放权重 + KV cache &#8212; <b>产能天花板</b></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-weight:500">NVLink 5</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-size:11.5px">1.8 TB/s/GPU, 72 GPU全互联</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-size:11.5px">多GPU间传输张量分片</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-weight:500">CPU + DRAM</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-size:11.5px">Grace CPU, 共~5 TB DDR5</td>
+              <td style="padding:6px 8px;border:1px solid var(--line);font-size:11.5px">调度、tokenize、模型加载中转</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- MoE权衡洞察 -->
+        <div class="note-box note-green" style="margin-top:10px">
+          <b>MoE的权衡：KV cache省了，权重开销大了。</b><br>
+          V4 Pro虽然KV cache最小（7 GB），但1.6T参数的权重需要1.6 TB HBM。Llama 405B权重只需810 GB，但KV cache需516 GB。<br>
+          <b>关键：V4 Pro的优势在并发。</b>权重只需加载一份（固定成本），KV cache随并发线性增长（边际成本）。V4 Pro以7 GB/线程增长 vs Llama的516 GB/线程&#8212;&#8212;73倍差距。同一台NVL72：V4 Pro并发1,121 vs Llama并发16。
+        </div>
+
+        <div class="q-transition">过渡 &#8594; 单任务BOM是理论值。现实中一台机器不只受显存容量限制&mdash;&mdash;带宽、算力、延迟都可能先卡住。不做多约束检查，直接拿S8的数字算全球产能会高估。</div>
+      </div>
+    </div>
+
+    <!-- Phase 3 -->
+    <div class="phase-divider">
+      <span class="phase-num" style="background:var(--amber)">3</span>
+      <span style="color:var(--amber)">从单机到全球</span>
+    </div>
+
+    <div class="card open" id="s9">
+      <div class="card-head" onclick="toggleCard(this)">
+        <span class="card-arrow">&#9654;</span>
+        <span class="card-tag tag-phase3">S9</span>
+        <span class="card-title">一台NVL72能同时服务多少？</span>
+        <span class="card-status status-done">已填</span>
+      </div>
+      <div class="card-body">
+        <div class="q-answer">&#8594; 不只看显存容量，6个约束取最小值。前沿闭源模型工作口径约30/60/120条1M活跃线程。</div>
+
+        <div class="note-box note-green" style="margin-top:10px;margin-bottom:10px">
+          <div style="font-size:12px;font-weight:700;color:var(--green-dark);margin-bottom:4px">&#128205; 公式位置</div>
+          <div style="font-size:13px">单机产能 = min(HBM容量, HBM带宽, prefill算力, decode算力, 互联通信, 延迟要求)</div>
+        </div>
+        <div class="note-box" style="margin-top:0;margin-bottom:12px;background:#f9f6f0;border-left:3px solid var(--amber)">
+          <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:4px">&#128172; 人话版本</div>
+          <div style="font-size:14px;line-height:1.7">一个办公室能摆100张工位（容量），但电梯一次只运10人（带宽）、前台每小时只能办5个入职（prefill）、客户最多等1天（延迟）&mdash;&mdash;实际能同时干活的人数取最紧的那个约束。</div>
+        </div>
+
+        <div class="prose" style="font-size:14px;line-height:1.8;margin-top:10px">
+          <p>S8算的是天花板&mdash;&mdash;只看HBM能放下多少个KV cache。但&ldquo;放得下&rdquo;不等于&ldquo;跑得动&rdquo;。要逐个检查其他约束，看谁先卡住。</p>
+        </div>
+
+        <table style="width:100%;font-size:13px;margin-top:14px;border-collapse:collapse">
+          <thead>
+            <tr style="background:var(--green-soft)">
+              <th style="text-align:left;padding:8px;border:1px solid var(--line)">约束</th>
+              <th style="text-align:left;padding:8px;border:1px solid var(--line)">问什么</th>
+              <th style="text-align:left;padding:8px;border:1px solid var(--line)">判断</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding:6px 8px;border:1px solid var(--line);font-weight:600">HBM容量</td><td style="padding:6px 8px;border:1px solid var(--line)">KV cache + 权重放得下吗？</td><td style="padding:6px 8px;border:1px solid var(--line)">天花板，S8已算：26&ndash;144条（前沿闭源约30&ndash;60）</td></tr>
+            <tr><td style="padding:6px 8px;border:1px solid var(--line);font-weight:600">HBM带宽</td><td style="padding:6px 8px;border:1px solid var(--line)">同时输出时读得动KV吗？</td><td style="padding:6px 8px;border:1px solid var(--line)">中低速输出通常不是第一瓶颈</td></tr>
+            <tr><td style="padding:6px 8px;border:1px solid var(--line);font-weight:600">Prefill算力</td><td style="padding:6px 8px;border:1px solid var(--line)">1M输入能快速启动吗？</td><td style="padding:6px 8px;border:1px solid var(--line)">交互式会扣，取决于长上下文优化</td></tr>
+            <tr><td style="padding:6px 8px;border:1px solid var(--line);font-weight:600">Decode算力</td><td style="padding:6px 8px;border:1px solid var(--line)">持续输出时算力够吗？</td><td style="padding:6px 8px;border:1px solid var(--line)">低/中TPS弱扣</td></tr>
+            <tr><td style="padding:6px 8px;border:1px solid var(--line);font-weight:600">互联通信</td><td style="padding:6px 8px;border:1px solid var(--line)">多GPU传数据够快吗？</td><td style="padding:6px 8px;border:1px solid var(--line)">NVL72的NVLink通常够用</td></tr>
+            <tr><td style="padding:6px 8px;border:1px solid var(--line);font-weight:600">延迟要求</td><td style="padding:6px 8px;border:1px solid var(--line)">用户能等多久？</td><td style="padding:6px 8px;border:1px solid var(--line)">越紧越扣，把物理上限打成可售供给</td></tr>
+          </tbody>
+        </table>
+
+        <div class="note-box note-green" style="margin-top:14px">
+          <div style="font-weight:700;color:var(--green-dark);margin-bottom:6px">工作结论</div>
+          <div style="font-size:14px;line-height:1.7">
+            一台NVL72 &asymp; <b>30 / 60 / 120</b> 条1M活跃线程（基础/工作/上修口径），基于前沿闭源模型假设。<br>
+            <span style="font-size:12px;color:var(--muted)">30 &asymp; 重模型下沿（GLM-4.5级），60 &asymp; 中端工作假设（Claude Opus级），120 &asymp; KV优化后上修。</span><br>
+            <span style="font-size:12px;color:var(--muted)">边界：V4 Pro级（MLA/CSA）可达1,121，Llama 405B级（dense GQA）仅16。30/60/120是全球主力负载的代表性区间。</span>
+          </div>
+        </div>
+
+        <div class="q-transition">过渡 &#8594; 单机产能有了（30/60/120条）。要算全球推理供给，下一步必须知道：全球有多少台这样的机器？不能数GPU出货&mdash;&mdash;不透明。用电力反推更干净。</div>
+      </div>
+    </div>
+
+    <div class="card open" id="s10">
+      <div class="card-head" onclick="toggleCard(this)">
+        <span class="card-arrow">&#9654;</span>
+        <span class="card-tag tag-phase3">S10</span>
+        <span class="card-title">全球有多少台等效AI机器？</span>
+        <span class="card-status status-done">已填</span>
+      </div>
+      <div class="card-body">
+        <div class="q-answer">&#8594; 电力反推，2025全球约8.8万-11.4万台NVL72等效机器已通电。</div>
+
+        <div class="note-box note-green" style="margin-top:10px;margin-bottom:10px">
+          <div style="font-size:12px;font-weight:700;color:var(--green-dark);margin-bottom:4px">&#128205; 公式位置</div>
+          <div style="font-size:13px">全球供给 = <strong>全球机器数</strong> &#215; 单机产能(S9)。本卡解决<strong>全球机器数</strong>。</div>
+        </div>
+        <div class="note-box" style="margin-top:0;margin-bottom:12px;background:#f9f6f0;border-left:3px solid var(--amber)">
+          <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:4px">&#128172; 人话版本</div>
+          <div style="font-size:14px;line-height:1.7">GPU库存是商业机密，谁都不告诉你仓库里有多少台机器。但电费单藏不住——全球AI服务器一年烧掉93-95度电（TWh），除以每台机器的功率，就知道全球大概通电了多少台。</div>
+        </div>
+
+        <h4 style="margin:16px 0 8px;color:var(--green-dark)">为什么用电力反推？</h4>
+        <p>GPU库存不透明：NVIDIA不公布各客户出货量，云厂商不公布部署状态，二级市场交易不可追踪。电力是唯一公开、可交叉验证的物理口径——机器只要通电就会被电网记录。</p>
+
+        <h4 style="margin:16px 0 8px;color:var(--green-dark)">主路径：AI服务器用电 &#8594; 机器数</h4>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;margin:8px 0">
+          <thead>
+            <tr style="border-bottom:2px solid var(--green-light)">
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">数据</th>
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">数值</th>
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">来源</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">2025 AI-optimized servers用电</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)"><strong>93-95 TWh</strong></td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">Gartner 2025-11</td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">上修口径（含更宽AI相关用电）</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">~120 TWh</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">估算</td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">NVL72机架功耗（计算）</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)"><strong>120 kW</strong>（含冷却约132kW）</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">NVIDIA官方</td></tr>
+          </tbody>
+        </table>
+
+        <div style="background:rgba(31,69,48,.04);border:1px dashed var(--border);border-radius:8px;padding:12px 14px;font-family:'JetBrains Mono',monospace;font-size:13px;margin:12px 0">
+          AI服务器平均功率 = 93-95 TWh &#247; 8,760h = 10.6-10.8 GW<br>
+          NVL72等效机器 = 10.6-10.8 GW &#247; 120 kW = <strong>8.8万-9.0万台</strong>（主口径）<br>
+          上修：120 TWh &#247; 8,760h &#247; 120 kW = <strong>11.4万台</strong><br>
+          <strong>工作区间：8.8万-11.4万台</strong>
+        </div>
+
+        <h4 style="margin:16px 0 8px;color:var(--green-dark)">交叉验证</h4>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;margin:8px 0">
+          <thead>
+            <tr style="border-bottom:2px solid var(--green-light)">
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">路径</th>
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">输入</th>
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">结果</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">主路径</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">Gartner AI servers 93-95 TWh</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)"><strong>8.8万-9.0万台</strong></td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">交叉验证</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">IEA总数据中心485 TWh &#215; AI占比21-25%</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">8.9万-11.5万台</td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">上修</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">更宽AI相关用电 ~120 TWh</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">11.4万台</td></tr>
+          </tbody>
+        </table>
+
+        <div class="note-box note-amber" style="margin-top:10px">
+          <strong>关键限定</strong>：这不是说全球真有8.8万台NVL72——而是把不同代际GPU（H100/A100/MI300X）、TPU、ASIC和各类AI服务器，统一折成NVL72这个标准单位。就像用"标准煤"衡量不同燃料的热值。
+        </div>
+
+        <div class="note-box" style="margin-top:10px;background:rgba(109,74,122,.06);border-left:3px solid var(--purple)">
+          <strong>2026增量参考</strong>：Gartner预测2026年AI服务器用电175 TWh（+84%），折合约16.6万台NVL72等效。说明扩张速度很快，但不是2025存量答案。
+        </div>
+
+        <div class="q-transition">过渡 &#8594; 8.8万-11.4万台是全部已通电AI服务器。但训练也要用机器——大模型训练一次占几千台、持续几个月。不切出推理占比，就不知道有多少机器在"上班接客"产出token，供给数字会虚高。</div>
+      </div>
+    </div>
+
+    <div class="card open" id="s11">
+      <div class="card-head" onclick="toggleCard(this)">
+        <span class="card-arrow">&#9654;</span>
+        <span class="card-tag tag-phase3">S11</span>
+        <span class="card-title">其中多少用于推理？</span>
+        <span class="card-status status-done">已填</span>
+      </div>
+      <div class="card-body">
+        <div class="q-answer">&#8594; 推理占比50-70%（2025），约4.4万-8.0万台NVL72等效机器用于推理服务。</div>
+
+        <div class="note-box note-green" style="margin-top:10px;margin-bottom:10px">
+          <div style="font-size:12px;font-weight:700;color:var(--green-dark);margin-bottom:4px">&#128205; 公式位置</div>
+          <div style="font-size:13px">推理机器数 = 全球机器数(S10) &#215; <strong>推理占比</strong>。本卡解决<strong>推理占比</strong>。</div>
+        </div>
+        <div class="note-box" style="margin-top:0;margin-bottom:12px;background:#f9f6f0;border-left:3px solid var(--amber)">
+          <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:4px">&#128172; 人话版本</div>
+          <div style="font-size:14px;line-height:1.7">公司买了100台机器，不是100台都在接客户的活。有些在培训新员工（训练），有些在做内部实验。真正坐在工位上接单产出的，大概一半到七成。</div>
+        </div>
+
+        <h4 style="margin:16px 0 8px;color:var(--green-dark)">为什么不是100%？</h4>
+        <p>AI服务器有三种用途：训练新模型（占用大量GPU数月）、推理服务用户请求（产出token）、研发实验（调参/评测/安全测试）。只有推理服务才产出用户可用的token，所以供给分析只算推理部分。</p>
+
+        <h4 style="margin:16px 0 8px;color:var(--green-dark)">三家数据，三种口径</h4>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;margin:8px 0">
+          <thead>
+            <tr style="border-bottom:2px solid var(--green-light)">
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">来源</th>
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">推理占比</th>
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">口径</th>
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">时间</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">Deloitte TMT</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)"><strong>1/2(2025) &#8594; 2/3(2026)</strong></td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">算力用途分配</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">2026预测</td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">Gartner</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)"><strong>55%(2026)</strong> &#8594; 65%(2029)</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">IaaS支出占比</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">2025-10发布</td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">Epoch AI</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)"><strong>~60%(2024-2026)</strong></td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">算力分配（含实验）</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">研究估算</td></tr>
+          </tbody>
+        </table>
+
+        <div class="note-box note-amber" style="margin-top:10px">
+          <strong>为什么差这么大？</strong>不是谁对谁错，是量的东西不同。Epoch量FLOP（训练密度高），Gartner量钱（训练硬件单价贵），Deloitte量用途（最接近我们要的"机器台数"口径）。OpenAI 2024年仅30%算力用于推理——但那是因为在猛训GPT-5，是单公司极端值。
+        </div>
+
+        <h4 style="margin:16px 0 8px;color:var(--green-dark)">工作区间</h4>
+        <div style="background:rgba(31,69,48,.04);border:1px dashed var(--border);border-radius:8px;padding:12px 14px;font-family:'JetBrains Mono',monospace;font-size:13px;margin:12px 0">
+          推理占比工作区间：<strong>50-70%</strong><br>
+          50% = 2025稳健值（Deloitte轨迹、Gartner支出口径下推）<br>
+          70% = 上修值（考虑2026趋势 + 支出占比&#8800;台数占比的修正）<br><br>
+          推理机器 = 8.8万-11.4万 &#215; 50-70%<br>
+          = <strong>4.4万-8.0万台</strong> NVL72等效推理机器
+        </div>
+
+        <div class="note-box" style="margin-top:10px;background:rgba(109,74,122,.06);border-left:3px solid var(--purple)">
+          <strong>趋势</strong>：推理占比持续上升（模型成熟 &#8594; 训练频次降低 + 部署扩大）。2026年可能升至60-75%。但本分析锚定2025存量，不追预测。
+        </div>
+
+        <div class="q-transition">过渡 &#8594; 现在知道全球有4.4万-8.0万台推理机器，S9算过每台能同时服务30/60/120条1M活跃线程。两个数字相乘就是全球推理供给上限——但这是理论天花板，不是实际可售服务量。</div>
+      </div>
+    </div>
+
+    <div class="card open" id="s12">
+      <div class="card-head" onclick="toggleCard(this)">
+        <span class="card-arrow">&#9654;</span>
+        <span class="card-tag tag-phase3">S12</span>
+        <span class="card-title">全球推理供给上限？</span>
+        <span class="card-status status-done">已填</span>
+      </div>
+      <div class="card-body">
+        <div class="q-answer">&#8594; 132万-960万条1M活跃线程（分三层：前沿重模型紧、混合负载中、轻量优化宽）。</div>
+
+        <div class="note-box note-green" style="margin-top:10px;margin-bottom:10px">
+          <div style="font-size:12px;font-weight:700;color:var(--green-dark);margin-bottom:4px">&#128205; 公式位置</div>
+          <div style="font-size:13px"><strong>全球推理供给</strong> = 推理机器数(S11) &#215; 单机产能(S9)。本卡是供给侧的<strong>终点输出</strong>。</div>
+        </div>
+        <div class="note-box" style="margin-top:0;margin-bottom:12px;background:#f9f6f0;border-left:3px solid var(--amber)">
+          <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:4px">&#128172; 人话版本</div>
+          <div style="font-size:14px;line-height:1.7">全球有4.4万-8.0万间"AI工厂"在接单。每间工厂能同时雇30-120个全职员工（取决于活的难度）。总劳动力 = 工厂数 &#215; 每厂员工数。答案不是一个数，是一张表——因为"难活"和"简单活"吃的资源完全不同。</div>
+        </div>
+
+        <h4 style="margin:16px 0 8px;color:var(--green-dark)">供给矩阵</h4>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;margin:8px 0">
+          <thead>
+            <tr style="border-bottom:2px solid var(--green-light)">
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)"></th>
+              <th style="padding:6px 10px;text-align:center;color:var(--dim)">30条/台（前沿重模型）</th>
+              <th style="padding:6px 10px;text-align:center;color:var(--dim)">60条/台（工作口径）</th>
+              <th style="padding:6px 10px;text-align:center;color:var(--dim)">120条/台（轻量/优化）</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border);font-weight:600">4.4万台（保守）</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border);text-align:center">132万</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border);text-align:center">264万</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border);text-align:center">528万</td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border);font-weight:600">6.2万台（中值）</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border);text-align:center">186万</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border);text-align:center;background:rgba(46,107,69,.08)"><strong>372万</strong></td><td style="padding:6px 10px;border-bottom:1px dashed var(--border);text-align:center">744万</td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border);font-weight:600">8.0万台（上修）</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border);text-align:center">240万</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border);text-align:center">480万</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border);text-align:center">960万</td></tr>
+          </tbody>
+        </table>
+
+        <h4 style="margin:16px 0 8px;color:var(--green-dark)">分层结论</h4>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;margin:8px 0">
+          <thead>
+            <tr style="border-bottom:2px solid var(--green-light)">
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">负载类型</th>
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">供给区间</th>
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">含义</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">前沿重模型（Opus级，30条/台）</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)"><strong>132万-240万条</strong></td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">参数大、KV重，供给偏紧</td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">混合负载（工作口径，60条/台）</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)"><strong>264万-480万条</strong></td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">MoE + 中端模型，供给适中</td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">轻量/优化（MLA+缓存，120条/台）</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)"><strong>528万-960万条</strong></td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">KV优化到位，供给宽裕</td></tr>
+          </tbody>
+        </table>
+
+        <div class="note-box note-amber" style="margin-top:10px">
+          <strong>为什么区间这么宽（7倍）？</strong>两层不确定性相乘：机器数有2倍不确定（4.4万 vs 8.0万），单机产能有4倍不确定（30 vs 120条）。但这不是"不知道"——4倍差距来自模型选择，是结构性的，不是误差。供给是否过剩的答案，取决于需求侧的"活"是什么构成。
+        </div>
+
+        <div style="margin:16px 0 8px">
+          <div style="font-size:12px;color:var(--dim);margin-bottom:4px"><strong>Epoch AI：同样GPU，推理供给随上下文长度变化巨大（5亿-200亿 output tokens/s）</strong> — 这就是为什么供给是一张矩阵 · 来源：Epoch AI</div>
+          <img src="assets/ai-epoch_inference_supply_vs_context.png" alt="Epoch AI inference supply vs context length" style="width:100%;max-width:600px;border-radius:8px;border:1px solid var(--border)">
+        </div>
+
+
+        <div class="note-box note-green" style="margin-top:10px">
+          <strong>供给侧推导链完整回顾</strong>：<br>
+          AI供给 = 质量 &#215; 数量(S3) &#8594; 数量 = 推理token(S4) &#8594; 推理用1M线程衡量(S5)<br>
+          &#8594; 1线程占多少HBM？KV+权重+激活(S6-S8) &#8594; 单机产能 = min(6约束) = 30/60/120(S9)<br>
+          &#8594; 全球机器 = 电力反推 = 8.8万-11.4万(S10) &#8594; 推理占比50-70% = 4.4万-8.0万(S11)<br>
+          &#8594; <strong>全球推理供给 = 132万-960万条1M活跃线程(S12)</strong>
+        </div>
+
+        
+        <div style="margin:12px 0 8px">
+          <div style="font-size:12px;color:var(--dim);margin-bottom:4px"><strong>Epoch AI：全球AI芯片算力存量约每7个月翻倍</strong> — 供给不是静态盘子 · 来源：Epoch AI</div>
+          <img src="assets/ai-epoch_chip_production_growth.png" alt="Epoch AI chip production growth" style="width:100%;max-width:600px;border-radius:8px;border:1px solid var(--border)">
+        </div>
+
+        <div class="q-transition">过渡 &#8594; 供给侧到此完成，输出是一张表不是一个数。要判断够不够，必须知道需求侧的"活"是什么构成——多少轻量短对话、多少前沿reasoning、多少超重长上下文。构成不同，对着供给表查到的答案完全不同。</div>
+      </div>
+    </div>
+
+    </div>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- TAB 4: 需求                                   -->
+  <!-- ════════════════════════════════════════════ -->
+  <div id="tab-demand" class="tab-panel">
+    <div class="phase-divider">
+      <span class="phase-num" style="background:var(--red)">4</span>
+      <span style="color:var(--red)">需求侧</span>
+    </div>
+
+    <!-- ========== S13 ========== -->
+    <div class="card open" id="s13">
+      <div class="card-head" onclick="toggleCard(this)">
+        <span class="card-arrow">&#9654;</span>
+        <span class="card-tag tag-phase4">S13</span>
+        <span class="card-title">需求到底是什么，怎么和供给比？</span>
+        <span class="card-status status-done">已填</span>
+      </div>
+      <div class="card-body">
+        <div class="q-answer">&#8594; 行业用token/day衡量AI需求，但token/day不能直接和供给比&#8212;&#8212;供给的单位是机器。需求也必须折成机器数，才能和供给4.4万-8万台放在同一把尺上。</div>
+
+        <h4 style="margin:14px 0 8px;color:var(--green-dark)">业内通行指标：token/day</h4>
+        <p style="margin:0 0 10px;line-height:1.8;color:var(--text)">行业衡量AI需求，最常见的指标是<strong>每天处理多少token</strong>&#8212;&#8212;Google、OpenAI、字节跳动都在用这个口径报数。这比用户数和收入更接近真实工作量：</p>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;margin:8px 0">
+          <thead>
+            <tr style="border-bottom:2px solid var(--green-light)">
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">指标</th>
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">为什么不适合做供需比较</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)"><strong>用户数</strong></td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">一个闲聊用户和一个coding agent对机器消耗差100倍</td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)"><strong>收入</strong></td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">价格在变（降价10x不代表需求降了10x）</td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)"><strong>API调用量</strong></td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">不含消费端（ChatGPT 700M周用户不走API）</td></tr>
+          </tbody>
+        </table>
+
+        <h4 style="margin:16px 0 8px;color:var(--green-dark)">但token/day还不够&#8212;&#8212;必须折成机器数</h4>
+        <p style="margin:0 0 10px;line-height:1.8;color:var(--text)">供给侧（S1-S12）已经统一成NVL72等效机器数：<strong>4.4万-8.0万台</strong>。token/day不能直接和"台"比较。所以需要一个公式把token/day翻译成机器数：</p>
+
+        <div class="formula-band">
+          <div class="fb-left">
+            <div class="fb-label" style="color:var(--green-dark)">&#128205; 公式</div>
+            <strong>需求机器数 = token/day &#247; 86400 &#247; 单台有效token/s</strong><br>
+            <span style="color:var(--green-dark)">&#8593; 分子 = 每天多少活（S14解决）</span><br>
+            <span style="color:var(--green-dark)">&#8593; 分母 = 一台机器每秒干多少活（S15解决）</span>
+          </div>
+          <div class="fb-right">
+            <div class="fb-label" style="color:var(--amber)">&#128172; 人话</div>
+            每天有多少活<br>
+            平摊到每一秒<br>
+            除以一台机器每秒能干多少<br>
+            = 需要多少台机器
+          </div>
+        </div>
+
+        <div class="note-box" style="background:#f9f6f0;border-left:3px solid var(--green-dark)">
+          <strong>&#128221; 例子</strong>：如果全球一天100T tokens，平摊到每秒 = 100T &#247; 86,400 &#8776; <strong>11.6亿 tokens/s</strong>。如果一台NVL72有效吞吐100K tokens/s，那么需要 11.6亿 &#247; 100K &#8776; <strong>1.16万台</strong>。这个数才能和供给的4.4万-8万台放在一起比。
+        </div>
+
+        <div class="q-transition">过渡 &#8594; 公式有两个未知数：分子是token/day，分母是单台token/s。先解决分子：全球每天到底跑了多少token？</div>
+      </div>
+    </div>
+
+    <!-- ========== S14 ========== -->
+    <div class="card open" id="s14">
+      <div class="card-head" onclick="toggleCard(this)">
+        <span class="card-arrow">&#9654;</span>
+        <span class="card-tag tag-phase4">S14</span>
+        <span class="card-title">全球每天大概跑多少token？</span>
+        <span class="card-status status-done">已填</span>
+      </div>
+      <div class="card-body">
+        <div class="q-answer">&#8594; 四路交叉验证收敛，工作区间<strong>100-300T tokens/day</strong>。</div>
+
+        <div class="formula-band">
+          <div class="fb-left">
+            <div class="fb-label" style="color:var(--green-dark)">&#128205; 公式位置</div>
+            需求机器数 = <strong style="background:#e8f5e9;padding:2px 4px;border-radius:3px">token/day</strong> &#247; 86400 &#247; 单台有效token/s<br>
+            <span style="color:var(--green-dark)">&#8593; S14锁定分子：<strong>100-300T tokens/day</strong></span>
+          </div>
+          <div class="fb-right">
+            <div class="fb-label" style="color:var(--amber)">&#128172; 人话</div>
+            问几家大厂各报多少<br>
+            口径不同但区间重叠<br>
+            锁定：<strong>每天100T-300T个token在跑</strong>
+          </div>
+        </div>
+
+        <h4 style="margin:16px 0 8px;color:var(--green-dark)">关键吞吐披露</h4>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;margin:8px 0">
+          <thead>
+            <tr style="border-bottom:2px solid var(--green-light)">
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">主体</th>
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">数值</th>
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">口径</th>
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">来源</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">Google全产品</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)"><strong>~105T/天</strong>（3.2Q/月）</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">全产品含多模态，同比7x</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">I/O主旨演讲 2026-05</td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">OpenAI</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)"><strong>21.6T/天</strong>（150亿/分钟）</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">仅API，不含ChatGPT消费端</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">融资公告 2026-03</td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">豆包</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)"><strong>180T/天</strong></td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">含图/视频/语音折算，构成未拆分</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">火山引擎大会 2026-06</td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">中国全国</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)"><strong>140T+/天</strong></td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">全国词元调用量</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">国家数据局 2026-03</td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">OpenRouter</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)"><strong>4.1T/天</strong></td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">聚合平台，同比12x</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">平台公开榜 2026-05</td></tr>
+          </tbody>
+        </table>
+
+        <div class="note-box note-amber" style="margin-top:10px">
+          <strong>&#9888; 口径警告</strong>：这些数字<strong>不能直接相加</strong>。Google全口径含搜索/办公/多模态折算；OpenAI仅API不含ChatGPT；豆包含多模态；国家数据局是全国汇总。全口径与API-only差一个数量级。
+        </div>
+
+        <h4 style="margin:16px 0 8px;color:var(--green-dark)">四条独立路径交叉验证</h4>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;margin:8px 0">
+          <thead>
+            <tr style="border-bottom:2px solid var(--green-light)">
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">路径</th>
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">逻辑</th>
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">结果</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)"><strong>A 数流水</strong></td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">各家披露的token/天加总修正</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">全球文本推理 150-350T/天</td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)"><strong>B 数钱</strong></td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">token类收入$45-65B/年 &#247; 混合单价$0.4-1.5/M</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">付费需求 82-445T/天</td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)"><strong>C 看行情</strong></td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">租赁市场价格与空置率反推</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">前沿段有效供给已被全额认购</td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)"><strong>D DeepSeek标定</strong></td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">唯一全透明样本：776B/天 &#247; 1,814块H800</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">= 4.3亿token/卡/天（MLA最优上锚）</td></tr>
+          </tbody>
+        </table>
+        <p style="margin-top:8px;font-size:13.5px">四路重叠区间约150-350T/天。采用<strong>100-300T/天</strong>作为保守工作区间。</p>
+
+        <div class="q-transition">过渡 &#8594; 分子锁定在100-300T/天。下一步要解决分母&#8212;&#8212;但不能只除以一个token/s，因为不同token对机器的消耗完全不同。同样100T，全是短问答和全是agent长任务，需要的机器数差100倍。</div>
+      </div>
+    </div>
+
+    <!-- ========== S15 ========== -->
+    <div class="card open" id="s15">
+      <div class="card-head" onclick="toggleCard(this)">
+        <span class="card-arrow">&#9654;</span>
+        <span class="card-tag tag-phase4">S15</span>
+        <span class="card-title">怎么把token翻译成机器数？&#8212;&#8212;任务有轻重</span>
+        <span class="card-status status-done">已填</span>
+      </div>
+      <div class="card-body">
+        <div class="q-answer">&#8594; 关键是分母&#8212;&#8212;每台机器每秒能处理多少token。这个数不是固定的，取决于任务的轻重。同一台NVL72：轻活吐89万/s，重活只吐1.4万/s，差100倍。所以"翻译"的核心就是：全球的活有多重？</div>
+
+        <div class="formula-band">
+          <div class="fb-left">
+            <div class="fb-label" style="color:var(--green-dark)">&#128205; 分母怎么定</div>
+            <strong>单台有效token/s</strong><br>
+            = 基准吞吐(MLPerf)<br>
+            &#247; 模型更重(2-5x)<br>
+            &#247; 上下文更长(5-50x)<br>
+            &#247; 不能让用户等(2-5x)<br>
+            &#247; 线上打折(1.5-3x)
+          </div>
+          <div class="fb-right">
+            <div class="fb-label" style="color:var(--amber)">&#128172; 人话</div>
+            实验室最快产量(<strong>89万</strong>/s)<br>
+            模型更难跑 &#8594; 变慢<br>
+            记忆更长 &#8594; 变慢<br>
+            用户不能等 &#8594; 变慢<br>
+            线上不能跑满 &#8594; 变慢<br>
+            = 真实可卖产量(<strong>1.4万-89万</strong>/s)
+          </div>
+        </div>
+
+        <p style="margin:14px 0;line-height:1.8;color:var(--text)">普通聊天、coding、reasoning、agent、1M长上下文不是同一种负载。如果用一个平均值除，轻活高估需求、重活低估需求，结论失真。所以必须把任务分层，给每层一个不同的分母。</p>
+
+        <h4 style="margin:16px 0 8px;color:var(--green-dark)">NVIDIA MLPerf 实测&#8212;&#8212;同一台机器，不同任务差多少</h4>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;margin:8px 0">
+          <thead>
+            <tr style="border-bottom:2px solid var(--green-light)">
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">模型 / 场景</th>
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">单台NVL72 tokens/s</th>
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">代表负载</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">Llama2 70B（短context）</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)"><strong>750K-890K</strong></td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">轻量：翻译、摘要、短问答</td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">DeepSeek R1（MoE reasoning）</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)"><strong>240K-336K</strong></td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">前沿：coding、多步推理</td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">Llama3.1 405B（长context）</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)"><strong>14K-15K</strong></td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">超重：长文档分析、agent</td></tr>
+          </tbody>
+        </table>
+
+        <div class="formula-band" style="margin:12px 0">
+          <div class="fb-left" style="flex:none;width:auto;padding:10px 14px">
+            <div class="fb-label" style="color:var(--green-dark)">三层工作区间</div>
+          </div>
+          <div class="fb-right" style="flex:1;padding:10px 14px;font-size:13px">
+            <strong>轻量</strong> 300K-900K tokens/s &#8212; 翻译、摘要、客服<br>
+            <strong>前沿</strong> 50K-300K tokens/s &#8212; reasoning、coding、分析<br>
+            <strong>超重</strong> 15K-50K tokens/s &#8212; agent工作流、长文档
+          </div>
+        </div>
+
+        <h4 style="margin:16px 0 8px;color:var(--green-dark)">证据：全球的token正在变重</h4>
+        <p style="margin:0 0 10px;line-height:1.8;color:var(--text)">分母取什么值，取决于全球token的轻重构成。当前证据显示<strong>token正在系统性变重</strong>&#8212;&#8212;这意味着分母在变小，同样的token/day需要更多机器：</p>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;margin:8px 0">
+          <thead>
+            <tr style="border-bottom:2px solid var(--green-light)">
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">趋势</th>
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">数据</th>
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">来源</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">Reasoning token占比已过50%</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">从接近0 &#8594; &gt;50%</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">OpenRouter&#215;a16z 100T实证</td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">Programming token占比</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">11% &#8594; &gt;50%</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">同上</td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">平均sequence length</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">~2K &#8594; 5.4K+</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">同上</td></tr>
+          </tbody>
+        </table>
+
+        <div style="margin:16px 0 8px">
+          <h4 style="color:var(--green-dark);margin-bottom:12px">外部图表证据</h4>
+          <div style="margin-bottom:16px">
+            <div style="font-size:12px;color:var(--dim);margin-bottom:4px"><strong>OpenRouter：reasoning token占比已越过50%</strong></div>
+            <img src="assets/ai-openrouter_reasoning_share.png" alt="OpenRouter reasoning token share" style="width:100%;max-width:700px;border-radius:8px;border:1px solid var(--border)">
+          </div>
+          <div style="margin-bottom:16px">
+            <div style="font-size:12px;color:var(--dim);margin-bottom:4px"><strong>OpenRouter：programming从约11%升到约50%</strong> &#8212; coding/agent是变重的主驱动</div>
+            <img src="assets/ai-openrouter_programming_share.png" alt="OpenRouter programming token share" style="width:100%;max-width:700px;border-radius:8px;border:1px solid var(--border)">
+          </div>
+          <div style="margin-bottom:16px">
+            <div style="font-size:12px;color:var(--dim);margin-bottom:4px"><strong>OpenRouter：平均sequence length持续上升（~2K&#8594;5.4K+）</strong></div>
+            <img src="assets/ai-openrouter_seq_length.png" alt="OpenRouter average sequence length" style="width:100%;max-width:700px;border-radius:8px;border:1px solid var(--border)">
+          </div>
+        </div>
+
+        <div class="note-box note-green" style="margin-top:12px">
+          <strong>回扣S6-S8</strong>：这些折扣因子不是凭空出现的。模型重量=S8的权重占用，上下文长度=S6-S7的KV cache放大，延迟=S9的用户体验约束，调度=S9未覆盖的生产开销。这是S6-S9在宏观吞吐层面的投影。
+        </div>
+
+        <div class="formula-band" style="margin:12px 0">
+          <div class="fb-left">
+            <div class="fb-label" style="color:var(--green-dark)">&#128205; 换一种理解方式</div>
+            需求机器数<br>
+            = 每天跑了多少活<br>
+            &#215; 每个活有多重<br>
+            &#247; 一台机器一天能扛多少
+          </div>
+          <div class="fb-right">
+            <div class="fb-label" style="color:var(--amber)">&#128172; 人话</div>
+            全球一天要生产多少token<br>
+            除以一台机器一天能生产多少token<br>
+            就知道这些需求大概要占多少台机器<br>
+            <strong>&#8212;&#8212;关键是"活有多重"决定了一台机器一天能干多少</strong>
+          </div>
+        </div>
+
+        <div class="q-transition">过渡 &#8594; 分子(100-300T/天)和分母(按轻重分层：1.4万-89万 tokens/s)都有了。代入公式，看需求折成多少台机器，和供给4.4万-8万台比。</div>
+      </div>
+    </div>
+
+    <!-- ========== S16 ========== -->
+    <div class="card open" id="s16">
+      <div class="card-head" onclick="toggleCard(this)">
+        <span class="card-arrow">&#9654;</span>
+        <span class="card-tag tag-phase4">S16</span>
+        <span class="card-title">折成机器数，和供给比什么结论？</span>
+        <span class="card-status status-done">已填</span>
+      </div>
+      <div class="card-body">
+        <div class="q-answer">&#8594; 当前已发生需求 &#8776; 0.8万-6.9万台NVL72。轻量token供给偏宽；前沿reasoning/agent接近平衡；超重长上下文可能局部紧张。不能说整体过剩，也不能说整体短缺&#8212;&#8212;答案取决于token的轻重。</div>
+
+        <div class="formula-band">
+          <div class="fb-left">
+            <div class="fb-label" style="color:var(--green-dark)">&#128205; 代入计算</div>
+            需求机器数 = <strong>S14(100-300T/天)</strong> &#247; 86400 &#247; <strong>S15(分层token/s)</strong><br>
+            供需对比 = 需求(0.8万-6.9万) vs 供给(4.4万-8.0万)
+          </div>
+          <div class="fb-right">
+            <div class="fb-label" style="color:var(--amber)">&#128172; 人话</div>
+            分子和分母都有了<br>
+            代入公式看需要多少台<br>
+            摆在供给旁边<br>
+            <strong>答案完全取决于token的轻重</strong>
+          </div>
+        </div>
+
+        <p style="margin:14px 0;line-height:1.8;color:var(--text)"><strong>这是全链的汇合点。</strong>供给链（S1-S12）用12个问题推到"全球有4.4万-8万台推理机器"；需求链（S13-S15）用3个问题推到"分子100-300T/天，分母按轻重分层"。现在代入公式。</p>
+
+        <h4 style="margin:16px 0 8px;color:var(--green-dark)">敏感性矩阵&#8212;&#8212;答案取决于分母</h4>
+        <p style="font-size:13.5px;margin-bottom:8px">需求机器数 = token/day &#247; 86400 &#247; 单台有效token/s：</p>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;margin:8px 0">
+          <thead>
+            <tr style="border-bottom:2px solid var(--green-light)">
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">单台有效token/s</th>
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">代表负载</th>
+              <th style="padding:6px 10px;text-align:right;color:var(--dim)">100T/天</th>
+              <th style="padding:6px 10px;text-align:right;color:var(--dim)">300T/天</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">150K</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">轻量/一般API</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border);text-align:right">0.77万</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border);text-align:right">2.31万</td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">100K</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">中等API/coding</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border);text-align:right">1.16万</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border);text-align:right">3.47万</td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">50K</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">前沿reasoning/agent</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border);text-align:right">2.31万</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border);text-align:right"><strong>6.94万</strong></td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">15K</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">超重长上下文</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border);text-align:right">7.72万</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border);text-align:right">23.1万</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:13.5px;margin-top:8px">用API/开发者级别的50K-150K校准：当前需求 &#8776; <strong>0.8万-6.9万台</strong>。对比供给 <strong>4.4万-8.0万台</strong>。</p>
+
+        <div class="formula-band" style="margin:12px 0">
+          <div class="fb-left">
+            <div class="fb-label" style="color:var(--green-dark)">&#128205; 怎么读这张表</div>
+            如果全球token偏轻（150K行）&#8594; 需求远低于供给<br>
+            如果前沿reasoning/agent为主（50K行）&#8594; 需求逼近供给<br>
+            如果超重长上下文（15K行）&#8594; 需求远超供给
+          </div>
+          <div class="fb-right">
+            <div class="fb-label" style="color:var(--amber)">&#128172; 人话</div>
+            "AI供给是否过剩"的答案<br>
+            不是一个数字，是一个结构<br>
+            <strong>取决于全球的活有多重</strong><br>
+            S15的证据：活正在变重
+          </div>
+        </div>
+
+        <h4 style="margin:16px 0 8px;color:var(--green-dark)">市场验证</h4>
+        <p style="margin:0 0 14px;line-height:1.8;color:var(--text)">数学与市场信号一致：前沿段GPU全额认购，H100合约价半年+40%&#8212;&#8212;"总量松、前沿紧"有价格佐证。</p>
+
+        <div class="note-box note-amber" style="margin-top:12px">
+          <strong>&#9888; 这是静态快照</strong>&#8212;&#8212;只说明今天大致什么状态。供给和需求都在增长：2026新增推理供给约2.6万-5.3万台NVL72。静态比较不能回答"AI供给是否过剩"&#8212;&#8212;真正的问题是：<strong>2026新增需求能不能吃掉新增供给？</strong>
+        </div>
+
+        <div class="formula-band" style="margin:12px 0">
+          <div class="fb-left">
+            <div class="fb-label" style="color:var(--green-dark)">&#128205; Act 2预告公式</div>
+            新增需求机器数<br>= 新增token/day &#247; 86400<br>&#247; 新增token的单台NVL72有效token/s
+          </div>
+          <div class="fb-right">
+            <div class="fb-label" style="color:var(--amber)">&#128172; 人话</div>
+            明年每天多出来多少AI工作量<br>
+            除以一台机器每天能处理多少这种工作量<br>
+            就知道新增需求大概要吃掉多少台机器
+          </div>
+        </div>
+
+        <div class="q-transition">过渡 &#8594; 静态快照不能回答根问题。供给和需求都在增长&#8212;&#8212;2026新增推理供给约2.6万-5.3万台，新增需求能吃掉吗？这是Act 2（S17-S21）要回答的。</div>
+      </div>
+    </div>
+
+</div>
+
+
+    <div id="tab-conclusion" class="tab-panel">
+
+    <div class="phase-divider">
+      <span class="phase-num" style="background:var(--purple)">5</span>
+      <span style="color:var(--purple)">比较</span>
+    </div>
+
+    <div class="card open" id="s17">
+      <div class="card-head" onclick="toggleCard(this)">
+        <span class="card-arrow">&#9654;</span>
+        <span class="card-tag tag-phase5">S17</span>
+        <span class="card-title">结论的边界是什么？</span>
+        <span class="card-status status-done">已填</span>
+      </div>
+      <div class="card-body">
+        <div class="q-answer">&#8594; S16的静态快照依赖六个前提假设。审计发现：需求侧更可能被低估，最大上修风险来自token结构变重和潜在需求释放。</div>
+
+        <div class="note-box note-green" style="margin-top:10px;margin-bottom:10px">
+          <div style="font-size:12px;font-weight:700;color:var(--green-dark);margin-bottom:4px">&#128205; 公式位置</div>
+          <div style="font-size:13px">静态推理供需 = 当前可用于推理的机器 vs 当前已满足token流量需要的机器<br>它能回答：当前推理供给是否明显不够<br>它不能回答：AI是否过剩（还需要看增速、价格、潜在需求）</div>
+        </div>
+        <div class="note-box" style="margin-top:0;margin-bottom:12px;background:#f9f6f0;border-left:3px solid var(--amber)">
+          <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:4px">&#128172; 人话版本</div>
+          <div style="font-size:14px;line-height:1.7">S16的数字只是一张照片&#8212;&#8212;只拍到了已满足的需求，没拍到被价格、限额、速度压住的需求，也没拍到明天新增的供给和需求。要判断&#8220;过不过剩&#8221;，得先把照片拍不到的东西列出来。</div>
+        </div>
+
+        <p>S16给出静态对照：供给4.4万-8.0万台推理NVL72，需求按三种场景约0.67万-3.74万台。表面看供给约为需求的2-12倍。但这个快照依赖六个前提假设，每个都可能改变结论。</p>
+
+        <h4 style="margin:16px 0 8px;color:var(--green-dark)">六项假设边界审计</h4>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;margin:8px 0">
+          <thead>
+            <tr style="border-bottom:2px solid var(--green-light)">
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">边界假设</th>
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">为什么重要</th>
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">忽略后果</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">token结构</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">同样100T token，轻量聊天和前沿reasoning/长上下文agent的机器消耗差10-50倍</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">低估重token的供给压力</td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">峰值vs平均</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">当前用日均token/day，但体验看高峰时段是否排队</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">平均够用但高峰拥堵</td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">供给增速</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">新增机器、电力释放、单机效率提升改变供给面</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">只看今天，错过明年供给释放后的变化</td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">需求增速</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">用户增长、频率提升、agent化和工作流改造推动增长</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">低估未来token消耗</td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">价格和毛利率</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">物理上够不够 &#8800; 经济上是否赚钱</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">看见&#8220;供给够&#8221;但资本回报不足</td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">潜在需求</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">当前token/day是已满足需求，非全部潜在需求</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">忽略被价格、速度、产品形态压住的需求</td></tr>
+          </tbody>
+        </table>
+
+        <h4 style="margin:16px 0 8px;color:var(--green-dark)">需求低估六项审计</h4>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;margin:8px 0">
+          <thead>
+            <tr style="border-bottom:2px solid var(--green-light)">
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">低估来源</th>
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">证据与影响</th>
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">判断</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">token/day可能偏低</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">如果全球总量更接近300T-600T/day，需求机器数同步翻倍</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)"><span style="color:var(--red)">可能低估</span></td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">有效token/s可能偏高</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">真实工作负载更接近50K-100K而非300K，前沿推理可能15K-50K</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)"><span style="color:var(--red)">可能低估</span></td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">token结构正在变重</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">prompt从~1.5K升至6K+，coding agents放大消耗</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)"><span style="color:var(--red)">明确上修风险</span></td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">已满足&lt;潜在需求</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">算力约束、限额管理、价格门槛压住部分需求</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">可能低估，不能直接加入静态需求</td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">非API/私有部署漏算</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">Google全产品、企业私有部署、中国生态不被API数据捕捉</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">方向上低估，不能机械加总</td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">需求高峰未计入</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">日均值低于峰值需求，高峰期排队/降速/限额</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">局部低估，影响体验和冗余</td></tr>
+          </tbody>
+        </table>
+
+        <p style="margin-top:12px">审计结论：六项边界中，token结构、有效token/s、潜在需求三项最可能上修需求。S16的区间（0.67万-3.74万台）更可能是下限而非中线。后续最优先研究token结构&#8212;&#8212;它决定同样的token/day到底除以300K-900K还是15K-50K。</p>
+
+        <div class="q-transition">六个假设大多往&#8220;需求被低估&#8221;方向偏。那把token结构加回来重新定位，过剩到底在哪一层？不足在哪一层？&#8594; S18</div>
+      </div>
+    </div>
+
+    <div class="card open" id="s18">
+      <div class="card-head" onclick="toggleCard(this)">
+        <span class="card-arrow">&#9654;</span>
+        <span class="card-tag tag-phase5">S18</span>
+        <span class="card-title">过剩在哪？不足在哪？</span>
+        <span class="card-status status-done">已填</span>
+      </div>
+      <div class="card-body">
+        <div class="q-answer">&#8594; 三层定位：轻量token供给明显宽裕；前沿reasoning/agent接近供需平衡区；超重长上下文局部紧张。整体不是绝对过剩也不是绝对短缺，而是分层的结构性状态。</div>
+
+        <div class="note-box note-green" style="margin-top:10px;margin-bottom:10px">
+          <div style="font-size:12px;font-weight:700;color:var(--green-dark);margin-bottom:4px">&#128205; 公式位置</div>
+          <div style="font-size:13px">分层定位 = 供给(S12)推理机器 vs 需求(S16)分场景分负载机器数<br>供给：4.4万-8.0万台推理NVL72等效<br>需求(S16静态)：0.67万-3.74万台 &#8594; 经S17修正后上限可能翻倍</div>
+        </div>
+        <div class="note-box" style="margin-top:0;margin-bottom:12px;background:#f9f6f0;border-left:3px solid var(--amber)">
+          <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:4px">&#128172; 人话版本</div>
+          <div style="font-size:14px;line-height:1.7">像超市货架&#8212;&#8212;零食区（轻量推理）堆满随便拿，奶粉区（API/前沿reasoning）刚好够但偶尔限购，进口高端货（长上下文/1M agent）时不时断供。整体不缺，局部紧张。</div>
+        </div>
+
+        <p>把S17的边界审计结论代入S16的框架。供给侧4.4万-8.0万台推理NVL72不变，需求侧按不同负载层分别定位：</p>
+
+        <h4 style="margin:16px 0 8px;color:var(--green-dark)">三层供需定位</h4>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;margin:8px 0">
+          <thead>
+            <tr style="border-bottom:2px solid var(--green-light)">
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">负载层</th>
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">吞吐特征</th>
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">相对供给(4.4-8万)</th>
+              <th style="padding:6px 10px;text-align:left;color:var(--dim)">定位</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">轻量/中等</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">750K-890K tokens/s，大量token低成本消化</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">需求远低于供给</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)"><span style="color:var(--green-dark)">&#9679; 明显宽裕</span></td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">前沿reasoning/agent</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">50K-150K tokens/s，token变重后主要消耗集中</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">需求与供给区间重叠</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)"><span style="color:var(--amber)">&#9679; 接近平衡</span></td></tr>
+            <tr><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">超重/1M长上下文</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">15K-50K tokens/s，少量token高成本消耗</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)">压力口径可能超出供给</td><td style="padding:6px 10px;border-bottom:1px dashed var(--border)"><span style="color:var(--red)">&#9679; 局部紧张</span></td></tr>
+          </tbody>
+        </table>
+
+        <p style="margin-top:12px">关键判断：轻量token供给宽裕不是因为供给太多，而是因为高吞吐下每台机器能消化大量token。前沿reasoning/agent层在S16场景C（压力测试）下需求可达3.74万台，与供给4.4万-8.0万已有重叠；如果S17的上修风险兑现，这一层可能从&#8220;平衡&#8221;滑向&#8220;紧张&#8221;。超重长上下文是最脆弱的&#8212;&#8212;即使只占5-15%的token，低吞吐意味着需要大量机器。</p>
+
+        <div class="note-box note-red" style="margin-top:12px">
+          <strong>四个已知未知 &#8212;&#8212; 认知边界声明</strong>
+          <div style="margin-top:6px;font-size:13px;line-height:1.7">
+            <strong>1. token结构演变速度。</strong>如果reasoning+agent占比从50%升至70%，中间层需求机器可能翻倍。<br>
+            <strong>2. 2026新增供给vs新增需求。</strong>Gartner预计2026 AI电力需求达129-137 TWh（同比+40%），但需求侧agent化也在加速。<br>
+            <strong>3. 价格和毛利率。</strong>物理够不够 &#8800; 经济上赚不赚钱。推理价格持续下降但算力成本不降，资本回报可能不足。<br>
+            <strong>4. 潜在需求释放。</strong>当前token/day是已满足需求。价格下降、限额放开后，已发生流量可能快速上升。
+          </div>
+        </div>
+
+        <p style="margin-top:12px"><strong>供需研究结论：当前全球AI推理供给不是绝对过剩，也不是绝对短缺，而是分层分段的结构性状态。</strong>总量表面宽裕掩盖了前沿和长上下文的局部紧张。这个判断的有效期取决于上述四个变量的演变速度。后续Q3-Q4研究将从这里出发，进入&#8220;系统性脆弱性&#8221;的定性分析。</p>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    AI供需研究 &middot; 问题推导链 v0.4 &middot; 2026-07-05<br>
+    09_AI泡沫全景 / Q3前置工具 &middot; 每个数据经搜索核验后进入
+  </div>
+
+</div>
+
+</div>
+
+<script>
+function switchTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('tab-' + id).classList.add('active');
+  var labels = { handoff: 0, data: 1, supply: 2, demand: 3, conclusion: 4 };
+  document.querySelectorAll('.tab-btn')[labels[id]].classList.add('active');
+}
+
+function toggleCard(head) {
+  head.parentElement.classList.toggle('open');
+}
+</script>
+</body>
+</html>
