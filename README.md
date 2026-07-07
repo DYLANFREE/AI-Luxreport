@@ -1,4 +1,4 @@
-# AI Irrational Exuberance Research
+# AI-Luxreport
 
 Static publish package for a two-entry research site:
 
