@@ -309,7 +309,7 @@ let rev="铁路", stg="病";
 
 function el(id){return document.getElementById(id)}
 function renderTabs(){
-  el('tabs').innerHTML=ORDER.map(r=>`<button class="tab${r===rev?' on':''}" onclick="setRev('${r}')">${r}</button>`).join('');
+  el('tabs').innerHTML=ORDER.map(r=>`<button type="button" class="tab${r===rev?' on':''}" aria-pressed="${r===rev}" onclick="setRev('${r}')">${r}</button>`).join('');
   el('revmeta').textContent=D[rev].meta;renderFp();
 }
 const IMGS={
@@ -394,7 +394,7 @@ function renderFp(){
     ].join('');
     imgBox.innerHTML='<div class="media-browser">'
       +'<div class="media-toolbar"><div class="media-heading"><b>'+rev+' · '+label+'</b><span>'+description+'</span></div><div class="media-switch" aria-label="图片阅读模式">'+buttons+'</div></div>'
-      +'<div class="media-stage '+(isBoard?'portrait':'landscape')+'"><div class="media-canvas"><img loading="lazy" decoding="async" src="'+src+'" alt="'+alt+'" onclick="openImageViewer(\''+src+'\',\''+alt+'\',\''+mediaView+'\')"></div>'
+      +'<div class="media-stage '+(isBoard?'portrait':'landscape')+'"><div class="media-canvas"><img loading="lazy" decoding="async" width="'+(isBoard?1086:1672)+'" height="'+(isBoard?1448:941)+'" src="'+src+'" alt="'+alt+'" onclick="openImageViewer(\''+src+'\',\''+alt+'\',\''+mediaView+'\')"></div>'
       +'<button type="button" class="media-open" onclick="openImageViewer(\''+src+'\',\''+alt+'\',\''+mediaView+'\')" aria-label="放大阅读'+alt+'">↗ 放大阅读</button></div>'
       +'<div class="media-caption"><b>'+ratio+'</b><span>点击图片进入阅读器；可放大并拖动查看细节</span></div></div>';
     imgBox.style.display='';
@@ -406,17 +406,21 @@ function renderFp(){
   el('fpcard').style.display='';
   const collapsed=imgs?' collapsed':'';
   const L=[["革命前的现状",f.before],["问题",f.problem],["人们的需求",f.need],["革命由什么带来",f.enabler],["这场革命是什么",f.what],["意义",f.meaning],["带来的影响",f.impact]];
-  el('fpcard').className='fp'+collapsed;
-  el('fpcard').onclick=function(){this.classList.toggle('collapsed')};
-  el('fpcard').style.cursor='pointer';
-  el('fpcard').innerHTML='<div class="t">第一性原理：'+rev+'革命到底解决了什么</div>'+L.map(x=>'<div class="row"><div class="k">'+x[0]+'</div><div>'+x[1]+'</div></div>').join('')+'<div style="font-family:var(--mono);font-size:9.5px;color:var(--text-dim);margin-top:7px">解读综合通识与本页已核钉子；具体数字以下方事件卡与来源节为准（运河载重倍数、装配工时等待核处未引精确数）</div>';
+  const fpCard=el('fpcard');
+  fpCard.className='fp'+collapsed;
+  fpCard.innerHTML='<button type="button" class="t" aria-expanded="'+(!imgs)+'">第一性原理：'+rev+'革命到底解决了什么</button>'+L.map(x=>'<div class="row"><div class="k">'+x[0]+'</div><div>'+x[1]+'</div></div>').join('')+'<div style="font-family:var(--mono);font-size:9.5px;color:var(--text-dim);margin-top:7px">解读综合通识与本页已核钉子；具体数字以下方事件卡与来源节为准（运河载重倍数、装配工时等待核处未引精确数）</div>';
+  const fpToggle=fpCard.querySelector('.t');
+  fpToggle.onclick=()=>{
+    fpCard.classList.toggle('collapsed');
+    fpToggle.setAttribute('aria-expanded',String(!fpCard.classList.contains('collapsed')));
+  };
 }
 
 function renderStages(){
   el('stages').innerHTML=STAGES.map(s=>{
     const f=D[rev].fin[s], t=D[rev].tech[s];
     const n=((f&&f.ev)?f.ev.length:0)+((t&&t.ev)?t.ev.length:0);
-    return `<button class="stg${s===stg?' on':''}" onclick="setStg('${s}')">${s}<small>${n>0?n+'钉':'·'}</small></button>`;
+    return `<button type="button" class="stg${s===stg?' on':''}" aria-pressed="${s===stg}" onclick="setStg('${s}')">${s}<small>${n>0?n+'钉':'·'}</small></button>`;
   }).join('');
   let h='';
   const dc=DUAL[rev];

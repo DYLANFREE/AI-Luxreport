@@ -49,6 +49,10 @@
     a { color: inherit; }
     img { max-width: 100%; }
     ::selection { background: rgba(196,123,49,.28); }
+    :where(a, button, [tabindex]):focus-visible {
+      outline: 3px solid rgba(199,137,66,.62);
+      outline-offset: 3px;
+    }
 
     .progress {
       position: fixed;
@@ -86,6 +90,9 @@
     }
     .nav-links { display: flex; align-items: center; gap: 4px; }
     .nav-links a {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
       text-decoration: none;
       color: rgba(36,91,67,.72);
       font-size: 12px;
@@ -95,7 +102,6 @@
     .nav-links a:hover, .nav-links a:focus-visible {
       color: var(--green);
       background: rgba(36,91,67,.09);
-      outline: none;
     }
     .nav-state {
       display: inline-flex;
@@ -202,6 +208,7 @@
     }
     .hero-deck strong { color: var(--green); font-weight: 650; }
     .scroll-cue {
+      min-height: 44px;
       display: inline-flex;
       align-items: center;
       gap: 10px;
@@ -223,6 +230,7 @@
     }
 
     .section { padding: 116px 0; }
+    .section[id] { scroll-margin-top: 96px; }
     .section-inner { width: min(1120px, calc(100% - 48px)); margin: 0 auto; }
     .section-kicker {
       margin-bottom: 12px;
@@ -404,17 +412,18 @@
 
     /* Existing Q1 phase browser, restyled for this standalone site. */
     #phase-browser { --bg: var(--paper); --bg-card: rgba(255,255,255,.72); --text: var(--ink); --text-dim: var(--dim); --wood: var(--green); --danger: var(--rust); --warn: var(--amber); }
-    #phase-browser .tabs { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin: 0 0 10px; position: sticky; top: 78px; z-index: 20; background: rgba(242,238,229,.94); padding: 14px 0 10px; border-bottom: 1px solid var(--line); backdrop-filter: blur(14px); }
-    #phase-browser .tab { font-family: var(--serif); font-size: 14px; font-weight: 600; padding: 8px 16px; border-radius: 999px; border: 1.5px solid rgba(36,77,56,.3); background: transparent; color: var(--green); cursor: pointer; }
+    #phase-browser .tabs { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin: 0 0 10px; position: sticky; top: 86px; z-index: 20; background: rgba(242,238,229,.94); padding: 14px 0 10px; border-bottom: 1px solid var(--line); backdrop-filter: blur(14px); }
+    #phase-browser .tab { min-height: 44px; font-family: var(--serif); font-size: 14px; font-weight: 600; padding: 8px 16px; border-radius: 999px; border: 1.5px solid rgba(36,77,56,.3); background: transparent; color: var(--green); cursor: pointer; }
     #phase-browser .tab:hover { background: rgba(36,77,56,.07); }
     #phase-browser .tab.on { background: var(--green); color: var(--paper); border-color: var(--green); }
     #phase-browser .revmeta { text-align: center; font-family: var(--mono); font-size: 10px; color: var(--dim); margin: 9px 0 18px; }
     #phase-browser .waveband { background: rgba(255,255,255,.66); border: 1px solid var(--line); border-radius: 16px; padding: 10px 14px 2px; margin: 18px 0 14px; position: relative; overflow: visible; }
     #phase-browser .waveband svg { display: block; width: 100%; height: auto; }
-    #phase-browser .nav-arr { position: absolute; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--line); background: var(--paper); color: var(--green); font-size: 18px; cursor: pointer; display: grid; place-items: center; opacity: .74; }
+    #phase-browser .mobile-swipe-hint { display: none; }
+    #phase-browser .nav-arr { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: var(--paper); color: var(--green); font-size: 20px; cursor: pointer; display: grid; place-items: center; opacity: .78; }
     #phase-browser .nav-arr:hover { opacity: 1; background: var(--green); color: var(--paper); }
-    #phase-browser .nav-arr.prev { left: -16px; }
-    #phase-browser .nav-arr.next { right: -16px; }
+    #phase-browser .nav-arr.prev { left: -22px; }
+    #phase-browser .nav-arr.next { right: -22px; }
     #phase-browser .stages { display: grid; grid-template-columns: repeat(12,1fr); gap: 5px; margin: 0 0 18px; }
     #phase-browser .stg { font-family: var(--serif); font-size: 13px; font-weight: 600; padding: 9px 2px; border-radius: 9px; border: 1px solid rgba(36,77,56,.22); background: transparent; color: var(--ink); cursor: pointer; text-align: center; }
     #phase-browser .stg small { display: block; font-family: var(--mono); font-size: 8px; color: var(--dim); font-weight: 400; }
@@ -446,7 +455,7 @@
     #phase-browser .col.fin.hl { box-shadow: 0 0 0 2px var(--fin); }
     #phase-browser .col.tech.hl { box-shadow: 0 0 0 2px var(--tech); }
     #phase-browser .fp { background: rgba(255,255,255,.68); border: 1px solid var(--line); border-left: 5px solid var(--green); border-radius: 12px; padding: 15px 18px; margin: 0 0 14px; font-size: 13px; }
-    #phase-browser .fp .t { font-family: var(--serif); font-size: 16px; font-weight: 600; color: var(--green); margin-bottom: 6px; }
+    #phase-browser .fp .t { width: 100%; min-height: 44px; display: block; padding: 0; border: 0; background: transparent; text-align: left; cursor: pointer; font-family: var(--serif); font-size: 16px; font-weight: 600; color: var(--green); margin-bottom: 6px; }
     #phase-browser .fp .row { display: grid; grid-template-columns: 118px 1fr; gap: 8px; padding: 5px 0; border-top: 1px dashed var(--line); }
     #phase-browser .fp .k { font-family: var(--mono); font-size: 10px; color: var(--amber); font-weight: 600; padding-top: 2px; }
     #phase-browser .fp.collapsed .row, #phase-browser .fp.collapsed>div:last-child { display: none; }
@@ -560,6 +569,7 @@
       bottom: 22px;
       display: inline-flex;
       align-items: center;
+      min-height: 44px;
       gap: 7px;
       padding: 9px 13px;
       border: 1px solid rgba(36,91,67,.24);
@@ -613,8 +623,8 @@
     .viewer-title span { display: block; color: var(--dim); font-size: 10px; }
     .viewer-tools { display: flex; align-items: center; gap: 6px; }
     .viewer-tools button {
-      min-width: 38px;
-      height: 38px;
+      min-width: 44px;
+      height: 44px;
       padding: 0 11px;
       border: 1px solid rgba(36,91,67,.2);
       border-radius: 10px;
@@ -687,7 +697,7 @@
     }
     .exit-photo img { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
     .exit-photo figcaption { padding: 14px 18px 17px; font-size: 11px; color: var(--dim); line-height: 1.65; }
-    .exit-photo figcaption a { color: var(--green); text-decoration-color: rgba(36,91,67,.3); text-underline-offset: 3px; }
+    .exit-photo figcaption a { min-height: 44px; display: inline-flex; align-items: center; color: var(--green); text-decoration-color: rgba(36,91,67,.3); text-underline-offset: 3px; }
     .photo-copy .section-kicker { color: var(--rust); }
     .photo-copy h2 { margin: 0; font-family: var(--serif); font-size: clamp(38px,5vw,68px); line-height: 1.2; }
     .photo-copy p { margin: 24px 0 0; color: var(--dim); font-size: 16px; }
@@ -802,6 +812,7 @@
       #phase-browser .fp .row { grid-template-columns: 1fr; }
       #phase-browser .waveband { padding: 4px; overflow-x: auto; }
       #phase-browser .waveband svg { min-width: 720px; }
+      #phase-browser .mobile-swipe-hint { position: sticky; left: 0; z-index: 2; width: max-content; display: block; margin: 4px 6px 0; padding: 3px 8px; border-radius: 999px; background: rgba(247,242,231,.92); color: var(--dim); font-family: var(--mono); font-size: 8px; letter-spacing: .04em; }
       #phase-browser .nav-arr { display: none; }
       .photo-grid { gap: 38px; }
       .signal-card, .mechanism-step { padding: 24px; }
@@ -813,13 +824,13 @@
       .viewer-bar { align-items: flex-start; padding: 9px 10px; }
       .viewer-title span { display: none; }
       .viewer-tools { gap: 4px; }
-      .viewer-tools button { min-width: 34px; height: 34px; padding: 0 8px; }
-      .viewer-scroll { height: calc(100dvh - 56px); padding: 12px; }
+      .viewer-tools button { min-width: 44px; height: 44px; padding: 0 8px; }
+      .viewer-scroll { height: calc(100dvh - 62px); padding: 12px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
-      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
     }
   </style>
 </head>
@@ -911,10 +922,11 @@
           <div class="revmeta" id="revmeta"></div>
           <div id="fpimgs"></div>
           <div class="fp" id="fpcard"></div>
-          <div class="waveband">
+          <div class="waveband" tabindex="0" aria-label="金融线与技术线相位图，手机上可横向滚动查看完整周期">
+            <div class="mobile-swipe-hint" aria-hidden="true">横向滑动查看完整周期 →</div>
             <button type="button" class="nav-arr prev" onclick="stepRev(-1)" title="上一个革命" aria-label="上一个革命">‹</button>
             <button type="button" class="nav-arr next" onclick="stepRev(1)" title="下一个革命" aria-label="下一个革命">›</button>
-            <svg viewBox="0 0 960 300" xmlns="http://www.w3.org/2000/svg" id="wave" aria-label="金融线与技术线相位图">
+            <svg viewBox="0 0 960 300" xmlns="http://www.w3.org/2000/svg" id="wave" role="img" aria-label="金融线与技术线相位图">
               <defs><marker id="arw" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto"><path d="M0,0 L6,2 L0,4" fill="#6b6f63"/></marker></defs>
               <g id="wavecontent"></g>
             </svg>
@@ -948,7 +960,7 @@
     <section class="section photo-section">
       <div class="section-inner photo-grid">
         <figure class="exit-photo">
-          <img src="assets/caixin-miner-exit.jpg" alt="四川黑水一位藏族妇女抱着从矿机上拆下的电源线，像抱着一束花" loading="lazy">
+          <img src="assets/caixin-miner-exit.jpg" width="799" height="533" alt="四川黑水一位藏族妇女抱着从矿机上拆下的电源线，像抱着一束花" loading="lazy" decoding="async">
           <figcaption>2021年5月3日，四川黑水，一位藏族妇女搬运从新疆转运来的矿机电源线。图｜财新周刊 丁刚。<a href="https://weekly.caixin.com/2021-07-10/101738443.html" target="_blank" rel="noopener">查看原报道</a></figcaption>
         </figure>
         <div class="photo-copy">
