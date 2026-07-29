@@ -1,0 +1,1016 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="不预测AI泡沫如何破裂。等待过度预期破裂，而技术革命没有破裂的时刻。">
+  <meta name="theme-color" content="#f7f2e7">
+  <title>等，不是猜｜AI革命中的应对</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&amp;family=Noto+Sans+SC:wght@300;400;500;600;700&amp;family=Noto+Serif+SC:wght@500;600;700;900&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #24382c;
+      --paper: #f7f2e7;
+      --paper-deep: #eee4d3;
+      --card: rgba(255,253,247,.76);
+      --line: rgba(36,91,67,.18);
+      --dim: #687368;
+      --night: #dfe9dc;
+      --night-2: #d2e0d2;
+      --green: #245b43;
+      --green-bright: #4f8066;
+      --rust: #a65338;
+      --amber: #c78942;
+      --purple: #70527c;
+      --tech: #2e6b45;
+      --tech-bg: #e6f0e7;
+      --fin: #a34827;
+      --fin-bg: #f4e4dc;
+      --serif: "Noto Serif SC", "Songti SC", serif;
+      --sans: "Noto Sans SC", system-ui, sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, monospace;
+      --shadow: 0 24px 70px rgba(45, 63, 48, .13);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-weight: 350;
+      line-height: 1.78;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, a { font: inherit; }
+    a { color: inherit; }
+    img { max-width: 100%; }
+    ::selection { background: rgba(196,123,49,.28); }
+
+    .progress {
+      position: fixed;
+      inset: 0 auto auto 0;
+      width: 0;
+      height: 3px;
+      z-index: 100;
+      background: linear-gradient(90deg, var(--amber), #e2b66f);
+    }
+
+    .site-nav {
+      position: fixed;
+      z-index: 90;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(1100px, calc(100% - 28px));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 10px 12px 10px 18px;
+      border: 1px solid rgba(36,91,67,.2);
+      border-radius: 999px;
+      background: rgba(250,246,237,.88);
+      color: var(--green);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 14px 38px rgba(45,63,48,.13);
+    }
+    .brand {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .13em;
+      white-space: nowrap;
+    }
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-links a {
+      text-decoration: none;
+      color: rgba(36,91,67,.72);
+      font-size: 12px;
+      padding: 6px 11px;
+      border-radius: 999px;
+    }
+    .nav-links a:hover, .nav-links a:focus-visible {
+      color: var(--green);
+      background: rgba(36,91,67,.09);
+      outline: none;
+    }
+    .nav-state {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11px;
+      color: var(--rust);
+      border: 1px solid rgba(166,83,56,.24);
+      border-radius: 999px;
+      padding: 5px 10px;
+      white-space: nowrap;
+    }
+    .nav-state::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #e09d45;
+      box-shadow: 0 0 0 5px rgba(224,157,69,.11);
+    }
+
+    .hero {
+      min-height: 100svh;
+      position: relative;
+      display: grid;
+      align-items: end;
+      overflow: hidden;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 82% 18%, rgba(199,137,66,.2), transparent 30%),
+        radial-gradient(circle at 16% 78%, rgba(79,128,102,.18), transparent 31%),
+        linear-gradient(145deg, #fbf7ef 0%, #f2eadb 58%, #e5eee2 100%);
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: .4;
+      background-image:
+        linear-gradient(rgba(36,91,67,.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(36,91,67,.07) 1px, transparent 1px);
+      background-size: 72px 72px;
+      mask-image: linear-gradient(to bottom, transparent 5%, #fff 45%, transparent 100%);
+    }
+    .hero-orbit {
+      position: absolute;
+      width: min(72vw, 860px);
+      aspect-ratio: 1;
+      border: 1px solid rgba(36,91,67,.14);
+      border-radius: 50%;
+      right: -26vw;
+      top: -28vw;
+    }
+    .hero-orbit::before,
+    .hero-orbit::after {
+      content: "";
+      position: absolute;
+      border: 1px solid rgba(36,91,67,.12);
+      border-radius: inherit;
+      inset: 13%;
+    }
+    .hero-orbit::after { inset: 31%; }
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      width: min(1180px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 144px 0 78px;
+    }
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .16em;
+      color: var(--rust);
+    }
+    .eyebrow::before { content: ""; width: 44px; height: 1px; background: currentColor; }
+    .hero h1 {
+      max-width: 1050px;
+      margin: 0;
+      font-family: var(--serif);
+      font-size: clamp(48px, 8.2vw, 112px);
+      font-weight: 900;
+      line-height: 1.03;
+      letter-spacing: -.045em;
+    }
+    .hero h1 span { display: block; color: var(--rust); }
+    .hero-bottom {
+      display: grid;
+      grid-template-columns: minmax(0, 720px) auto;
+      align-items: end;
+      justify-content: space-between;
+      gap: 44px;
+      margin-top: 38px;
+    }
+    .hero-deck {
+      margin: 0;
+      color: rgba(36,56,44,.72);
+      font-size: clamp(17px, 2vw, 23px);
+      line-height: 1.7;
+    }
+    .hero-deck strong { color: var(--green); font-weight: 650; }
+    .scroll-cue {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: rgba(36,91,67,.72);
+      text-decoration: none;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .1em;
+      white-space: nowrap;
+    }
+    .scroll-cue i {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(36,91,67,.28);
+      border-radius: 50%;
+      font-style: normal;
+    }
+
+    .section { padding: 116px 0; }
+    .section-inner { width: min(1120px, calc(100% - 48px)); margin: 0 auto; }
+    .section-kicker {
+      margin-bottom: 12px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .18em;
+      color: var(--rust);
+      text-transform: uppercase;
+    }
+    .section-title {
+      max-width: 880px;
+      margin: 0;
+      font-family: var(--serif);
+      font-size: clamp(38px, 5vw, 68px);
+      line-height: 1.18;
+      letter-spacing: -.035em;
+    }
+    .section-lead {
+      max-width: 760px;
+      margin: 24px 0 0;
+      color: var(--dim);
+      font-size: 17px;
+    }
+
+    .network-section { background: #ebe5d9; }
+    .network-grid {
+      display: grid;
+      grid-template-columns: .82fr 1.18fr;
+      gap: 72px;
+      align-items: center;
+    }
+    .network-board {
+      position: relative;
+      min-height: 520px;
+      border-radius: 28px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at center, rgba(199,137,66,.24), transparent 25%),
+        linear-gradient(145deg, #d6e3d4, #f7f2e7);
+      box-shadow: var(--shadow);
+    }
+    .network-board::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(30deg, transparent 48%, rgba(36,91,67,.07) 49%, rgba(36,91,67,.07) 50%, transparent 51%),
+        linear-gradient(-30deg, transparent 48%, rgba(36,91,67,.05) 49%, rgba(36,91,67,.05) 50%, transparent 51%);
+      background-size: 120px 120px;
+      opacity: .45;
+    }
+    .network-core,
+    .network-node {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      border-radius: 50%;
+      z-index: 2;
+    }
+    .network-core {
+      inset: 50% auto auto 50%;
+      transform: translate(-50%,-50%);
+      width: 150px;
+      height: 150px;
+      background: #d3994b;
+      color: var(--ink);
+      font-family: var(--serif);
+      font-weight: 800;
+      font-size: 24px;
+      box-shadow: 0 0 0 22px rgba(199,137,66,.12), 0 18px 48px rgba(45,63,48,.18);
+    }
+    .network-node {
+      width: 102px;
+      height: 102px;
+      padding: 10px;
+      border: 1px solid rgba(36,91,67,.22);
+      background: rgba(255,253,247,.72);
+      color: var(--green);
+      font-size: 13px;
+      backdrop-filter: blur(8px);
+    }
+    .n1 { top: 7%; left: 12%; }
+    .n2 { top: 9%; right: 10%; }
+    .n3 { top: 39%; right: 4%; }
+    .n4 { bottom: 7%; right: 15%; }
+    .n5 { bottom: 7%; left: 13%; }
+    .n6 { top: 40%; left: 3%; }
+    .network-caption {
+      position: absolute;
+      inset: auto 28px 22px;
+      z-index: 3;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: rgba(36,91,67,.58);
+      letter-spacing: .08em;
+    }
+    .reject-list { margin: 42px 0 0; padding: 0; list-style: none; }
+    .reject-list li {
+      display: grid;
+      grid-template-columns: 32px 1fr;
+      gap: 16px;
+      padding: 17px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 17px;
+    }
+    .reject-list b { font-family: var(--mono); color: var(--rust); font-size: 11px; padding-top: 6px; }
+
+    .manifesto {
+      color: var(--ink);
+      background: linear-gradient(135deg, #e1eadf, #f2eadb);
+    }
+    .manifesto .section-kicker { color: var(--rust); }
+    .manifesto-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 54px;
+    }
+    .manifesto-card {
+      min-height: 320px;
+      padding: 36px;
+      border: 1px solid rgba(36,91,67,.18);
+      border-radius: 22px;
+      background: rgba(255,253,247,.68);
+      box-shadow: 0 16px 40px rgba(45,63,48,.08);
+    }
+    .manifesto-card.wait { background: #d9a25b; color: var(--ink); border-color: rgba(166,83,56,.18); }
+    .manifesto-card .label { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; opacity: .62; }
+    .manifesto-card h3 { margin: 22px 0 14px; font-family: var(--serif); font-size: 34px; line-height: 1.25; }
+    .manifesto-card p { margin: 0; font-size: 16px; opacity: .72; }
+    .trigger-note {
+      margin: 18px 0 0;
+      padding: 18px 22px;
+      border: 1px solid rgba(36,91,67,.18);
+      border-radius: 14px;
+      color: var(--dim);
+      font-size: 14px;
+    }
+    .trigger-note strong { color: var(--rust); font-weight: 600; }
+
+    .history-section { background: var(--paper); }
+    .history-intro {
+      display: flex;
+      justify-content: space-between;
+      gap: 40px;
+      align-items: end;
+      margin-bottom: 58px;
+    }
+    .history-note {
+      max-width: 360px;
+      padding: 16px 18px;
+      border-left: 3px solid var(--amber);
+      background: rgba(255,255,255,.46);
+      color: var(--dim);
+      font-size: 13px;
+    }
+    .history-shell {
+      padding: 34px;
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      background: rgba(255,255,255,.48);
+      box-shadow: var(--shadow);
+    }
+    .history-how {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+      color: var(--dim);
+      font-size: 12px;
+    }
+    .history-how span {
+      color: var(--rust);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .1em;
+    }
+
+    /* Existing Q1 phase browser, restyled for this standalone site. */
+    #phase-browser { --bg: var(--paper); --bg-card: rgba(255,255,255,.72); --text: var(--ink); --text-dim: var(--dim); --wood: var(--green); --danger: var(--rust); --warn: var(--amber); --purple: var(--purple); --tech: var(--tech); --tech-bg: var(--tech-bg); --fin: var(--fin); --fin-bg: var(--fin-bg); --serif: var(--serif); --sans: var(--sans); --mono: var(--mono); }
+    #phase-browser .tabs { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin: 0 0 10px; position: sticky; top: 78px; z-index: 20; background: rgba(242,238,229,.94); padding: 14px 0 10px; border-bottom: 1px solid var(--line); backdrop-filter: blur(14px); }
+    #phase-browser .tab { font-family: var(--serif); font-size: 14px; font-weight: 600; padding: 8px 16px; border-radius: 999px; border: 1.5px solid rgba(36,77,56,.3); background: transparent; color: var(--green); cursor: pointer; }
+    #phase-browser .tab:hover { background: rgba(36,77,56,.07); }
+    #phase-browser .tab.on { background: var(--green); color: var(--paper); border-color: var(--green); }
+    #phase-browser .revmeta { text-align: center; font-family: var(--mono); font-size: 10px; color: var(--dim); margin: 9px 0 18px; }
+    #phase-browser .waveband { background: rgba(255,255,255,.66); border: 1px solid var(--line); border-radius: 16px; padding: 10px 14px 2px; margin: 18px 0 14px; position: relative; overflow: visible; }
+    #phase-browser .waveband svg { display: block; width: 100%; height: auto; }
+    #phase-browser .nav-arr { position: absolute; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--line); background: var(--paper); color: var(--green); font-size: 18px; cursor: pointer; display: grid; place-items: center; opacity: .74; }
+    #phase-browser .nav-arr:hover { opacity: 1; background: var(--green); color: var(--paper); }
+    #phase-browser .nav-arr.prev { left: -16px; }
+    #phase-browser .nav-arr.next { right: -16px; }
+    #phase-browser .stages { display: grid; grid-template-columns: repeat(12,1fr); gap: 5px; margin: 0 0 18px; }
+    #phase-browser .stg { font-family: var(--serif); font-size: 13px; font-weight: 600; padding: 9px 2px; border-radius: 9px; border: 1px solid rgba(36,77,56,.22); background: transparent; color: var(--ink); cursor: pointer; text-align: center; }
+    #phase-browser .stg small { display: block; font-family: var(--mono); font-size: 8px; color: var(--dim); font-weight: 400; }
+    #phase-browser .stg:hover { border-color: var(--amber); }
+    #phase-browser .stg.on { background: var(--amber); border-color: var(--amber); color: #fff; }
+    #phase-browser .stg.on small { color: #fff; }
+    #phase-browser .stagecard { background: rgba(36,77,56,.055); border-left: 5px solid var(--green); border-radius: 12px; padding: 16px 20px; margin-bottom: 16px; }
+    #phase-browser .stagecard .nm { font-family: var(--serif); font-size: 22px; font-weight: 700; color: var(--green); }
+    #phase-browser .stagecard .gu { font-size: 12px; color: var(--dim); margin-left: 10px; }
+    #phase-browser .stagecard .bai { font-size: 14px; margin-top: 3px; }
+    #phase-browser .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    #phase-browser .col { border-radius: 12px; padding: 16px; border: 1px solid var(--line); }
+    #phase-browser .col.fin { background: var(--fin-bg); }
+    #phase-browser .col.tech { background: var(--tech-bg); }
+    #phase-browser .col h3 { font-family: var(--serif); font-size: 16px; font-weight: 600; margin: 0 0 2px; }
+    #phase-browser .col.fin h3 { color: var(--fin); }
+    #phase-browser .col.tech h3 { color: var(--tech); }
+    #phase-browser .col .yr { font-family: var(--mono); font-size: 11px; font-weight: 600; margin-bottom: 10px; display: inline-block; padding: 1px 10px; border-radius: 999px; }
+    #phase-browser .col.fin .yr { background: rgba(163,72,39,.12); color: var(--fin); }
+    #phase-browser .col.tech .yr { background: rgba(46,107,69,.12); color: var(--tech); }
+    #phase-browser .ev { background: rgba(255,255,255,.65); border-radius: 8px; padding: 9px 12px; margin-bottom: 9px; font-size: 13px; }
+    #phase-browser .ev .w { font-family: var(--mono); font-size: 10px; font-weight: 600; margin-right: 7px; }
+    #phase-browser .col.fin .ev .w { color: var(--fin); }
+    #phase-browser .col.tech .ev .w { color: var(--tech); }
+    #phase-browser .ev .inst, #phase-browser .ev .anomtag { font-family: var(--mono); font-size: 9px; color: #fff; padding: 1px 6px; border-radius: 999px; margin-left: 6px; white-space: nowrap; }
+    #phase-browser .ev .inst { background: var(--purple); }
+    #phase-browser .ev .anomtag { background: var(--amber); }
+    #phase-browser .empty { font-size: 13px; color: var(--dim); padding: 10px 4px; }
+    #phase-browser .col.fin.hl { box-shadow: 0 0 0 2px var(--fin); }
+    #phase-browser .col.tech.hl { box-shadow: 0 0 0 2px var(--tech); }
+    #phase-browser .fp { background: rgba(255,255,255,.68); border: 1px solid var(--line); border-left: 5px solid var(--green); border-radius: 12px; padding: 15px 18px; margin: 0 0 14px; font-size: 13px; }
+    #phase-browser .fp .t { font-family: var(--serif); font-size: 16px; font-weight: 600; color: var(--green); margin-bottom: 6px; }
+    #phase-browser .fp .row { display: grid; grid-template-columns: 118px 1fr; gap: 8px; padding: 5px 0; border-top: 1px dashed var(--line); }
+    #phase-browser .fp .k { font-family: var(--mono); font-size: 10px; color: var(--amber); font-weight: 600; padding-top: 2px; }
+    #phase-browser .fp.collapsed .row, #phase-browser .fp.collapsed>div:last-child { display: none; }
+    #phase-browser .fp.collapsed .t::after { content: "  展开 ↘"; float: right; font-family: var(--mono); font-size: 9px; color: var(--dim); }
+    #phase-browser .media-browser { margin: 2px 0 20px; }
+    #phase-browser .media-toolbar {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 12px;
+    }
+    #phase-browser .media-heading { min-width: 0; }
+    #phase-browser .media-heading b {
+      display: block;
+      font-family: var(--serif);
+      font-size: 20px;
+      color: var(--green);
+    }
+    #phase-browser .media-heading span {
+      display: block;
+      margin-top: 2px;
+      color: var(--dim);
+      font-size: 12px;
+    }
+    #phase-browser .media-switch {
+      flex: 0 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: rgba(25,27,23,.055);
+    }
+    #phase-browser .media-choice {
+      min-width: 116px;
+      padding: 8px 12px;
+      border: 0;
+      border-radius: 9px;
+      background: transparent;
+      color: var(--dim);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    #phase-browser .media-choice small {
+      display: block;
+      margin-top: 1px;
+      font-family: var(--mono);
+      font-size: 8px;
+      font-weight: 400;
+      opacity: .65;
+    }
+    #phase-browser .media-choice:hover { color: var(--green); }
+    #phase-browser .media-choice.on {
+      background: var(--green);
+      color: var(--paper);
+      box-shadow: 0 5px 14px rgba(36,77,56,.18);
+    }
+    #phase-browser .media-stage {
+      position: relative;
+      border: 1px solid rgba(25,27,23,.16);
+      box-shadow: 0 18px 46px rgba(28,31,25,.14);
+    }
+    #phase-browser .media-stage.landscape {
+      width: min(1440px, calc(100vw - 36px));
+      margin-left: 50%;
+      transform: translateX(-50%);
+      padding: 10px;
+      border-radius: 18px;
+      background: #d5dfd2;
+    }
+    #phase-browser .media-stage.portrait {
+      width: min(780px, 100%);
+      margin: 0 auto;
+      padding: 12px;
+      border-radius: 18px;
+      background: #ded5c5;
+    }
+    #phase-browser .media-canvas {
+      overflow: hidden;
+      border-radius: 10px;
+      background: #f4f0e7;
+    }
+    #phase-browser .media-stage img {
+      display: block;
+      width: 100%;
+      height: auto;
+      cursor: zoom-in;
+    }
+    #phase-browser .media-open {
+      position: absolute;
+      right: 22px;
+      bottom: 22px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 13px;
+      border: 1px solid rgba(36,91,67,.24);
+      border-radius: 999px;
+      background: rgba(250,246,237,.9);
+      color: var(--green);
+      backdrop-filter: blur(10px);
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 600;
+      box-shadow: 0 8px 20px rgba(45,63,48,.18);
+    }
+    #phase-browser .media-open:hover { background: var(--green); color: var(--paper); }
+    #phase-browser .media-caption {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      margin-top: 10px;
+      color: var(--dim);
+      font-size: 11px;
+    }
+    #phase-browser .media-caption b { color: var(--ink); font-weight: 600; }
+
+    .image-viewer {
+      width: 100vw;
+      max-width: none;
+      height: 100dvh;
+      max-height: none;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: #e7dfd1;
+      color: var(--ink);
+    }
+    .image-viewer::backdrop { background: rgba(36,56,44,.76); }
+    .viewer-bar {
+      position: relative;
+      z-index: 2;
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 10px 18px;
+      border-bottom: 1px solid rgba(36,91,67,.18);
+      background: rgba(250,246,237,.95);
+      backdrop-filter: blur(16px);
+    }
+    .viewer-title { min-width: 0; }
+    .viewer-title b { display: block; font-family: var(--serif); font-size: 15px; }
+    .viewer-title span { display: block; color: var(--dim); font-size: 10px; }
+    .viewer-tools { display: flex; align-items: center; gap: 6px; }
+    .viewer-tools button {
+      min-width: 38px;
+      height: 38px;
+      padding: 0 11px;
+      border: 1px solid rgba(36,91,67,.2);
+      border-radius: 10px;
+      background: rgba(255,253,247,.72);
+      color: var(--green);
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .viewer-tools button:hover { background: var(--amber); border-color: var(--amber); }
+    .viewer-tools .viewer-close { margin-left: 6px; }
+    .viewer-scroll {
+      height: calc(100dvh - 64px);
+      overflow: auto;
+      padding: 24px;
+      text-align: center;
+      overscroll-behavior: contain;
+    }
+    .viewer-scroll img {
+      display: block;
+      max-width: none;
+      height: auto;
+      margin: 0 auto;
+      box-shadow: 0 20px 70px rgba(45,63,48,.22);
+      transition: width .15s ease;
+    }
+
+    .signals { background: #e8e1d5; }
+    .signal-grid {
+      display: grid;
+      grid-template-columns: repeat(2,1fr);
+      gap: 18px;
+      margin-top: 48px;
+    }
+    .signal-card {
+      padding: 30px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(255,255,255,.5);
+    }
+    .signal-card strong {
+      display: block;
+      margin-bottom: 12px;
+      font-family: var(--serif);
+      font-size: 25px;
+      color: var(--green);
+    }
+    .signal-card p { margin: 0; color: var(--dim); }
+    .signal-card:nth-child(3), .signal-card:nth-child(4) { border-color: rgba(163,72,39,.24); }
+    .signal-card:nth-child(3) strong, .signal-card:nth-child(4) strong { color: var(--rust); }
+    .signal-rule {
+      margin-top: 24px;
+      padding: 24px 28px;
+      border-radius: 18px;
+      color: #f4eee4;
+      background: var(--green);
+      font-family: var(--serif);
+      font-size: clamp(20px, 3vw, 30px);
+      line-height: 1.55;
+    }
+
+    .photo-section { background: linear-gradient(140deg, #dce8da, #edf0df); color: var(--ink); }
+    .photo-grid { display: grid; grid-template-columns: 1.08fr .92fr; gap: 64px; align-items: center; }
+    .exit-photo {
+      margin: 0;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid rgba(36,91,67,.18);
+      background: #f5efe4;
+      box-shadow: 0 28px 80px rgba(45,63,48,.18);
+    }
+    .exit-photo img { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+    .exit-photo figcaption { padding: 14px 18px 17px; font-size: 11px; color: var(--dim); line-height: 1.65; }
+    .exit-photo figcaption a { color: var(--green); text-decoration-color: rgba(36,91,67,.3); text-underline-offset: 3px; }
+    .photo-copy .section-kicker { color: var(--rust); }
+    .photo-copy h2 { margin: 0; font-family: var(--serif); font-size: clamp(38px,5vw,68px); line-height: 1.2; }
+    .photo-copy p { margin: 24px 0 0; color: var(--dim); font-size: 16px; }
+    .photo-copy .correction {
+      margin-top: 28px;
+      padding: 16px 18px;
+      border-left: 3px solid var(--amber);
+      background: rgba(255,253,247,.62);
+      font-size: 13px;
+      color: var(--dim);
+    }
+
+    .mechanism {
+      background: linear-gradient(180deg, #f2eee5, #e6dfd1);
+    }
+    .mechanism-steps {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 0;
+      margin-top: 54px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      overflow: hidden;
+      background: rgba(255,255,255,.48);
+    }
+    .mechanism-step { min-height: 330px; padding: 32px; border-right: 1px solid var(--line); }
+    .mechanism-step:last-child { border-right: 0; }
+    .mechanism-step b { display: block; font-family: var(--mono); color: var(--rust); font-size: 11px; }
+    .mechanism-step h3 { margin: 42px 0 14px; font-family: var(--serif); font-size: 27px; line-height: 1.35; }
+    .mechanism-step p { margin: 0; color: var(--dim); }
+
+    .quote-section {
+      min-height: 92svh;
+      display: grid;
+      place-items: center;
+      padding: 100px 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 20% 0%, rgba(79,128,102,.24), transparent 36%),
+        linear-gradient(150deg, #eddfbe, #d9b877);
+    }
+    .quote-wrap { width: min(1050px, calc(100% - 48px)); }
+    .quote-mark { font-family: Georgia, serif; font-size: 110px; color: #d19a4b; line-height: .6; }
+    blockquote { margin: 34px 0 0; }
+    blockquote p { margin: 0; font-family: var(--serif); font-weight: 700; font-size: clamp(42px,7vw,92px); line-height: 1.23; letter-spacing: -.04em; }
+    blockquote footer { margin-top: 34px; font-family: var(--mono); font-size: 12px; color: rgba(36,56,44,.58); letter-spacing: .1em; }
+
+    .closing { padding: 118px 0 52px; background: #d39a50; color: var(--ink); }
+    .closing-grid { display: grid; grid-template-columns: 1.25fr .75fr; gap: 80px; align-items: end; }
+    .closing h2 { margin: 0; font-family: var(--serif); font-size: clamp(48px,7vw,92px); line-height: 1.08; letter-spacing: -.05em; }
+    .closing-copy { font-size: 17px; }
+    .closing-copy p { margin: 0 0 18px; }
+    .closing-copy strong { font-weight: 700; }
+    .closing-footer {
+      width: min(1120px, calc(100% - 48px));
+      margin: 90px auto 0;
+      padding-top: 20px;
+      border-top: 1px solid rgba(23,24,19,.25);
+      display: flex;
+      justify-content: space-between;
+      gap: 28px;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: rgba(23,24,19,.58);
+    }
+
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .network-grid, .photo-grid, .closing-grid { grid-template-columns: 1fr; }
+      .network-board { min-height: 470px; }
+      .history-intro { display: block; }
+      .history-note { margin-top: 24px; max-width: none; }
+      .manifesto-grid, .signal-grid { grid-template-columns: 1fr; }
+      .mechanism-steps { grid-template-columns: 1fr; }
+      .mechanism-step { min-height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
+      .mechanism-step:last-child { border-bottom: 0; }
+    }
+
+    @media (max-width: 700px) {
+      .site-nav { top: 10px; width: calc(100% - 20px); }
+      .brand { font-size: 9px; }
+      .hero-inner, .section-inner, .quote-wrap, .closing-footer { width: min(100% - 32px, 1120px); }
+      .hero-inner { padding: 126px 0 48px; }
+      .hero h1 { font-size: clamp(45px, 15vw, 72px); }
+      .hero-bottom { display: block; }
+      .scroll-cue { margin-top: 28px; }
+      .section { padding: 82px 0; }
+      .network-grid { gap: 42px; }
+      .network-board { min-height: 410px; border-radius: 20px; }
+      .network-core { width: 112px; height: 112px; font-size: 19px; }
+      .network-node { width: 78px; height: 78px; font-size: 11px; }
+      .n1 { left: 8%; } .n2 { right: 7%; } .n3 { right: 2%; } .n4 { right: 10%; } .n5 { left: 10%; } .n6 { left: 2%; }
+      .manifesto-card { min-height: auto; padding: 27px; }
+      .history-shell { padding: 18px 12px; border-radius: 18px; }
+      #phase-browser .media-toolbar { display: block; }
+      #phase-browser .media-switch { margin-top: 13px; }
+      #phase-browser .media-choice { min-width: 0; }
+      #phase-browser .media-stage.landscape {
+        width: 100%;
+        margin-left: 0;
+        transform: none;
+        padding: 5px;
+        border-radius: 13px;
+      }
+      #phase-browser .media-stage.portrait { padding: 5px; border-radius: 13px; }
+      #phase-browser .media-open { right: 12px; bottom: 12px; padding: 7px 10px; }
+      #phase-browser .media-caption { display: block; }
+      #phase-browser .media-caption span { display: block; }
+      #phase-browser .tabs { top: 68px; justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; padding: 10px 0; scrollbar-width: none; }
+      #phase-browser .tab { flex: 0 0 auto; }
+      #phase-browser .stages { grid-template-columns: repeat(6,1fr); }
+      #phase-browser .cols { grid-template-columns: 1fr; }
+      #phase-browser .fp .row { grid-template-columns: 1fr; }
+      #phase-browser .waveband { padding: 4px; overflow-x: auto; }
+      #phase-browser .waveband svg { min-width: 720px; }
+      #phase-browser .nav-arr { display: none; }
+      .photo-grid { gap: 38px; }
+      .signal-card, .mechanism-step { padding: 24px; }
+      blockquote p { font-size: clamp(39px, 12vw, 68px); }
+      .closing { padding-top: 84px; }
+      .closing-grid { gap: 42px; }
+      .closing-footer { display: block; margin-top: 62px; }
+      .closing-footer span { display: block; margin-top: 8px; }
+      .viewer-bar { align-items: flex-start; padding: 9px 10px; }
+      .viewer-title span { display: none; }
+      .viewer-tools { gap: 4px; }
+      .viewer-tools button { min-width: 34px; height: 34px; padding: 0 8px; }
+      .viewer-scroll { height: calc(100dvh - 56px); padding: 12px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress" aria-hidden="true"></div>
+  <nav class="site-nav" aria-label="页面导航">
+    <div class="brand">AI REVOLUTION / RESPONSE</div>
+    <div class="nav-links">
+      <a href="#choice">选择</a>
+      <a href="#history">历史</a>
+      <a href="#signals">信号</a>
+      <a href="#opportunity">机会</a>
+    </div>
+    <div class="nav-state">现在：等待证据</div>
+  </nav>
+
+  <main>
+    <section class="hero" id="top">
+      <div class="hero-orbit" aria-hidden="true"></div>
+      <div class="hero-inner">
+        <div class="eyebrow">AI革命中的应对</div>
+        <h1>不预测泡沫<span>如何破裂。</span></h1>
+        <div class="hero-bottom">
+          <p class="hero-deck">等待<strong>过度预期破裂</strong>，而<strong>技术革命没有破裂</strong>的时刻。变量太多，过程不可预测；结构会重复，证据可以等待。</p>
+          <a class="scroll-cue" href="#choice"><i>↓</i> 从选择开始</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section network-section" id="choice">
+      <div class="section-inner network-grid">
+        <div>
+          <div class="section-kicker">01 / 放弃不可能的任务</div>
+          <h2 class="section-title">过程是一张网，没人能把每根线都算准。</h2>
+          <p class="section-lead">芯片、云、算力租赁、模型公司、债务、能源与需求彼此缠绕。逐家公司推演谁先出事、冲击传到哪里，研究成本极高，结论仍可能是错的。</p>
+          <ol class="reject-list">
+            <li><b>NO.1</b><span>不猜甲骨文、CoreWeave、OpenAI或Anthropic谁先成为触发点。</span></li>
+            <li><b>NO.2</b><span>不猜具体日期，也不把某个跌幅当作自动买入信号。</span></li>
+            <li><b>NO.3</b><span>不靠一张完美的关系图，假装自己已经掌握未来。</span></li>
+          </ol>
+        </div>
+        <div class="network-board" role="img" aria-label="AI产业由芯片、云、算力租赁、模型公司、融资与能源组成的网状关系示意">
+          <div class="network-core">AI<br>产业</div>
+          <div class="network-node n1">芯片与<br>机柜</div>
+          <div class="network-node n2">云厂商</div>
+          <div class="network-node n3">模型公司</div>
+          <div class="network-node n4">企业需求</div>
+          <div class="network-node n5">债务与<br>融资</div>
+          <div class="network-node n6">电力与<br>数据中心</div>
+          <div class="network-caption">任一节点变化，都可能沿多条路径传导</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section manifesto">
+      <div class="section-inner">
+        <div class="section-kicker">02 / 把问题换掉</div>
+        <h2 class="section-title">历史不负责告诉我哪天发生。它只告诉我，什么变化值得行动。</h2>
+        <div class="manifesto-grid">
+          <article class="manifesto-card">
+            <div class="label">不做的事</div>
+            <h3>预测过程</h3>
+            <p>谁先倒、何时倒、跌多少、下一张多米诺骨牌在哪里。这些答案看起来精确，实际最容易制造虚假的确定感。</p>
+          </article>
+          <article class="manifesto-card wait">
+            <div class="label">真正要做的事</div>
+            <h3>等待状态改变</h3>
+            <p>等到有人不得不卖，行业开始洗牌，昂贵的算力与智力被重新定价，乐观叙事被现实打断。</p>
+          </article>
+        </div>
+        <p class="trigger-note"><strong>触发源可以完全不同：</strong>可能是韩国金融危机式的外部流动性冲击，也可能是甲骨文、CoreWeave或模型公司的现金流断裂。来源不是行动标准；它是否迫使行业重新配置资产，才是。</p>
+      </div>
+    </section>
+
+    <section class="section history-section" id="history">
+      <div class="section-inner">
+        <div class="history-intro">
+          <div>
+            <div class="section-kicker">03 / 逐相位浏览</div>
+            <h2 class="section-title">六次革命＋加密：不是同一条故事，是同一种错位。</h2>
+            <p class="section-lead">五次历史技术革命、正在发生的AI革命，再加上四年一轮的加密样本。技术线继续前进，金融线却会提前繁荣、过度扩张、被迫出清。</p>
+          </div>
+          <div class="history-note">建议先点“病、死、墓”，再横向切换革命。要找的不是日期重复，而是“不得不卖 → 价格重置 → 基础设施留下”的结构。</div>
+        </div>
+
+        <div class="history-shell" id="phase-browser">
+          <div class="history-how"><span>HOW TO READ</span> 先选革命；全景横图看完整过程，竖版讲解看关键证据，再点相位对照两条线。</div>
+          <div class="tabs" id="tabs" aria-label="革命选择"></div>
+          <div class="revmeta" id="revmeta"></div>
+          <div id="fpimgs"></div>
+          <div class="fp" id="fpcard"></div>
+          <div class="waveband">
+            <button type="button" class="nav-arr prev" onclick="stepRev(-1)" title="上一个革命" aria-label="上一个革命">‹</button>
+            <button type="button" class="nav-arr next" onclick="stepRev(1)" title="下一个革命" aria-label="下一个革命">›</button>
+            <svg viewBox="0 0 960 300" xmlns="http://www.w3.org/2000/svg" id="wave" aria-label="金融线与技术线相位图">
+              <defs><marker id="arw" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto"><path d="M0,0 L6,2 L0,4" fill="#6b6f63"/></marker></defs>
+              <g id="wavecontent"></g>
+            </svg>
+          </div>
+          <div class="stages" id="stages" aria-label="十二相位选择"></div>
+          <div class="stagecard" id="stagecard"></div>
+          <div class="cols">
+            <div class="col fin"><h3>金融线　在这个相位</h3><span class="yr" id="finyr"></span><div id="finlist"></div></div>
+            <div class="col tech"><h3>技术线　在这个相位</h3><span class="yr" id="techyr"></span><div id="techlist"></div></div>
+          </div>
+          <noscript>需要启用 JavaScript 才能使用逐相位浏览器。</noscript>
+        </div>
+      </div>
+    </section>
+
+    <section class="section signals" id="signals">
+      <div class="section-inner">
+        <div class="section-kicker">04 / 等待什么</div>
+        <h2 class="section-title">不是价格跌了多少。是现实世界里，有人已经没有选择。</h2>
+        <p class="section-lead">普通回调、坏消息和悲观评论都不够。真正的信号必须穿透价格，改变行业结构。</p>
+        <div class="signal-grid">
+          <article class="signal-card"><strong>不得不卖</strong><p>保证金、债务、现金流或赎回压力迫使参与者按市价处置资产，不再能够等待。</p></article>
+          <article class="signal-card"><strong>行业洗牌</strong><p>破产、重组、合并与订单重写开始改变谁能活下来、谁拥有基础设施。</p></article>
+          <article class="signal-card"><strong>算力打折</strong><p>GPU、数据中心和算力租赁从稀缺溢价回到按真实使用价值定价。</p></article>
+          <article class="signal-card"><strong>智力打折</strong><p>推理、模型与智能服务的单位价格显著下降，昂贵能力开始成为普及型投入。</p></article>
+        </div>
+        <div class="signal-rule">当乐观被压到过度悲观，而技术能力、真实需求和基础设施仍然存在，对AI产业与下一轮赢家而言，这一定是机会；但不等于失败公司的股票或债权自动值得买。</div>
+      </div>
+    </section>
+
+    <section class="section photo-section">
+      <div class="section-inner photo-grid">
+        <figure class="exit-photo">
+          <img src="assets/caixin-miner-exit.jpg" alt="四川黑水一位藏族妇女抱着从矿机上拆下的电源线，像抱着一束花" loading="lazy">
+          <figcaption>2021年5月3日，四川黑水，一位藏族妇女搬运从新疆转运来的矿机电源线。图｜财新周刊 丁刚。<a href="https://weekly.caixin.com/2021-07-10/101738443.html" target="_blank" rel="noopener">查看原报道</a></figcaption>
+        </figure>
+        <div class="photo-copy">
+          <div class="section-kicker">05 / 出清不是一个百分比</div>
+          <h2>生产资料，最后像废料一样被抱走。</h2>
+          <p>真正的出清会落到具体的人和具体的资产上。曾经昂贵、稀缺、被视为通往未来的设备，被拆下、转运、重新寻找买家。那一刻，价格上的故事变成了现实里的处置。</p>
+          <div class="correction">这张照片记录的是政策关停后的矿机搬运，不是已证实的“矿企破产”；妇女手里拿的是矿机电源线，也不是GPU。它仍然准确呈现了你要表达的核心：当外部约束让参与者无法继续等待，基础设施就会被迫重新配置。</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section mechanism" id="opportunity">
+      <div class="section-inner">
+        <div class="section-kicker">06 / 为什么这反而是机会</div>
+        <h2 class="section-title">破裂的是过度反应，不是技术革命本身。</h2>
+        <p class="section-lead">高估假设下的价格、融资和产能需要被修复；能够解决真实问题的技术不会因此消失。出清甚至可能替下一轮普及支付成本。</p>
+        <div class="mechanism-steps">
+          <article class="mechanism-step"><b>PHASE 01</b><h3>狂热把基础设施提前建出来</h3><p>资本用过度乐观的预期，建设了超出当期需求的铁路、光纤、数据中心与算力。</p></article>
+          <article class="mechanism-step"><b>PHASE 02</b><h3>出清把价格压回真实使用价值</h3><p>失败者承担损失，资产折价、债务重组、租赁价格下降，纸面价值回到现金流约束。</p></article>
+          <article class="mechanism-step"><b>PHASE 03</b><h3>后来者用更低成本完成普及</h3><p>便宜的电力、光纤、流量、算力与智力进入企业和家庭，长期影响才真正展开。</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="quote-section">
+      <div class="quote-wrap">
+        <div class="quote-mark">“</div>
+        <blockquote>
+          <p>我们总是高估技术的短期影响，低估它的长期威力。</p>
+          <footer>AMARA’S LAW</footer>
+        </blockquote>
+      </div>
+    </section>
+
+    <section class="closing">
+      <div class="section-inner closing-grid">
+        <h2>等待，<br>不是无所作为。</h2>
+        <div class="closing-copy">
+          <p>它是在拒绝虚假的精确，把注意力从“什么时候跌”转向“什么事实已经改变”。</p>
+          <p><strong>现在：</strong>观察谁开始被迫行动。</p>
+          <p><strong>届时：</strong>重新判断幸存者、低成本基础设施与下一轮赢家，而不是默认买入已经失败的公司。</p>
+        </div>
+      </div>
+      <footer class="closing-footer">
+        <span>观点分享 · 历史类比不是时点模型</span>
+        <span>不构成任何投资建议</span>
+      </footer>
+    </section>
+  </main>
+
+  <dialog class="image-viewer" id="image-viewer" aria-labelledby="viewer-heading">
+    <div class="viewer-bar">
+      <div class="viewer-title">
+        <b id="viewer-heading">图片阅读器</b>
+        <span>放大后可拖动查看细节</span>
+      </div>
+      <div class="viewer-tools" aria-label="图片缩放控制">
+        <button type="button" onclick="changeImageZoom(-.25)" aria-label="缩小图片">−</button>
+        <button type="button" onclick="resetImageZoom()" aria-label="恢复适合宽度">适宽</button>
+        <button type="button" onclick="changeImageZoom(.25)" aria-label="放大图片">＋</button>
+        <button type="button" class="viewer-close" onclick="closeImageViewer()" aria-label="关闭图片阅读器">关闭</button>
+      </div>
+    </div>
+    <div class="viewer-scroll" id="viewer-scroll">
+      <img id="viewer-image" alt="">
+    </div>
+  </dialog>
+
+  <script src="history-browser.js"></script>
+  <script>
+    const progress = document.querySelector('.progress');
+    const updateProgress = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      progress.style.width = `${max > 0 ? (window.scrollY / max) * 100 : 0}%`;
+    };
+    updateProgress();
+    window.addEventListener('scroll', updateProgress, { passive: true });
+  </script>
+</body>
+</html>
