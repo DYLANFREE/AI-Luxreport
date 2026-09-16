@@ -1,0 +1,675 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<style>
+body{margin:0;padding:20px 24px;font:15px/1.75 "PingFang SC",sans-serif;background:#f7f2e7;color:#24382c}
+:root{--ink:#20251f;--muted:#687168;--paper:#fffdf8;--bg:#f4f1eb;--wood:#1f4530;--fire:#9e3a1e;--gold:#b87030;--line:#d8d0c2}
+</style>
+</head>
+<body>
+<section id="aztec" class="panel">
+<style>
+:root{--green-dark:#1f4530;--green-mid:#2e6b45;--green-soft:#e6f0ea;--blue:#235d7d;--blue-soft:#e5eef3;--amber:#b87030;--amber-soft:#f4ead8;--red:#9e3a1e;--red-soft:#f5e7e2;--purple:#6d4a7a;--purple-soft:#f0e8f3;--serif:"Songti SC","Noto Serif SC",Georgia,serif;--mono:ui-monospace,SFMono-Regular,Menlo,monospace}
+.azx{font-size:22px;line-height:1.75;color:var(--ink)}
+.azx .hero{text-align:center;padding:28px 22px 22px;border:1px solid var(--line);background:rgba(255,253,248,.92);border-radius:12px;margin-bottom:20px}
+.azx .hero-tag{display:inline-block;font-size:14px;letter-spacing:2px;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 10px;margin-bottom:10px;font-family:var(--mono)}
+.azx .hero h1{font-family:var(--serif);font-size:clamp(30px,5vw,44px);font-weight:900;color:var(--green-dark);line-height:1.3;margin-bottom:10px}
+.azx .one-line{font-size:21px;color:var(--muted);max-width:660px;margin:0 auto 16px;line-height:1.7}
+.azx .one-line strong{color:var(--green-dark)}
+.azx .hero-note{font-size:15px;color:var(--muted);margin-top:12px}
+.azx .eq-bar{display:flex;gap:5px;margin:14px 0 0;flex-wrap:wrap}
+.azx .eq-step{flex:1;min-width:140px;padding:10px 14px;border-radius:6px;text-align:center}
+.azx .eq-step small{display:block;font-size:12px;font-weight:600;opacity:.7;margin-bottom:1px;font-family:var(--mono)}
+.azx .eq-step b{display:block;font-size:17px;font-weight:700}
+.azx .eq-step span{display:block;font-size:14px;margin-top:1px;opacity:.8}
+.azx .eq-red{background:var(--red-soft);color:var(--red);border:1px solid rgba(158,58,30,.3)}
+.azx .eq-yellow{background:var(--amber-soft);color:var(--amber);border:1px solid rgba(184,112,48,.3)}
+.azx .eq-green{background:var(--green-soft);color:var(--green-dark);border:1px solid rgba(46,107,69,.3)}
+.azx .eq-gray{background:var(--blue-soft);color:var(--blue);border:1px solid rgba(35,93,125,.3)}
+.azx .toc{display:grid;grid-template-columns:repeat(auto-fit,minmax(196px,1fr));gap:8px;margin:0 0 18px}
+.azx .toc a{display:flex;gap:9px;align-items:flex-start;padding:11px 13px;border:1px solid var(--line);border-left:3px solid var(--green-mid);border-radius:6px;background:rgba(255,253,248,.9);text-decoration:none;color:var(--muted);font-size:14px;line-height:1.45;transition:all .15s}
+.azx .toc a:hover{background:var(--green-soft);border-left-color:var(--green-dark);color:var(--green-dark)}
+.azx .toc a i{font-style:normal;display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;border-radius:50%;background:var(--green-dark);color:#fff;font-size:10px;font-weight:700;flex:none;margin-top:2px}
+.azx .toc a em{display:block;font-style:normal;font-size:12px;font-weight:600;color:var(--red);margin-top:2px}
+.azx .section{margin-bottom:18px;border:1px solid var(--line);border-radius:10px;background:rgba(255,253,248,.92);box-shadow:0 4px 16px rgba(30,31,27,.04);overflow:hidden;scroll-margin-top:24px}
+.azx .section:hover{box-shadow:0 6px 24px rgba(30,31,27,.08)}
+.azx .question{font-family:var(--serif);font-size:26px;font-weight:700;line-height:1.35;list-style:none;cursor:pointer;user-select:none;padding:20px 24px;display:flex;align-items:center;gap:10px;color:var(--green-dark)}
+.azx .question::-webkit-details-marker{display:none}
+.azx .question::before{content:'\25B8';font-size:16px;color:var(--muted);transition:transform .15s;flex:none}
+.azx details[open]>.question::before{content:'\25BE'}
+.azx .question:hover{background:rgba(230,240,234,.25)}
+.azx .qnum{display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:34px;border-radius:50%;font-family:var(--mono);font-size:16px;font-weight:700;color:#fff;flex-shrink:0}
+.azx .section-body{padding:0 28px 24px;font-size:21px;line-height:1.75;color:#3a4a42}
+.azx .section-body p{margin-bottom:8px}
+.azx .verdict{padding:18px 22px;background:rgba(31,69,48,.04);border-left:5px solid var(--green-mid);border-radius:0 8px 8px 0;margin-bottom:16px}
+.azx .v-eq{display:block;font-family:var(--serif);font-size:20px;font-weight:700;color:var(--amber);margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid rgba(31,69,48,.12)}
+.azx .verdict ol{margin:0;padding:0 0 0 18px;list-style:none}
+.azx .verdict li{position:relative;font-size:20px;line-height:1.75;color:var(--green-dark);font-weight:600;margin-bottom:5px}
+.azx .verdict li:last-child{margin-bottom:0}
+.azx .verdict li::before{content:"";position:absolute;left:-16px;top:10px;width:6px;height:6px;border-radius:50%;background:var(--green-mid)}
+.azx .ev{font-size:20px;padding:16px 20px;border-radius:6px;margin-top:10px;line-height:1.7}
+.azx .ev-fact{background:var(--green-soft);border-left:3px solid var(--green-mid)}
+.azx .ev-judge{background:var(--amber-soft);border-left:3px solid var(--amber)}
+.azx .ev-explore{background:var(--purple-soft);border-left:3px solid var(--purple)}
+.azx .ev-action{background:var(--blue-soft);border-left:3px solid var(--blue)}
+.azx .ev-label{font-size:17px;font-weight:700;margin-bottom:4px;display:block}
+.azx .ev-src{font-size:15px;color:var(--muted);margin-top:6px;font-style:italic}
+.azx .ev p{font-size:16px;line-height:1.75;margin-bottom:8px}
+.azx .ev p:last-of-type{margin-bottom:0}
+.azx .q-row{border-top:1px solid rgba(31,69,48,.14);padding:12px 0 10px}
+.azx .q-row:first-of-type{border-top:0;padding-top:2px}
+.azx .q-row>b{display:block;font-size:17px;color:var(--green-dark);margin-bottom:7px}
+.azx .q-cmp{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.azx .q-cmp>div{padding:10px 13px;border-radius:5px;font-size:15px;line-height:1.7}
+.azx .q-cmp .now{background:var(--red-soft);border-left:3px solid var(--red)}
+.azx .q-cmp .priv{background:rgba(255,253,248,.85);border-left:3px solid var(--green-mid)}
+.azx .q-cmp span{display:block;font-family:var(--mono);font-size:12px;letter-spacing:.06em;margin-bottom:3px}
+.azx .q-cmp .now span{color:var(--red)}
+.azx .q-cmp .priv span{color:var(--green-mid)}
+.azx .band{margin:12px 0 6px}
+.azx .band-row{display:grid;grid-template-columns:88px 1fr 76px 1fr 96px;gap:9px;align-items:center;margin:7px 0;font-size:14px}
+.azx .band-row.head{font-size:12px;color:var(--muted);font-family:var(--mono);letter-spacing:.04em}
+.azx .band-row .b{height:14px;background:rgba(255,253,248,.9);border-radius:3px;overflow:hidden}
+.azx .band-row .b i{display:block;height:100%;background:var(--green-mid)}
+.azx .band-row .b.now i{background:var(--red)}
+.azx .band-row.aztec .b i{background:var(--amber)}
+.azx .band-row.aztec{border-top:1px dashed rgba(31,69,48,.25);margin-top:11px;padding-top:10px}
+.azx .band-row .v{text-align:right;font-variant-numeric:tabular-nums;color:var(--green-dark);font-weight:600}
+.azx .band-row .v em{display:block;font-style:normal;font-size:12px;font-weight:700;color:var(--red)}
+.azx .band-row .v em.up{color:var(--amber)}
+.azx .num{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0 4px}
+.azx .num>div{padding:13px 15px;background:rgba(255,253,248,.9);border-radius:6px;border-top:3px solid var(--green-mid)}
+.azx .num>div:last-child{border-top-color:var(--red)}
+.azx .num small{display:block;font-size:13px;color:var(--muted);margin-bottom:8px}
+.azx .num strong{display:block;font-family:var(--serif);font-size:34px;line-height:1;color:var(--green-dark)}
+.azx .num>div:last-child strong{color:var(--red)}
+.azx .num strong em{font-style:normal;font-size:16px;margin-left:3px}
+.azx .num p{margin:9px 0 0;font-size:13px;color:var(--muted);line-height:1.6}
+.azx table{width:100%;border-collapse:collapse;font-size:16px;margin:10px 0 2px}
+.azx th,.azx td{border-bottom:1px solid rgba(31,69,48,.14);padding:9px 10px;text-align:left;vertical-align:top;line-height:1.65}
+.azx th{font-family:var(--mono);font-size:13px;letter-spacing:.05em;color:var(--green-dark);background:rgba(31,69,48,.06)}
+.azx td:first-child{font-weight:700;color:var(--green-dark);white-space:nowrap}
+.azx td.ok{color:var(--green-mid);font-weight:700}
+.azx td.no{color:var(--red);font-weight:700}
+.azx td.wait{color:var(--amber);font-weight:700}
+.azx .quote{margin:10px 0 4px;padding:14px 18px;background:rgba(255,253,248,.9);border-left:4px solid var(--red);border-radius:0 6px 6px 0;font-family:var(--serif);font-size:20px;font-weight:700;color:var(--red);line-height:1.6}
+.azx .quote span{display:block;font-family:inherit;font-size:15px;font-weight:400;color:var(--muted);margin-top:8px}
+.azx .qz{margin:14px 0 0}
+.azx .qz-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.azx .qz-tab{font:600 13.5px "PingFang SC",sans-serif;padding:7px 13px;border:1px solid var(--line);border-radius:20px;background:rgba(255,253,248,.9);color:var(--muted);cursor:pointer}
+.azx .qz-tab:hover{border-color:var(--green-mid);color:var(--green-dark)}
+.azx .qz-tab.on{background:var(--green-dark);border-color:var(--green-dark);color:#fff}
+.azx .qz-stage{background:rgba(255,253,248,.9);border:1px solid var(--line);border-radius:8px;padding:14px 16px 12px}
+.azx .qz-slide{display:none}
+.azx .qz-slide.on{display:block}
+.azx .qz-slide svg{width:100%;height:auto;display:block}
+.azx .qz-cap{margin:10px 0 0;font-size:14.5px;color:#3a4a42;line-height:1.75}
+.azx .qz-foot{display:flex;align-items:center;gap:12px;margin-top:10px}
+.azx .qz-foot button{font:inherit;font-size:13.5px;padding:6px 14px;border:1px solid var(--line);background:rgba(255,253,248,.9);border-radius:6px;cursor:pointer;color:var(--green-dark)}
+.azx .qz-foot button:hover{background:var(--green-soft);border-color:var(--green-mid)}
+.azx .qz-idx{font-family:var(--mono);font-size:13px;color:var(--muted)}
+.azx figure.fig{margin:14px 0 8px;padding:14px 16px 8px;background:rgba(255,253,248,.96);border:1px solid var(--line);border-radius:8px}
+.azx figure.fig svg{width:100%;height:auto;display:block}
+.azx figure.fig figcaption{font-size:14px;color:var(--muted);margin-top:6px;line-height:1.65}
+.azx .fg-t{font:700 17px "PingFang SC",sans-serif;fill:#1f4530}
+.azx .fg-l{font:14.5px "PingFang SC",sans-serif;fill:#3a4a42}
+.azx .fg-v{font:700 15px "PingFang SC",sans-serif;fill:#3a4a42}
+.azx .fg-c{font:700 13px "PingFang SC",sans-serif}
+.azx .fg-sm{font:12.5px "PingFang SC",sans-serif;fill:#62706a}
+.azx .fg-s{font:12px "PingFang SC",sans-serif;fill:#62706a}
+.azx .fg-w{font:700 15px "PingFang SC",sans-serif;fill:#fff}
+.azx .go{display:inline-block;margin-top:16px;padding:11px 20px;background:var(--green-dark);color:#fff!important;text-decoration:none;border-radius:6px;font-size:17px}
+@media(max-width:760px){.azx figure.fig{overflow-x:auto}.azx figure.fig svg{min-width:620px}}
+@media(max-width:960px){.azx{font-size:19px}.azx .section-body{font-size:18px;padding:0 16px 18px}.azx .question{font-size:22px;padding:16px}.azx .verdict li,.azx .ev{font-size:17px}.azx .v-eq{font-size:18px}.azx .q-cmp{grid-template-columns:1fr}.azx .num{grid-template-columns:1fr}.azx .band-row{grid-template-columns:58px 1fr 60px 1fr 74px;gap:5px;font-size:12px}.azx .num strong{font-size:28px}}
+</style>
+<div class="azx">
+
+<div class="hero">
+  <span class="hero-tag">Aztec 复盘 · 2025.12 — 2026.09</span>
+  <h1>方向没看错，钱没赚到</h1>
+  <p class="one-line">2025 年 12 月，我们用 10 ETH 参与 Aztec 公募。买的不是一枚 L2 代币，是一个判断：<strong>隐私会变成链上结算的基础设施。</strong></p>
+  <div class="eq-bar">
+    <div class="eq-step eq-green"><small>① 方向</small><b>没看错</b><span>隐私需求真长出来了</span></div>
+    <div class="eq-step eq-yellow"><small>② 标的</small><b>没证明</b><span>需求没长到 Aztec 上</span></div>
+    <div class="eq-step eq-red"><small>③ 估值</small><b>下限没了</b><span>L2 带子整体下移</span></div>
+    <div class="eq-step eq-red"><small>④ 时机</small><b>错得最直接</b><span>当时以为还有后市</span></div>
+    <div class="eq-step eq-gray"><small>⑤ 纪律</small><b>当时没写</b><span>期限与退出条件缺失</span></div>
+  </div>
+  <p class="hero-note">九个月后回看，中间隔着标的、估值、时机三件事。事实核查截止 2026-09-09。</p>
+</div>
+
+<nav class="toc">
+  <a href="#az1" onclick="var d=document.getElementById('az1');if(d)d.open=true"><i>1</i><span>为什么看好隐私？<em>隐私是基础设施问题</em></span></a>
+  <a href="#az2" onclick="var d=document.getElementById('az2');if(d)d.open=true"><i>2</i><span>当时怎么挑到 Aztec？<em>便宜＋预期＋背书</em></span></a>
+  <a href="#az3" onclick="var d=document.getElementById('az3');if(d)d.open=true"><i>3</i><span>现在怎么样了？<em>下限带自己下移了</em></span></a>
+  <a href="#az4" onclick="var d=document.getElementById('az4');if(d)d.open=true"><i>4</i><span>现在该怎么应对？<em>长期看产品力，短期看筹码</em></span></a>
+  <a href="#az5" onclick="var d=document.getElementById('az5');if(d)d.open=true"><i>5</i><span>结论<em>五件事分开看</em></span></a>
+</nav>
+
+<details class="section" id="az1" open>
+  <summary class="question"><span class="qnum" style="background:var(--green-dark)">1</span>为什么看好隐私？</summary>
+  <div class="section-body">
+    <div class="verdict"><span class="v-eq">隐私不是个人偏好，是 AI 时代的基础设施需求。</span><ol>
+      <li>AI 让执行变便宜，真实行为数据变多、变值钱。</li>
+      <li>观察和预测的成本同时下降，公开记录会变成一张行为地图。</li>
+      <li>大规模上链要的不是"全透明"，是选择性透明：该验证的能验证，该隐藏的不必公开。</li>
+    </ol></div>
+
+    <div class="ev ev-fact">
+      <span class="ev-label" style="color:var(--green-mid)">五个问题，五次对比 · 点标签切换</span>
+      <div class="qz">
+        <div class="qz-tabs"><button class="qz-tab on" data-i="0" type="button">1 · 谁在做交易</button><button class="qz-tab" data-i="1" type="button">2 · AI 读出什么</button><button class="qz-tab" data-i="2" type="button">3 · 谁在看</button><button class="qz-tab" data-i="3" type="button">4 · 敢全透明吗</button><button class="qz-tab" data-i="4" type="button">5 · 要全藏起来吗</button></div>
+        <div class="qz-stage"><div class="qz-slide on" data-i="0">
+          <svg viewBox="0 0 720 300" role="img" aria-label="今天一个人一天几十次交易，有隐私之后 AI 代理一天可能几万次调用">
+          <rect x="0" y="0" width="344" height="300" rx="9" fill="#f7ece7"/>
+          <text x="20" y="32" class="fg-t" style="fill:#9e3a1e">今天</text>
+          <text x="20" y="54" class="fg-sm">一个人，一天几十次交易</text>
+          <circle cx="148" cy="98" r="5" fill="#d9b3a2"/><circle cx="184" cy="98" r="5" fill="#d9b3a2"/><circle cx="220" cy="98" r="5" fill="#d9b3a2"/><circle cx="256" cy="98" r="5" fill="#d9b3a2"/><circle cx="292" cy="98" r="5" fill="#d9b3a2"/><circle cx="148" cy="134" r="5" fill="#d9b3a2"/><circle cx="184" cy="134" r="5" fill="#d9b3a2"/><circle cx="220" cy="134" r="5" fill="#d9b3a2"/><circle cx="256" cy="134" r="5" fill="#d9b3a2"/><circle cx="292" cy="134" r="5" fill="#d9b3a2"/><circle cx="148" cy="170" r="5" fill="#d9b3a2"/><circle cx="184" cy="170" r="5" fill="#d9b3a2"/><circle cx="220" cy="170" r="5" fill="#d9b3a2"/><circle cx="256" cy="170" r="5" fill="#d9b3a2"/><circle cx="292" cy="170" r="5" fill="#d9b3a2"/><circle cx="148" cy="206" r="5" fill="#d9b3a2"/><circle cx="184" cy="206" r="5" fill="#d9b3a2"/><circle cx="220" cy="206" r="5" fill="#d9b3a2"/><circle cx="256" cy="206" r="5" fill="#d9b3a2"/><circle cx="292" cy="206" r="5" fill="#d9b3a2"/><text x="130" y="258" class="fg-c" style="fill:#9e3a1e">几十次</text>
+          <rect x="376" y="0" width="344" height="300" rx="9" fill="#eef4f0"/>
+          <text x="396" y="32" class="fg-t">有隐私之后</text>
+          <text x="396" y="54" class="fg-sm">AI 代理，一天可能几万次调用</text>
+          <rect x="396" y="86" width="60" height="52" rx="6" fill="none" stroke="#2e6b45" stroke-width="2.5"/>
+          <text x="426" y="118" class="fg-c" style="text-anchor:middle;fill:#2e6b45">AI</text>
+          <path d="M456 112 h26" stroke="#2e6b45" stroke-width="2.5"/>
+          <path d="M478 106 L488 112 L478 118 z" fill="#2e6b45"/>
+          <circle cx="502" cy="86" r="2.1" fill="#2e6b45"/><circle cx="516" cy="86" r="2.1" fill="#2e6b45"/><circle cx="528" cy="86" r="2.1" fill="#2e6b45"/><circle cx="542" cy="86" r="2.1" fill="#2e6b45"/><circle cx="554" cy="86" r="2.1" fill="#2e6b45"/><circle cx="568" cy="86" r="2.1" fill="#2e6b45"/><circle cx="580" cy="86" r="2.1" fill="#2e6b45"/><circle cx="594" cy="86" r="2.1" fill="#2e6b45"/><circle cx="606" cy="86" r="2.1" fill="#2e6b45"/><circle cx="620" cy="86" r="2.1" fill="#2e6b45"/><circle cx="632" cy="86" r="2.1" fill="#2e6b45"/><circle cx="646" cy="86" r="2.1" fill="#2e6b45"/><circle cx="658" cy="86" r="2.1" fill="#2e6b45"/><circle cx="672" cy="86" r="2.1" fill="#2e6b45"/><circle cx="684" cy="86" r="2.1" fill="#2e6b45"/><circle cx="698" cy="86" r="2.1" fill="#2e6b45"/><circle cx="502" cy="100" r="2.1" fill="#2e6b45"/><circle cx="516" cy="100" r="2.1" fill="#2e6b45"/><circle cx="528" cy="100" r="2.1" fill="#2e6b45"/><circle cx="542" cy="100" r="2.1" fill="#2e6b45"/><circle cx="554" cy="100" r="2.1" fill="#2e6b45"/><circle cx="568" cy="100" r="2.1" fill="#2e6b45"/><circle cx="580" cy="100" r="2.1" fill="#2e6b45"/><circle cx="594" cy="100" r="2.1" fill="#2e6b45"/><circle cx="606" cy="100" r="2.1" fill="#2e6b45"/><circle cx="620" cy="100" r="2.1" fill="#2e6b45"/><circle cx="632" cy="100" r="2.1" fill="#2e6b45"/><circle cx="646" cy="100" r="2.1" fill="#2e6b45"/><circle cx="658" cy="100" r="2.1" fill="#2e6b45"/><circle cx="672" cy="100" r="2.1" fill="#2e6b45"/><circle cx="684" cy="100" r="2.1" fill="#2e6b45"/><circle cx="698" cy="100" r="2.1" fill="#2e6b45"/><circle cx="502" cy="112" r="2.1" fill="#2e6b45"/><circle cx="516" cy="112" r="2.1" fill="#2e6b45"/><circle cx="528" cy="112" r="2.1" fill="#2e6b45"/><circle cx="542" cy="112" r="2.1" fill="#2e6b45"/><circle cx="554" cy="112" r="2.1" fill="#2e6b45"/><circle cx="568" cy="112" r="2.1" fill="#2e6b45"/><circle cx="580" cy="112" r="2.1" fill="#2e6b45"/><circle cx="594" cy="112" r="2.1" fill="#2e6b45"/><circle cx="606" cy="112" r="2.1" fill="#2e6b45"/><circle cx="620" cy="112" r="2.1" fill="#2e6b45"/><circle cx="632" cy="112" r="2.1" fill="#2e6b45"/><circle cx="646" cy="112" r="2.1" fill="#2e6b45"/><circle cx="658" cy="112" r="2.1" fill="#2e6b45"/><circle cx="672" cy="112" r="2.1" fill="#2e6b45"/><circle cx="684" cy="112" r="2.1" fill="#2e6b45"/><circle cx="698" cy="112" r="2.1" fill="#2e6b45"/><circle cx="502" cy="126" r="2.1" fill="#2e6b45"/><circle cx="516" cy="126" r="2.1" fill="#2e6b45"/><circle cx="528" cy="126" r="2.1" fill="#2e6b45"/><circle cx="542" cy="126" r="2.1" fill="#2e6b45"/><circle cx="554" cy="126" r="2.1" fill="#2e6b45"/><circle cx="568" cy="126" r="2.1" fill="#2e6b45"/><circle cx="580" cy="126" r="2.1" fill="#2e6b45"/><circle cx="594" cy="126" r="2.1" fill="#2e6b45"/><circle cx="606" cy="126" r="2.1" fill="#2e6b45"/><circle cx="620" cy="126" r="2.1" fill="#2e6b45"/><circle cx="632" cy="126" r="2.1" fill="#2e6b45"/><circle cx="646" cy="126" r="2.1" fill="#2e6b45"/><circle cx="658" cy="126" r="2.1" fill="#2e6b45"/><circle cx="672" cy="126" r="2.1" fill="#2e6b45"/><circle cx="684" cy="126" r="2.1" fill="#2e6b45"/><circle cx="698" cy="126" r="2.1" fill="#2e6b45"/><circle cx="502" cy="138" r="2.1" fill="#2e6b45"/><circle cx="516" cy="138" r="2.1" fill="#2e6b45"/><circle cx="528" cy="138" r="2.1" fill="#2e6b45"/><circle cx="542" cy="138" r="2.1" fill="#2e6b45"/><circle cx="554" cy="138" r="2.1" fill="#2e6b45"/><circle cx="568" cy="138" r="2.1" fill="#2e6b45"/><circle cx="580" cy="138" r="2.1" fill="#2e6b45"/><circle cx="594" cy="138" r="2.1" fill="#2e6b45"/><circle cx="606" cy="138" r="2.1" fill="#2e6b45"/><circle cx="620" cy="138" r="2.1" fill="#2e6b45"/><circle cx="632" cy="138" r="2.1" fill="#2e6b45"/><circle cx="646" cy="138" r="2.1" fill="#2e6b45"/><circle cx="658" cy="138" r="2.1" fill="#2e6b45"/><circle cx="672" cy="138" r="2.1" fill="#2e6b45"/><circle cx="684" cy="138" r="2.1" fill="#2e6b45"/><circle cx="698" cy="138" r="2.1" fill="#2e6b45"/><circle cx="502" cy="152" r="2.1" fill="#2e6b45"/><circle cx="516" cy="152" r="2.1" fill="#2e6b45"/><circle cx="528" cy="152" r="2.1" fill="#2e6b45"/><circle cx="542" cy="152" r="2.1" fill="#2e6b45"/><circle cx="554" cy="152" r="2.1" fill="#2e6b45"/><circle cx="568" cy="152" r="2.1" fill="#2e6b45"/><circle cx="580" cy="152" r="2.1" fill="#2e6b45"/><circle cx="594" cy="152" r="2.1" fill="#2e6b45"/><circle cx="606" cy="152" r="2.1" fill="#2e6b45"/><circle cx="620" cy="152" r="2.1" fill="#2e6b45"/><circle cx="632" cy="152" r="2.1" fill="#2e6b45"/><circle cx="646" cy="152" r="2.1" fill="#2e6b45"/><circle cx="658" cy="152" r="2.1" fill="#2e6b45"/><circle cx="672" cy="152" r="2.1" fill="#2e6b45"/><circle cx="684" cy="152" r="2.1" fill="#2e6b45"/><circle cx="698" cy="152" r="2.1" fill="#2e6b45"/><circle cx="502" cy="164" r="2.1" fill="#2e6b45"/><circle cx="516" cy="164" r="2.1" fill="#2e6b45"/><circle cx="528" cy="164" r="2.1" fill="#2e6b45"/><circle cx="542" cy="164" r="2.1" fill="#2e6b45"/><circle cx="554" cy="164" r="2.1" fill="#2e6b45"/><circle cx="568" cy="164" r="2.1" fill="#2e6b45"/><circle cx="580" cy="164" r="2.1" fill="#2e6b45"/><circle cx="594" cy="164" r="2.1" fill="#2e6b45"/><circle cx="606" cy="164" r="2.1" fill="#2e6b45"/><circle cx="620" cy="164" r="2.1" fill="#2e6b45"/><circle cx="632" cy="164" r="2.1" fill="#2e6b45"/><circle cx="646" cy="164" r="2.1" fill="#2e6b45"/><circle cx="658" cy="164" r="2.1" fill="#2e6b45"/><circle cx="672" cy="164" r="2.1" fill="#2e6b45"/><circle cx="684" cy="164" r="2.1" fill="#2e6b45"/><circle cx="698" cy="164" r="2.1" fill="#2e6b45"/><circle cx="502" cy="178" r="2.1" fill="#2e6b45"/><circle cx="516" cy="178" r="2.1" fill="#2e6b45"/><circle cx="528" cy="178" r="2.1" fill="#2e6b45"/><circle cx="542" cy="178" r="2.1" fill="#2e6b45"/><circle cx="554" cy="178" r="2.1" fill="#2e6b45"/><circle cx="568" cy="178" r="2.1" fill="#2e6b45"/><circle cx="580" cy="178" r="2.1" fill="#2e6b45"/><circle cx="594" cy="178" r="2.1" fill="#2e6b45"/><circle cx="606" cy="178" r="2.1" fill="#2e6b45"/><circle cx="620" cy="178" r="2.1" fill="#2e6b45"/><circle cx="632" cy="178" r="2.1" fill="#2e6b45"/><circle cx="646" cy="178" r="2.1" fill="#2e6b45"/><circle cx="658" cy="178" r="2.1" fill="#2e6b45"/><circle cx="672" cy="178" r="2.1" fill="#2e6b45"/><circle cx="684" cy="178" r="2.1" fill="#2e6b45"/><circle cx="698" cy="178" r="2.1" fill="#2e6b45"/><circle cx="502" cy="190" r="2.1" fill="#2e6b45"/><circle cx="516" cy="190" r="2.1" fill="#2e6b45"/><circle cx="528" cy="190" r="2.1" fill="#2e6b45"/><circle cx="542" cy="190" r="2.1" fill="#2e6b45"/><circle cx="554" cy="190" r="2.1" fill="#2e6b45"/><circle cx="568" cy="190" r="2.1" fill="#2e6b45"/><circle cx="580" cy="190" r="2.1" fill="#2e6b45"/><circle cx="594" cy="190" r="2.1" fill="#2e6b45"/><circle cx="606" cy="190" r="2.1" fill="#2e6b45"/><circle cx="620" cy="190" r="2.1" fill="#2e6b45"/><circle cx="632" cy="190" r="2.1" fill="#2e6b45"/><circle cx="646" cy="190" r="2.1" fill="#2e6b45"/><circle cx="658" cy="190" r="2.1" fill="#2e6b45"/><circle cx="672" cy="190" r="2.1" fill="#2e6b45"/><circle cx="684" cy="190" r="2.1" fill="#2e6b45"/><circle cx="698" cy="190" r="2.1" fill="#2e6b45"/><circle cx="502" cy="204" r="2.1" fill="#2e6b45"/><circle cx="516" cy="204" r="2.1" fill="#2e6b45"/><circle cx="528" cy="204" r="2.1" fill="#2e6b45"/><circle cx="542" cy="204" r="2.1" fill="#2e6b45"/><circle cx="554" cy="204" r="2.1" fill="#2e6b45"/><circle cx="568" cy="204" r="2.1" fill="#2e6b45"/><circle cx="580" cy="204" r="2.1" fill="#2e6b45"/><circle cx="594" cy="204" r="2.1" fill="#2e6b45"/><circle cx="606" cy="204" r="2.1" fill="#2e6b45"/><circle cx="620" cy="204" r="2.1" fill="#2e6b45"/><circle cx="632" cy="204" r="2.1" fill="#2e6b45"/><circle cx="646" cy="204" r="2.1" fill="#2e6b45"/><circle cx="658" cy="204" r="2.1" fill="#2e6b45"/><circle cx="672" cy="204" r="2.1" fill="#2e6b45"/><circle cx="684" cy="204" r="2.1" fill="#2e6b45"/><circle cx="698" cy="204" r="2.1" fill="#2e6b45"/><circle cx="502" cy="216" r="2.1" fill="#2e6b45"/><circle cx="516" cy="216" r="2.1" fill="#2e6b45"/><circle cx="528" cy="216" r="2.1" fill="#2e6b45"/><circle cx="542" cy="216" r="2.1" fill="#2e6b45"/><circle cx="554" cy="216" r="2.1" fill="#2e6b45"/><circle cx="568" cy="216" r="2.1" fill="#2e6b45"/><circle cx="580" cy="216" r="2.1" fill="#2e6b45"/><circle cx="594" cy="216" r="2.1" fill="#2e6b45"/><circle cx="606" cy="216" r="2.1" fill="#2e6b45"/><circle cx="620" cy="216" r="2.1" fill="#2e6b45"/><circle cx="632" cy="216" r="2.1" fill="#2e6b45"/><circle cx="646" cy="216" r="2.1" fill="#2e6b45"/><circle cx="658" cy="216" r="2.1" fill="#2e6b45"/><circle cx="672" cy="216" r="2.1" fill="#2e6b45"/><circle cx="684" cy="216" r="2.1" fill="#2e6b45"/><circle cx="698" cy="216" r="2.1" fill="#2e6b45"/><circle cx="502" cy="230" r="2.1" fill="#2e6b45"/><circle cx="516" cy="230" r="2.1" fill="#2e6b45"/><circle cx="528" cy="230" r="2.1" fill="#2e6b45"/><circle cx="542" cy="230" r="2.1" fill="#2e6b45"/><circle cx="554" cy="230" r="2.1" fill="#2e6b45"/><circle cx="568" cy="230" r="2.1" fill="#2e6b45"/><circle cx="580" cy="230" r="2.1" fill="#2e6b45"/><circle cx="594" cy="230" r="2.1" fill="#2e6b45"/><circle cx="606" cy="230" r="2.1" fill="#2e6b45"/><circle cx="620" cy="230" r="2.1" fill="#2e6b45"/><circle cx="632" cy="230" r="2.1" fill="#2e6b45"/><circle cx="646" cy="230" r="2.1" fill="#2e6b45"/><circle cx="658" cy="230" r="2.1" fill="#2e6b45"/><circle cx="672" cy="230" r="2.1" fill="#2e6b45"/><circle cx="684" cy="230" r="2.1" fill="#2e6b45"/><circle cx="698" cy="230" r="2.1" fill="#2e6b45"/>
+          <text x="496" y="258" class="fg-c" style="fill:#2e6b45">几万次</text>
+          <rect x="0" y="272" width="720" height="28" rx="6" fill="#f4ead8"/>
+          <text x="360" y="291" class="fg-c" style="text-anchor:middle;fill:#8a5a20">每一笔都公开，等于把策略、预算和意图摊在桌面上</text>
+        </svg>
+          <p class="qz-cap">人不希望自己的资产和习惯被长期画像；AI 代理也不希望身份、预算和行动路径被持续跟踪。交易量级的跃迁，是隐私从"个人偏好"变成"基础设施问题"的第一推力。</p>
+        </div><div class="qz-slide" data-i="1">
+          <svg viewBox="0 0 720 300" role="img" aria-label="同一份公开记录：今天没人看得完，AI 全量读取后连成一张行为地图">
+          <rect x="0" y="0" width="220" height="300" rx="9" fill="#f4f1eb" stroke="#d8d0c2"/>
+          <text x="18" y="32" class="fg-t">今天</text>
+          <text x="18" y="54" class="fg-sm">记录公开，没人看得完</text>
+          <circle cx="47" cy="130" r="4.5" fill="#cdc6b8"/><circle cx="82" cy="152" r="4.5" fill="#cdc6b8"/><circle cx="122" cy="125" r="4.5" fill="#cdc6b8"/><circle cx="162" cy="160" r="4.5" fill="#cdc6b8"/><circle cx="192" cy="135" r="4.5" fill="#cdc6b8"/><circle cx="62" cy="190" r="4.5" fill="#cdc6b8"/><circle cx="107" cy="210" r="4.5" fill="#cdc6b8"/><circle cx="152" cy="195" r="4.5" fill="#cdc6b8"/><circle cx="187" cy="215" r="4.5" fill="#cdc6b8"/><circle cx="37" cy="220" r="4.5" fill="#cdc6b8"/><circle cx="97" cy="180" r="4.5" fill="#cdc6b8"/><circle cx="142" cy="145" r="4.5" fill="#cdc6b8"/>
+          <circle cx="107" cy="178" r="7" fill="none" stroke="#2e6b45" stroke-width="2"/>
+          <text x="110" y="256" class="fg-c" style="text-anchor:middle;fill:#62706a">零星几个点被注意到</text>
+          <path d="M226 150 h24" stroke="#b8b0a0" stroke-width="2"/>
+          <path d="M246 145 L254 150 L246 155 z" fill="#b8b0a0"/>
+          <rect x="260" y="0" width="200" height="300" rx="9" fill="#eef4f0" stroke="#9dc0ac"/>
+          <text x="278" y="32" class="fg-t">AI 介入后</text>
+          <text x="278" y="54" class="fg-sm">全量读取、互相关联</text>
+          <line x1="307" y1="130" x2="342" y2="152" stroke="#6f9c83" stroke-width="1.3"/><line x1="342" y1="152" x2="382" y2="125" stroke="#6f9c83" stroke-width="1.3"/><line x1="382" y1="125" x2="422" y2="160" stroke="#6f9c83" stroke-width="1.3"/><line x1="422" y1="160" x2="452" y2="135" stroke="#6f9c83" stroke-width="1.3"/><line x1="322" y1="190" x2="367" y2="210" stroke="#6f9c83" stroke-width="1.3"/><line x1="367" y1="210" x2="412" y2="195" stroke="#6f9c83" stroke-width="1.3"/><line x1="357" y1="180" x2="402" y2="145" stroke="#6f9c83" stroke-width="1.3"/><line x1="402" y1="145" x2="422" y2="160" stroke="#6f9c83" stroke-width="1.3"/><circle cx="307" cy="130" r="4.5" fill="#2e6b45"/><circle cx="342" cy="152" r="4.5" fill="#2e6b45"/><circle cx="382" cy="125" r="4.5" fill="#2e6b45"/><circle cx="422" cy="160" r="4.5" fill="#2e6b45"/><circle cx="452" cy="135" r="4.5" fill="#2e6b45"/><circle cx="322" cy="190" r="4.5" fill="#2e6b45"/><circle cx="367" cy="210" r="4.5" fill="#2e6b45"/><circle cx="412" cy="195" r="4.5" fill="#2e6b45"/><circle cx="447" cy="215" r="4.5" fill="#2e6b45"/><circle cx="297" cy="220" r="4.5" fill="#2e6b45"/><circle cx="357" cy="180" r="4.5" fill="#2e6b45"/><circle cx="402" cy="145" r="4.5" fill="#2e6b45"/>
+          <text x="360" y="256" class="fg-c" style="text-anchor:middle;fill:#2e6b45">同样的记录，读成一张关系网</text>
+          <path d="M466 150 h24" stroke="#b8b0a0" stroke-width="2"/>
+          <path d="M486 145 L494 150 L486 155 z" fill="#b8b0a0"/>
+          <rect x="500" y="0" width="220" height="300" rx="9" fill="#f7ece7" stroke="#dda893"/>
+          <text x="518" y="32" class="fg-t" style="fill:#9e3a1e">结果</text>
+          <text x="518" y="54" class="fg-sm">一张能预测下一步的地图</text>
+          <line x1="547" y1="130" x2="582" y2="152" stroke="#c98a72" stroke-width="1.3"/><line x1="582" y1="152" x2="622" y2="125" stroke="#c98a72" stroke-width="1.3"/><line x1="622" y1="125" x2="662" y2="160" stroke="#c98a72" stroke-width="1.3"/><line x1="662" y1="160" x2="692" y2="135" stroke="#c98a72" stroke-width="1.3"/><line x1="562" y1="190" x2="607" y2="210" stroke="#c98a72" stroke-width="1.3"/><line x1="607" y1="210" x2="652" y2="195" stroke="#c98a72" stroke-width="1.3"/><line x1="597" y1="180" x2="642" y2="145" stroke="#c98a72" stroke-width="1.3"/><line x1="642" y1="145" x2="662" y2="160" stroke="#c98a72" stroke-width="1.3"/><line x1="547" y1="130" x2="597" y2="180" stroke="#c98a72" stroke-width="1.3"/><line x1="597" y1="180" x2="562" y2="190" stroke="#c98a72" stroke-width="1.3"/><line x1="537" y1="220" x2="562" y2="190" stroke="#c98a72" stroke-width="1.3"/><line x1="652" y1="195" x2="687" y2="215" stroke="#c98a72" stroke-width="1.3"/><line x1="692" y1="135" x2="662" y2="160" stroke="#c98a72" stroke-width="1.3"/><line x1="622" y1="125" x2="642" y2="145" stroke="#c98a72" stroke-width="1.3"/><line x1="582" y1="152" x2="597" y2="180" stroke="#c98a72" stroke-width="1.3"/><line x1="547" y1="130" x2="537" y2="220" stroke="#c98a72" stroke-width="1.3"/><line x1="687" y1="215" x2="652" y2="195" stroke="#c98a72" stroke-width="1.3"/><line x1="537" y1="220" x2="547" y2="130" stroke="#c98a72" stroke-width="1.3"/><circle cx="547" cy="130" r="4.5" fill="#9e3a1e"/><circle cx="582" cy="152" r="4.5" fill="#9e3a1e"/><circle cx="622" cy="125" r="4.5" fill="#9e3a1e"/><circle cx="662" cy="160" r="4.5" fill="#9e3a1e"/><circle cx="692" cy="135" r="4.5" fill="#9e3a1e"/><circle cx="562" cy="190" r="4.5" fill="#9e3a1e"/><circle cx="607" cy="210" r="4.5" fill="#9e3a1e"/><circle cx="652" cy="195" r="4.5" fill="#9e3a1e"/><circle cx="687" cy="215" r="4.5" fill="#9e3a1e"/><circle cx="537" cy="220" r="4.5" fill="#9e3a1e"/><circle cx="597" cy="180" r="4.5" fill="#9e3a1e"/><circle cx="642" cy="145" r="4.5" fill="#9e3a1e"/>
+          <g transform="translate(510,40)">
+            <circle cx="97" cy="170" r="9" fill="#9e3a1e"/>
+            <circle cx="97" cy="170" r="15" fill="none" stroke="#9e3a1e" stroke-width="1.6" opacity=".55"/>
+            <text x="97" y="174" class="fg-w" text-anchor="middle" style="font-size:11px">你</text>
+          </g>
+          <text x="610" y="256" class="fg-c" style="text-anchor:middle;fill:#9e3a1e">资产、对手方、习惯、关系全部可推</text>
+        </svg>
+          <p class="qz-cap">同一份公开记录，看的人不同，价值就不同。今天的问题是"看不过来"，AI 时代的问题是"藏不住"。</p>
+        </div><div class="qz-slide" data-i="2">
+          <svg viewBox="0 0 720 300" role="img" aria-label="今天只有一个观察者盯着你，AI 之后是一群 bot 同时盯着你">
+          <rect x="0" y="0" width="344" height="300" rx="9" fill="#f7ece7"/>
+          <text x="20" y="32" class="fg-t" style="fill:#9e3a1e">今天</text>
+          <text x="20" y="54" class="fg-sm">看的人少、慢、贵</text>
+          <g><rect x="77" y="87" width="30" height="26" rx="7" fill="#fffdf8" stroke="#c98a72" stroke-width="2"/><circle cx="92" cy="100" r="6.3" fill="#c98a72"/><circle cx="92" cy="100" r="2.2" fill="#fffdf8"/></g><line x1="107" y1="104" x2="164" y2="124" stroke="#c98a72" stroke-width="1.6" stroke-dasharray="5 4" opacity=".8"/><g stroke="#9e3a1e" stroke-width="2.5" fill="none"><circle cx="172" cy="117" r="14"/><line x1="172" y1="131" x2="172" y2="171"/><line x1="152" y1="143" x2="192" y2="143"/><line x1="172" y1="171" x2="160" y2="197"/><line x1="172" y1="171" x2="184" y2="197"/></g>
+          <text x="172" y="252" class="fg-c" style="text-anchor:middle;fill:#9e3a1e">盯一个人，要花人力和时间</text>
+          <rect x="376" y="0" width="344" height="300" rx="9" fill="#eef4f0"/>
+          <text x="396" y="32" class="fg-t">有隐私之后</text>
+          <text x="396" y="54" class="fg-sm">看的人多、快、便宜</text>
+          <line x1="660" y1="150" x2="579" y2="150" stroke="#2e6b45" stroke-width="1.6" stroke-dasharray="5 4" opacity=".8"/><line x1="627" y1="196" x2="570" y2="163" stroke="#2e6b45" stroke-width="1.6" stroke-dasharray="5 4" opacity=".8"/><line x1="548" y1="216" x2="548" y2="168" stroke="#2e6b45" stroke-width="1.6" stroke-dasharray="5 4" opacity=".8"/><line x1="468" y1="196" x2="525" y2="163" stroke="#2e6b45" stroke-width="1.6" stroke-dasharray="5 4" opacity=".8"/><line x1="436" y1="150" x2="516" y2="150" stroke="#2e6b45" stroke-width="1.6" stroke-dasharray="5 4" opacity=".8"/><line x1="468" y1="103" x2="525" y2="136" stroke="#2e6b45" stroke-width="1.6" stroke-dasharray="5 4" opacity=".8"/><line x1="548" y1="84" x2="548" y2="131" stroke="#2e6b45" stroke-width="1.6" stroke-dasharray="5 4" opacity=".8"/><line x1="627" y1="103" x2="570" y2="136" stroke="#2e6b45" stroke-width="1.6" stroke-dasharray="5 4" opacity=".8"/><g><rect x="647" y="139" width="26" height="22" rx="6" fill="#fffdf8" stroke="#2e6b45" stroke-width="2"/><circle cx="660" cy="150" r="5.5" fill="#2e6b45"/><circle cx="660" cy="150" r="1.9" fill="#fffdf8"/></g><g><rect x="614" y="186" width="26" height="22" rx="6" fill="#fffdf8" stroke="#2e6b45" stroke-width="2"/><circle cx="627" cy="196" r="5.5" fill="#2e6b45"/><circle cx="627" cy="196" r="1.9" fill="#fffdf8"/></g><g><rect x="535" y="205" width="26" height="22" rx="6" fill="#fffdf8" stroke="#2e6b45" stroke-width="2"/><circle cx="548" cy="216" r="5.5" fill="#2e6b45"/><circle cx="548" cy="216" r="1.9" fill="#fffdf8"/></g><g><rect x="456" y="186" width="26" height="22" rx="6" fill="#fffdf8" stroke="#2e6b45" stroke-width="2"/><circle cx="468" cy="196" r="5.5" fill="#2e6b45"/><circle cx="468" cy="196" r="1.9" fill="#fffdf8"/></g><g><rect x="423" y="139" width="26" height="22" rx="6" fill="#fffdf8" stroke="#2e6b45" stroke-width="2"/><circle cx="436" cy="150" r="5.5" fill="#2e6b45"/><circle cx="436" cy="150" r="1.9" fill="#fffdf8"/></g><g><rect x="456" y="92" width="26" height="22" rx="6" fill="#fffdf8" stroke="#2e6b45" stroke-width="2"/><circle cx="468" cy="103" r="5.5" fill="#2e6b45"/><circle cx="468" cy="103" r="1.9" fill="#fffdf8"/></g><g><rect x="535" y="73" width="26" height="22" rx="6" fill="#fffdf8" stroke="#2e6b45" stroke-width="2"/><circle cx="548" cy="84" r="5.5" fill="#2e6b45"/><circle cx="548" cy="84" r="1.9" fill="#fffdf8"/></g><g><rect x="614" y="92" width="26" height="22" rx="6" fill="#fffdf8" stroke="#2e6b45" stroke-width="2"/><circle cx="627" cy="103" r="5.5" fill="#2e6b45"/><circle cx="627" cy="103" r="1.9" fill="#fffdf8"/></g><g stroke="#9e3a1e" stroke-width="2.5" fill="none"><path d="M506 102 h16 M506 102 v16"/><path d="M590 102 h-16 M590 102 v16"/><path d="M506 198 h16 M506 198 v-16"/><path d="M590 198 h-16 M590 198 v-16"/></g><g stroke="#1f4530" stroke-width="2.5" fill="none"><circle cx="548" cy="117" r="14"/><line x1="548" y1="131" x2="548" y2="171"/><line x1="528" y1="143" x2="568" y2="143"/><line x1="548" y1="171" x2="536" y2="197"/><line x1="548" y1="171" x2="560" y2="197"/></g>
+          <text x="548" y="252" class="fg-c" style="text-anchor:middle;fill:#2e6b45">同一个你，被同时盯着，成本几乎为零</text>
+        </svg>
+          <p class="qz-cap">观察这件事的成本，正在从人力成本变成算力成本。当它趋近于零，能被观察的就不再只是"公开的部分"。</p>
+        </div><div class="qz-slide" data-i="3">
+          <svg viewBox="0 0 720 300" role="img" aria-label="链上结算占比小时透明还能忍，占比上去后等于把商业机密挂在网上">
+          <rect x="0" y="0" width="344" height="300" rx="9" fill="#f7ece7"/>
+          <text x="20" y="32" class="fg-t" style="fill:#9e3a1e">今天</text>
+          <text x="20" y="54" class="fg-sm">链上结算占比还小，透明还能忍</text>
+          <g transform="translate(60,90)">
+            <rect x="0" y="0" width="96" height="126" rx="4" fill="#fffdf8" stroke="#c98a72" stroke-width="2"/>
+            <line x1="14" y1="26" x2="82" y2="26" stroke="#e0c8bd" stroke-width="2"/>
+            <line x1="14" y1="48" x2="82" y2="48" stroke="#e0c8bd" stroke-width="2"/>
+            <line x1="14" y1="70" x2="60" y2="70" stroke="#e0c8bd" stroke-width="2"/>
+          </g>
+          <text x="108" y="246" class="fg-c" style="text-anchor:middle;fill:#9e3a1e">只有一小部分账目要见光</text>
+          <rect x="376" y="0" width="344" height="300" rx="9" fill="#eef4f0"/>
+          <text x="396" y="32" class="fg-t">企业链上结算占到 10%–30% 之后</text>
+          <text x="396" y="54" class="fg-sm">账本、客户、成本和策略全部公开</text>
+          <g transform="translate(420,84)">
+            <rect x="0" y="0" width="72" height="140" rx="4" fill="#fffdf8" stroke="#2e6b45" stroke-width="2"/>
+            <rect x="30" y="10" width="72" height="140" rx="4" fill="#fffdf8" stroke="#2e6b45" stroke-width="2"/>
+            <rect x="60" y="20" width="72" height="140" rx="4" fill="#fffdf8" stroke="#2e6b45" stroke-width="2"/>
+            <g stroke="#9dc0ac" stroke-width="2">
+              <line x1="74" y1="46" x2="122" y2="46"/><line x1="74" y1="68" x2="122" y2="68"/>
+              <line x1="74" y1="90" x2="100" y2="90"/><line x1="74" y1="112" x2="122" y2="112"/><line x1="74" y1="134" x2="108" y2="134"/>
+              <line x1="44" y1="36" x2="92" y2="36"/><line x1="44" y1="58" x2="92" y2="58"/><line x1="44" y1="80" x2="70" y2="80"/>
+            </g>
+          </g>
+          <text x="548" y="262" class="fg-c" style="text-anchor:middle;fill:#9e3a1e">等于把商业机密挂在网上</text>
+        </svg>
+          <p class="qz-cap">链上结算占比小的时候，透明可以忍；占比上去以后，账本本身就是商业机密。约束不在意愿，在规模。</p>
+        </div><div class="qz-slide" data-i="4">
+          <svg viewBox="0 0 720 300" role="img" aria-label="要的不是全藏起来，而是选择性透明">
+          <line x1="60" y1="150" x2="660" y2="150" stroke="#d8d0c2" stroke-width="2"/>
+          <rect x="20" y="40" width="200" height="180" rx="9" fill="#f5e7e2" stroke="#dda893"/>
+          <text x="120" y="76" class="fg-t" style="text-anchor:middle;fill:#9e3a1e">全部藏起来</text>
+          <text x="120" y="108" class="fg-sm" style="text-anchor:middle">无法审计</text>
+          <text x="120" y="132" class="fg-sm" style="text-anchor:middle">无法合规</text>
+          <text x="120" y="164" class="fg-sm" style="text-anchor:middle">机构不会用</text>
+          <text x="120" y="192" class="fg-c" style="text-anchor:middle;fill:#9e3a1e">监管也不会允许</text>
+          <rect x="252" y="20" width="216" height="220" rx="10" fill="#f4ead8" stroke="#b87030" stroke-width="2.5"/>
+          <text x="360" y="60" class="fg-t" style="text-anchor:middle;fill:#b87030">选择性透明</text>
+          <text x="360" y="94" class="fg-sm" style="text-anchor:middle">该验证的能验证</text>
+          <text x="360" y="120" class="fg-sm" style="text-anchor:middle">该隐藏的不必公开</text>
+          <line x1="284" y1="142" x2="436" y2="142" stroke="#e0c39a" stroke-width="1.5"/>
+          <text x="360" y="172" class="fg-c" style="text-anchor:middle;fill:#8a5a20">机构金融要的是这个</text>
+          <text x="360" y="196" class="fg-c" style="text-anchor:middle;fill:#8a5a20">RWA 要的也是这个</text>
+          <text x="360" y="226" class="fg-sm" style="text-anchor:middle;fill:#b87030">← 当时赌的落点</text>
+          <rect x="500" y="40" width="200" height="180" rx="9" fill="#f4f1eb" stroke="#d8d0c2"/>
+          <text x="600" y="76" class="fg-t" style="text-anchor:middle">全部公开</text>
+          <text x="600" y="108" class="fg-sm" style="text-anchor:middle">账本、客户、成本</text>
+          <text x="600" y="132" class="fg-sm" style="text-anchor:middle">策略全部摊开</text>
+          <text x="600" y="164" class="fg-sm" style="text-anchor:middle">没人愿意这么干</text>
+          <text x="600" y="192" class="fg-c" style="text-anchor:middle;fill:#62706a">企业和机构尤其如此</text>
+        </svg>
+          <p class="qz-cap">不是。要的是"该验证的能验证，该隐藏的不必公开"。这是当时下注 Aztec 的真正落点——不是赌一个匿名的世界，是赌一个可选择的账本。</p>
+        </div></div>
+        <div class="qz-foot"><button class="qz-prev" type="button">← 上一问</button><span class="qz-idx">1 / 5</span><button class="qz-next" type="button">下一问 →</button></div>
+      </div>
+      <figure class="fig">
+        <svg viewBox="0 0 720 302" role="img" aria-label="五个问题连成一条因果链：世界在变，于是隐私从个人偏好变成基础设施需求">
+          <text x="0" y="18" class="fg-t">五个问题连起来，是一条链</text>
+          <text x="0" y="46" class="fg-sm">世界在变</text>
+          <rect x="0" y="58" width="226" height="86" rx="8" fill="#e6f0ea" stroke="#2e6b45"/><text x="16" y="86" class="fg-sm" style="fill:#1f4530">①</text><text x="16" y="120" class="fg-l" style="fill:#1f4530">AI 让执行变便宜</text><rect x="247" y="58" width="226" height="86" rx="8" fill="#e6f0ea" stroke="#2e6b45"/><text x="263" y="86" class="fg-sm" style="fill:#1f4530">②</text><text x="263" y="120" class="fg-l" style="fill:#1f4530">真实行为数据变多、变值钱</text><rect x="494" y="58" width="226" height="86" rx="8" fill="#e6f0ea" stroke="#2e6b45"/><text x="510" y="86" class="fg-sm" style="fill:#1f4530">③</text><text x="510" y="120" class="fg-l" style="fill:#1f4530">观察和预测的成本同时下降</text><line x1="230" y1="101" x2="242" y2="101" stroke="#2e6b45" stroke-width="2"/><path d="M240 96 L248 101 L240 106 z" fill="#2e6b45"/><line x1="477" y1="101" x2="489" y2="101" stroke="#2e6b45" stroke-width="2"/><path d="M487 96 L495 101 L487 106 z" fill="#2e6b45"/>
+          <line x1="360" y1="146" x2="360" y2="168" stroke="#2e6b45" stroke-width="2"/>
+          <path d="M355 166 L360 176 L365 166 z" fill="#2e6b45"/>
+          <text x="374" y="168" class="fg-sm" style="fill:#62706a">于是</text>
+          <text x="0" y="196" class="fg-sm">所以我们要回答的问题</text>
+          <rect x="0" y="204" width="226" height="86" rx="8" fill="#f4ead8" stroke="#b87030"/><text x="16" y="232" class="fg-sm" style="fill:#8a5a20">④</text><text x="16" y="266" class="fg-l" style="fill:#8a5a20">透明记录变成行为地图</text><rect x="247" y="204" width="226" height="86" rx="8" fill="#f4ead8" stroke="#b87030"/><text x="263" y="232" class="fg-sm" style="fill:#8a5a20">⑤</text><text x="263" y="266" class="fg-l" style="fill:#8a5a20">大规模使用需要选择性隐藏</text><line x1="230" y1="247" x2="242" y2="247" stroke="#b87030" stroke-width="2"/><path d="M240 242 L248 247 L240 252 z" fill="#b87030"/><line x1="477" y1="247" x2="489" y2="247" stroke="#b87030" stroke-width="2"/><path d="M487 242 L495 247 L487 252 z" fill="#b87030"/><rect x="494" y="204" width="226" height="86" rx="8" fill="#1f4530" stroke="#b87030" stroke-width="2.5"/><text x="510" y="232" class="fg-sm" style="fill:#e0c39a">⑥</text><text x="510" y="264" class="fg-l" style="fill:#ffffff">隐私从个人偏好</text><text x="510" y="284" class="fg-l" style="fill:#ffffff">变成基础设施需求</text>
+          
+        </svg>
+        <figcaption>五个问题不是并列的，是一条链——终点就是当时下注 Aztec 的那句话。</figcaption>
+      </figure>
+      <script>
+      (function(){
+        var z=document.querySelector('#aztec .qz');if(!z)return;
+        var tabs=z.querySelectorAll('.qz-tab'),slides=z.querySelectorAll('.qz-slide'),idx=z.querySelector('.qz-idx'),cur=0;
+        function go(i){cur=(i+tabs.length)%tabs.length;
+          tabs.forEach(function(t,k){t.classList.toggle('on',k===cur)});
+          slides.forEach(function(s,k){s.classList.toggle('on',k===cur)});
+          if(idx)idx.textContent=(cur+1)+' / '+slides.length;}
+        tabs.forEach(function(t,k){t.onclick=function(){go(k)}});
+        z.querySelector('.qz-prev').onclick=function(){go(cur-1)};
+        z.querySelector('.qz-next').onclick=function(){go(cur+1)};
+        go(0);
+      })();
+      </script>
+    </div>
+
+    <div class="ev ev-fact">
+      <span class="ev-label" style="color:var(--green-mid)">数据：这条推演在现实里已经有承接</span>
+      <p>自动支付：Coinbase 的 x402 已有生产级结算，Google 的 AP2 把"最小披露"写进设计。</p>
+      <p>机构隐私：Broadridge 的回购业务已经在用 Canton 技术跑机构成交；Zama 用同态加密做过加密拍卖。</p>
+      <p>Aztec 自己：Galactica 已经写出 aztec-x402 的测试网原型，只是还没跑出主网付费。</p>
+      <div class="ev-src">来源：CDP x402 文档、AP2 概览（2025-09-16）、Broadridge 公告（2026-09-02）、Galactica 源码</div>
+    </div>
+
+    <div class="ev ev-judge">
+      <span class="ev-label" style="color:var(--amber)">边界：这是推演，不是已发生的事实</span>
+      需求长出来了，但截至核查日，承接这些需求的<strong>都不是 Aztec</strong>：机构那部分用 Canton，自动支付主要发生在别的链上。方向成立，不等于这家公司能吃到——这正是后面要交代的。
+    </div>
+  </div>
+</details>
+
+<details class="section" id="az2">
+  <summary class="question"><span class="qnum" style="background:var(--amber)">2</span>当时怎么挑到 Aztec？</summary>
+  <div class="section-body">
+    <div class="verdict"><span class="v-eq">先有赛道判断，再挑标的；不是先看上 Aztec，再回头补理由。</span><ol>
+      <li>参与成本比机构低：机构 B 轮隐含约 14 亿美元，公募起拍底价约 3.5 亿美元 FDV。</li>
+      <li>买的是隐私预期，不是一枚普通 L2：下限按 L2 看，上限按隐私看。</li>
+      <li>有背书、有生命力，再用当时 L2 的市值带保护下限。</li>
+    </ol></div>
+
+    <div class="ev ev-fact">
+      <span class="ev-label" style="color:var(--green-mid)">四条理由</span>
+      <p><strong>参与成本比机构低。</strong>2022 年 12 月市场寒冬里，a16z 领投 B 轮 1 亿美元，隐含估值约 14 亿美元；这次公募起拍底价约 3.5 亿美元 FDV。同一个项目，公募进场价明显低于机构。</p>
+      <p><strong>买的是隐私预期。</strong>不把 Aztec 只当成一个有炒作概念的 L2，而是买一个"隐私成为结算基础设施"的期权。</p>
+      <p><strong>有背书。</strong>2021 年 Paradigm 领投 A 轮 1700 万美元，Vitalik 参投。说明技术和方向早就被重要参与者认可。</p>
+      <p><strong>有生命力。</strong>2018 年做到现在八年，中间关掉旧桥、换路线重做 L2，一直在开发、一直在融资、没放弃。隐私叙事 2022 年炒过、沉寂、又回来——能回来的叙事才有生命力。</p>
+      <div class="ev-src">来源：Aztec A 轮／B 轮官方公告、发行公告（2025-11-13）、销售条款</div>
+    </div>
+
+    <figure class="fig">
+      <svg viewBox="0 0 720 560" role="img" aria-label="Aztec 四轮融资、公开拍卖，以及按创世供应折算的每枚成本">
+        <text x="0" y="16" class="fg-t">四轮融资，一次公开拍卖</text>
+
+        <rect x="20" y="30" width="160" height="106" rx="8" fill="#e6f0ea" stroke="#2e6b45"/>
+        <text x="32" y="52" class="fg-l">种子轮 · 2018-11</text>
+        <text x="32" y="78" class="fg-t" style="font-size:20px">210 万美元</text>
+        <text x="32" y="99" class="fg-sm">ConsenSys Ventures</text>
+        <text x="32" y="115" class="fg-sm">Entrepreneur First 等</text>
+        <text x="32" y="130" class="fg-sm" style="fill:#62706a">估值未披露</text>
+
+        <rect x="370" y="30" width="160" height="106" rx="8" fill="#e6f0ea" stroke="#2e6b45"/>
+        <text x="382" y="52" class="fg-l">A 轮 · 2021-12</text>
+        <text x="382" y="78" class="fg-t" style="font-size:20px">1700 万美元</text>
+        <text x="382" y="99" class="fg-sm">Paradigm 领投</text>
+        <text x="382" y="115" class="fg-sm">Vitalik 参投</text>
+        <text x="382" y="130" class="fg-sm" style="fill:#62706a">估值未披露</text>
+
+        <rect x="200" y="184" width="160" height="106" rx="8" fill="#e6f0ea" stroke="#2e6b45"/>
+        <text x="212" y="206" class="fg-l">B 轮 · 2022-12</text>
+        <text x="212" y="232" class="fg-t" style="font-size:20px">1 亿美元</text>
+        <text x="212" y="253" class="fg-sm">a16z crypto 领投</text>
+        <text x="212" y="269" class="fg-sm" style="fill:#62706a">寒冬里完成</text>
+        <text x="212" y="284" class="fg-sm" style="fill:#b87030">隐含估值 14 亿美元</text>
+
+        <rect x="540" y="184" width="160" height="106" rx="8" fill="#f4ead8" stroke="#b87030" stroke-width="2"/>
+        <text x="552" y="206" class="fg-l" style="fill:#b87030">公开拍卖 · 2025-11</text>
+        <text x="552" y="232" class="fg-t" style="font-size:20px">19,476 ETH</text>
+        <text x="552" y="253" class="fg-sm">超 16,700 人参与</text>
+        <text x="552" y="269" class="fg-sm" style="fill:#b87030">起拍 3.5 亿美元 FDV</text>
+        <text x="552" y="284" class="fg-c" style="fill:#b87030">我们在这里进场</text>
+
+        <line x1="40" y1="160" x2="700" y2="160" stroke="#d8d0c2" stroke-width="2"/>
+        <g fill="#2e6b45"><circle cx="100" cy="160" r="7"/><circle cx="450" cy="160" r="7"/><circle cx="280" cy="160" r="7"/></g>
+        <circle cx="620" cy="160" r="8" fill="#b87030"/>
+        <g stroke="#9dc0ac" stroke-width="1.5">
+          <line x1="100" y1="136" x2="100" y2="153"/><line x1="450" y1="136" x2="450" y2="153"/>
+          <line x1="280" y1="167" x2="280" y2="184"/><line x1="620" y1="167" x2="620" y2="184"/>
+        </g>
+        <text x="40" y="164" class="fg-sm">2018</text>
+        <text x="660" y="164" class="fg-sm">2025</text>
+
+        <text x="0" y="326" class="fg-t">把每枚成本折算出来，看现在站在哪</text>
+        <text x="560" y="326" class="fg-sm">按 103.5 亿枚创世供应折算</text>
+
+<text x="118" y="349" class="fg-l" text-anchor="end">B 轮隐含估值</text><rect x="126" y="344" width="300.0" height="21" rx="3" fill="#b87030"/><text x="440" y="360" class="fg-v" style="fill:#b87030">14.00 亿美元</text><text x="560" y="359" class="fg-sm" style="fill:#b87030">0.1353 美元/枚</text><text x="118" y="381" class="fg-l" text-anchor="end">公募起拍</text><rect x="126" y="376" width="75.0" height="21" rx="3" fill="#9e3a1e"/><text x="440" y="392" class="fg-v" style="fill:#9e3a1e">3.50 亿美元</text><text x="560" y="391" class="fg-sm" style="fill:#9e3a1e">0.0338 美元/枚</text><text x="118" y="413" class="fg-l" text-anchor="end">现在</text><rect x="126" y="408" width="33.0" height="21" rx="3" fill="#9e3a1e"/><text x="440" y="424" class="fg-v" style="fill:#9e3a1e">1.55 亿美元</text><text x="560" y="423" class="fg-sm" style="fill:#9e3a1e">0.01495 美元/枚</text>
+        <rect x="0" y="446" width="720" height="32" rx="6" fill="#f5e7e2"/>
+        <text x="360" y="467" class="fg-c" style="text-anchor:middle;fill:#9e3a1e">现在的价格是 B 轮隐含成本的 11%，是公募起拍成本的 44%</text>
+        <text x="0" y="502" class="fg-sm" style="fill:#3a4a42">现在的 FDV（1.55 亿美元）＝ 公司历史累计融资额（1.19 亿美元）的 1.3 倍——市场只比它融到的钱多给 30%。</text>
+        <text x="0" y="522" class="fg-sm" style="fill:#3a4a42">即便按最宽松的口径（三轮融资全部折为投资者的 28.2 亿枚，每枚成本 0.0422 美元），现价仍只有该成本的 35%。</text>
+        <text x="0" y="544" class="fg-s">口径：每枚＝估值÷103.5 亿枚创世供应，是折算值不是任何机构的真实成本。机构买的是股权（可能含代币权证与老股），真实代币成本从未披露；种子轮与 A 轮估值未公开，无法折算。</text>
+        </svg>
+      <figcaption><strong>现在的价格已经跌穿了所有能算出来的机构成本线</strong>——只有 B 轮隐含成本的 11%、公募起拍成本的 44%；按融资额折成代币的最宽松口径（0.0422 美元/枚）算，也只剩 35%。换句话说，连按最有利的方式折算，机构现在也是浮亏的。<br>来源：A 轮／B 轮为 Aztec 官方公告（2021-12-16、2022-12-15）；种子轮细节据 CoinDesk 报道（2018-11-29）与 CoinCarp 融资库，官方未披露估值；公募数据据官方发行公告与销售结束总结。</figcaption>
+    </figure>
+
+
+    <figure class="fig">
+      <svg viewBox="0 0 720 216" role="img" aria-label="这笔下注的结构：ETH 主仓加 Aztec 小仓，两个上行加一个下限参考">
+        <rect x="230" y="8" width="260" height="40" rx="7" fill="#1f4530"/>
+        <text x="360" y="34" class="fg-w" text-anchor="middle">组合：ETH 是主仓，Aztec 是小仓位</text>
+        <path d="M360 48 V64 M120 64 H600 M120 64 V80 M360 64 V80 M600 64 V80" stroke="#2e6b45" stroke-width="2" fill="none"/>
+        <rect x="20" y="80" width="200" height="96" rx="8" fill="#e6f0ea" stroke="#2e6b45"/>
+        <text x="120" y="108" class="fg-t" text-anchor="middle">上行一</text>
+        <text x="120" y="134" class="fg-sm" text-anchor="middle">隐私需求爆发</text>
+        <text x="120" y="156" class="fg-sm" text-anchor="middle" style="fill:#1f4530">→ 使用和价值上升</text>
+        <rect x="260" y="80" width="200" height="96" rx="8" fill="#e6f0ea" stroke="#2e6b45"/>
+        <text x="360" y="108" class="fg-t" text-anchor="middle">上行二</text>
+        <text x="360" y="134" class="fg-sm" text-anchor="middle">机构持仓与关注</text>
+        <text x="360" y="156" class="fg-sm" text-anchor="middle" style="fill:#1f4530">→ 后续炒作</text>
+        <rect x="500" y="80" width="200" height="96" rx="8" fill="#f4ead8" stroke="#b87030"/>
+        <text x="600" y="108" class="fg-t" text-anchor="middle" style="fill:#b87030">下限参考</text>
+        <text x="600" y="134" class="fg-sm" text-anchor="middle">当时 L2 的市值带</text>
+        <text x="600" y="156" class="fg-sm" text-anchor="middle" style="fill:#b87030">Linea / zkSync · ARB</text>
+        <text x="0" y="204" class="fg-s">参与价：公募起拍约 3.5 亿美元 FDV；机构 B 轮隐含估值约 14 亿美元。图只画结构，不代表仓位比例（比例未记录）。</text>
+      </svg>
+      <figcaption>两个上行都是"如果发生"，下限参考是"当时算过的底"。三条腿里，只有第一条后来部分成真。</figcaption>
+    </figure>
+
+
+    <div class="ev ev-fact">
+      <span class="ev-label" style="color:var(--green-mid)">估值参考：把它放进当时 L2 的市值带里看</span>
+    <figure class="fig">
+      <svg viewBox="0 0 720 330" role="img" aria-label="L2 流通市值：2025-12-02 与 2026-09-08 对比，整条估值带左移">
+        <text x="0" y="18" class="fg-t">L2 估值带整体左移</text>
+        <circle cx="300" cy="34" r="6" fill="#2e6b45"/>
+        <text x="312" y="39" class="fg-sm">2025-12-02</text>
+        <circle cx="410" cy="34" r="6" fill="#fffdf8" stroke="#9e3a1e" stroke-width="2.5"/>
+        <text x="422" y="39" class="fg-sm">2026-09-08</text>
+
+        <text x="100" y="72" class="fg-l" text-anchor="end">Linea</text>
+        <line x1="135.8" y1="76" x2="166.3" y2="76" stroke="#d8d0c2" stroke-width="3"/>
+        <circle cx="166.3" cy="76" r="6.5" fill="#2e6b45"/><circle cx="135.8" cy="76" r="6.5" fill="#fffdf8" stroke="#9e3a1e" stroke-width="2.5"/>
+        <text x="534" y="72" class="fg-v">1.53 → <tspan fill="#9e3a1e">0.67</tspan></text>
+        <text x="534" y="89" class="fg-sm" style="fill:#9e3a1e">−57%</text>
+
+        <text x="100" y="118" class="fg-l" text-anchor="end">zkSync</text>
+        <line x1="150.7" y1="122" x2="217.4" y2="122" stroke="#d8d0c2" stroke-width="3"/>
+        <circle cx="217.4" cy="122" r="6.5" fill="#2e6b45"/><circle cx="150.7" cy="122" r="6.5" fill="#fffdf8" stroke="#9e3a1e" stroke-width="2.5"/>
+        <text x="534" y="118" class="fg-v">2.97 → <tspan fill="#9e3a1e">1.09</tspan></text>
+        <text x="534" y="135" class="fg-sm" style="fill:#9e3a1e">−63%</text>
+
+        <text x="100" y="164" class="fg-l" text-anchor="end">OP</text>
+        <line x1="201.8" y1="168" x2="305.4" y2="168" stroke="#d8d0c2" stroke-width="3"/>
+        <circle cx="305.4" cy="168" r="6.5" fill="#2e6b45"/><circle cx="201.8" cy="168" r="6.5" fill="#fffdf8" stroke="#9e3a1e" stroke-width="2.5"/>
+        <text x="534" y="164" class="fg-v">5.45 → <tspan fill="#9e3a1e">2.53</tspan></text>
+        <text x="534" y="181" class="fg-sm" style="fill:#9e3a1e">−54%</text>
+
+        <text x="100" y="210" class="fg-l" text-anchor="end">ARB</text>
+        <line x1="498.7" y1="214" x2="513.3" y2="214" stroke="#d8d0c2" stroke-width="3"/>
+        <circle cx="498.7" cy="214" r="6.5" fill="#2e6b45"/><circle cx="513.3" cy="214" r="6.5" fill="#fffdf8" stroke="#9e3a1e" stroke-width="2.5"/>
+        <text x="534" y="210" class="fg-v">10.90 → <tspan fill="#b87030">11.31</tspan></text>
+        <text x="534" y="227" class="fg-sm" style="fill:#b87030">+4% · 价格 −13%，靠解锁持平</text>
+
+        <text x="100" y="266" class="fg-l" text-anchor="end" style="fill:#b87030">Aztec</text>
+        <text x="100" y="282" class="fg-sm" text-anchor="end" style="fill:#b87030">FDV 口径</text>
+        <line x1="167.0" y1="272" x2="236.2" y2="272" stroke="#e0c39a" stroke-width="3" stroke-dasharray="4 3"/>
+        <circle cx="236.2" cy="272" r="6.5" fill="#b87030"/><circle cx="167.0" cy="272" r="6.5" fill="#fffdf8" stroke="#b87030" stroke-width="2.5"/>
+        <text x="534" y="268" class="fg-v">3.50 → <tspan fill="#b87030">1.55</tspan></text>
+        <text x="534" y="285" class="fg-sm" style="fill:#b87030">−56%</text>
+
+        <line x1="112" y1="306" x2="520" y2="306" stroke="#d8d0c2"/>
+        <g class="fg-sm" text-anchor="middle">
+          <text x="112" y="322">0</text><text x="183" y="322">2</text><text x="253.9" y="322">4</text><text x="324.9" y="322">6</text><text x="395.8" y="322">8</text><text x="466.8" y="322">10</text>
+        </g>
+        <text x="534" y="322" class="fg-sm">单位：亿美元</text>
+      </svg>
+      <figcaption>实心点是参与那一周（2025-12-02），空心点是复盘时点（2026-09-08）。连线就是"下限"消失的过程：Linea、zkSync 这两条下限腿跌了一半以上，ARB 靠解锁撑住市值。Aztec 用 FDV 口径，与流通市值不可直接比高低。</figcaption>
+    </figure>
+      <p>当时看到的是：Aztec 的 3.5 亿起拍价，在 L2 这条带子里处在偏低位置——下限有 Linea、zkSync，上限有 ARB。组合上，ETH 是主仓，Aztec 是小仓位，博隐私赛道的上行。</p>
+      <div class="ev-src">口径：四个 L2 是 CoinGecko 流通市值（美元、UTC 日收盘），Aztec 是公募起拍与当前 FDV，两种口径不能直接比高低，只作位置参考。四个 L2 在这九个月里都有解锁、流通量增加：ARB 价格跌了约 13%，市值却基本持平，就是这个原因。</div>
+    </div>
+
+    <div class="ev ev-judge">
+      <span class="ev-label" style="color:var(--amber)">当时不能推出的三件事</span>
+      <p>一、机构背书成立，但不能推出机构会按公募价格托底代币。</p>
+      <p>二、"公募比机构便宜"成立，但不能推出这个价格就是安全边际。</p>
+      <p>三、Aztec 用 FDV、L2 用流通市值，两种口径放在一起看，位置感会被放大——这是当时论证里最薄的一环。</p>
+    </div>
+  </div>
+</details>
+
+<details class="section" id="az3">
+  <summary class="question"><span class="qnum" style="background:var(--red)">3</span>现在怎么样了？</summary>
+  <div class="section-body">
+    <div class="verdict"><span class="v-eq">"下限"是市场氛围给的，不是资产自带的。</span><ol>
+      <li>用来保下限的 L2 带子整体下移，下限被腰斩。</li>
+      <li>Aztec 有技术和早期产品；规模采用、持续付费、代币回报都还没有证明。</li>
+      <li>这笔钱现在约值 4.09 ETH，相对继续持有 ETH 差 −59.12%，且仍未实现。</li>
+    </ol></div>
+
+    <div class="ev ev-judge">
+      <span class="ev-label" style="color:var(--red)">当时写下的那条风险，成了事实</span>
+      <div class="quote">"包下限的说法是建立在当下市场氛围，如果 2026 年更熊了，L2 的下限估值也会被拉低。"<span>—— 当时列出的风险之一。九个月后看第 2 段那张表：Linea −57%、zkSync −63%、OP −54%。</span></div>
+    </div>
+
+    <div class="ev ev-fact">
+      <span class="ev-label" style="color:var(--green-mid)">产品：Alpha 主网在跑，但仍是谨慎开放的早期产品</span>
+      <p>2026 年 3 月 Alpha 执行网络上线，7 月激活 V5。可用的应用仍然邀请制——Nyx 每个钱包的存入上限是 100 USDC、100 USDT 和 0.05 WETH。</p>
+      <p>技术与工程活动真实存在：自有 Rollup、Noir 语言、开源仓库、早期应用（Nyx、Dark Forest Aztec）。</p>
+      <div class="ev-src">来源：Aztec 官方公告与 Networks 文档、Nyx 帮助页、开发者仓库（核查日 2026-09-09）</div>
+    </div>
+
+    <div class="ev ev-judge">
+      <span class="ev-label" style="color:var(--red)">安全：当前最需要盯住的事</span>
+      2026 年 8 月 7 日官方披露 V5 证明系统存在严重漏洞，修复排进 V6。截至核查日，<strong>没有看到确认这一事件已经闭环的后续公告</strong>。既不能写成已确认被盗，也不能因为没有公开损失数字就判定安全。
+    </div>
+
+    <div class="ev ev-fact">
+      <span class="ev-label" style="color:var(--green-mid)">这笔钱现在值多少</span>
+      <figure class="fig">
+        <svg viewBox="0 0 720 196" role="img" aria-label="继续持有 ETH 为 10 ETH，换成 AZTEC 后约值 4.09 ETH，少 5.91 ETH">
+          <text x="0" y="20" class="fg-t">10 ETH 进去，现在对应 4.09 ETH</text>
+          <text x="196" y="62" class="fg-l" text-anchor="end">如果一直拿着 ETH</text>
+          <rect x="210" y="45" width="420" height="25" rx="3" fill="#2e6b45"/>
+          <text x="640" y="63" class="fg-v" style="fill:#1f4530">10 ETH</text>
+          <text x="196" y="114" class="fg-l" text-anchor="end">实际换成 AZTEC</text>
+          <rect x="210" y="97" width="172" height="25" rx="3" fill="#9e3a1e"/>
+          <text x="392" y="115" class="fg-v" style="fill:#9e3a1e">4.09 ETH</text>
+          <line x1="382" y1="134" x2="630" y2="134" stroke="#9e3a1e" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <line x1="382" y1="128" x2="382" y2="140" stroke="#9e3a1e" stroke-width="1.5"/>
+          <line x1="630" y1="128" x2="630" y2="140" stroke="#9e3a1e" stroke-width="1.5"/>
+          <text x="506" y="156" class="fg-c" style="fill:#9e3a1e" text-anchor="middle">这一段没了：5.91 ETH，−59.12%</text>
+          <text x="0" y="186" class="fg-s">AZTEC 按 2026-09-08 收盘 0.01495487 美元、ETH 2,485.07 美元折算；标准案例（全部保留），未计卖出、质押与奖励，属于未实现估算。</text>
+        </svg>
+      </figure>
+      <p>AZTEC 当日收盘 0.01495487 美元，对应 FDV 约 1.55 亿美元、流通市值约 4,356 万美元。</p>
+      <div class="ev-src">这是"全部保留"的统一算法，不代表每个人的真实账户；卖出、质押、奖励和实际退出深度另算。</div>
+    </div>
+
+    <figure class="fig">
+      <svg viewBox="0 0 720 650" role="img" aria-label="Vitalik 与机构对 Aztec 项目和隐私赛道的表态时间线"><text x="0" y="16" class="fg-t">谁看好过 Aztec，谁还在看好隐私</text><line x1="70" y1="40" x2="70" y2="556" stroke="#d8d0c2" stroke-width="2"/><circle cx="70" cy="64" r="6.5" fill="#b87030"/><text x="92" y="60" class="fg-l" style="fill:#b87030">2021-12　Paradigm 领投 A 轮 1700 万美元</text><text x="92" y="80" class="fg-sm">Vitalik 作为天使参投（官方公告列为参投人）</text><circle cx="70" cy="122" r="6.5" fill="#b87030"/><text x="92" y="118" class="fg-l" style="fill:#b87030">2022-12　a16z crypto 领投 B 轮 1 亿美元</text><text x="92" y="138" class="fg-sm">隐含估值 14 亿美元，在 FTX 暴雷后的寒冬里完成</text><circle cx="70" cy="180" r="6.5" fill="#62706a"/><text x="92" y="176" class="fg-l" style="fill:#62706a">2023–2025　未检索到项目层面的新公开表态</text><text x="92" y="196" class="fg-sm">不等于没有，只说明这一段没有可回源的记录</text><circle cx="70" cy="238" r="6.5" fill="#2e6b45"/><text x="92" y="234" class="fg-l" style="fill:#2e6b45">2025-10　以太坊基金会组建 47 人隐私团队</text><text x="92" y="254" class="fg-sm">专门改进网络基础层的隐私</text><circle cx="70" cy="296" r="6.5" fill="#2e6b45"/><text x="92" y="292" class="fg-l" style="fill:#2e6b45">2025-11　Vitalik 发布 Kohaku</text><text x="92" y="312" class="fg-sm">开源模块化隐私钱包栈，把隐私做进钱包</text><circle cx="70" cy="354" r="6.5" fill="#2e6b45"/><text x="92" y="350" class="fg-l" style="fill:#2e6b45">2026-03　Vitalik 提出 CROPS 原则</text><text x="92" y="370" class="fg-sm">「不应在核心属性上妥协：抗审查、开源、隐私、安全」，并称隐私是自由的基础</text><circle cx="70" cy="412" r="6.5" fill="#2e6b45"/><text x="92" y="408" class="fg-l" style="fill:#2e6b45">2026-07　基金会隐私团队整建制分拆</text><text x="92" y="428" class="fg-sm">成立 EthSystems，Lubin、Bitmine、SharpLink 投资，服务机构保密交易</text><circle cx="70" cy="470" r="6.5" fill="#b87030"/><text x="92" y="466" class="fg-l" style="fill:#b87030">2026-07　Vitalik 在 Aztec 上开发匿名公告板 Demo 并开源</text><text x="92" y="486" class="fg-sm">匿名公告板＋内容审核；他说「顺便一提，它已经是 Stage 2」</text><circle cx="70" cy="528" r="6.5" fill="#2e6b45"/><text x="92" y="524" class="fg-l" style="fill:#2e6b45">2026-08　路线图更新：隐私首次列为一级事项</text><text x="92" y="544" class="fg-sm">EIP-8182 提议在协议层建立共享隐私池</text><circle cx="92" cy="596" r="6" fill="#b87030"/><text x="106" y="601" class="fg-sm">对 Aztec 这个项目的公开动作</text><circle cx="330" cy="596" r="6" fill="#2e6b45"/><text x="344" y="601" class="fg-sm">以太坊基金会与隐私赛道的基础设施动作</text><circle cx="92" cy="626" r="6" fill="#62706a"/><text x="106" y="631" class="fg-sm">没有可回源记录的时间段</text></svg>
+      <figcaption>看好不是一次性的：Vitalik 从 2021 年参投，到 2026 年 7 月还在 Aztec 上写代码、并给出 Stage 2 的评价。同一时期，隐私这条赛道被持续加码——只是加码的形式分成了两条：Vitalik 用 Aztec 做可编程隐私的实验，而基金会的隐私团队选择分拆出去服务机构客户。<br>背景一句：他此前公开讲过，只会优先提及达到「阶段 1」以上的 L2——所以 Stage 2 这个评价是按他自己的标准给的。<br>另一面也要放上：他公开讲过随着主网扩容、对 L2 的需求会减少——这句话不是冲着 Aztec 说的，但 Aztec 正是一条 L2。</figcaption>
+    </figure>
+
+    <div class="ev ev-judge">
+      <span class="ev-label" style="color:var(--amber)">当年赌的两个上行，走到哪了</span>
+      <p><strong>上行一 · 隐私需求爆发：</strong>需求确实长出来了，但承接它的不是 Aztec——机构那部分用 Canton，自动支付主要发生在别的链上。</p>
+      <p><strong>上行二 · 机构持仓带来炒作：</strong>没有发生。机构背书停留在股权融资层面，没有变成代币买盘。</p>
+      <p>一句话：需求长出来了，但没有长到 Aztec 身上。这不等于 Aztec 出局，只说明"方向对"和"这家公司能吃到"是两件事。</p>
+    </div>
+  </div>
+</details>
+
+<details class="section" id="az4">
+  <summary class="question"><span class="qnum" style="background:var(--purple)">4</span>现在该怎么应对？</summary>
+  <div class="section-body">
+    <div class="verdict"><span class="v-eq">同一条线，要用两个视角看：长期看产品力，短期看筹码。</span><ol>
+      <li>长期：隐私需求没变，但 Aztec 的产品力还不够好，而且 ETH 主网自己开始做这件事了。</li>
+      <li>短期：投资者与团队合计 50 亿枚（占总量 48.3%）在 2026 年 11 月起解锁，机构要离场。</li>
+      <li>两个视角判据不同，不能互相借：长期看采用，短期看筹码和叙事。</li>
+    </ol></div>
+
+    <div class="ev ev-judge">
+      <span class="ev-label" style="color:var(--amber)">长期视角：需求还在，载体不够强</span>
+      <p><strong>需求那一条没有被推翻。</strong>第 1 段的推演仍然成立：AI 让执行变便宜，真实行为数据变值钱，观察和预测的成本同时下降。</p>
+      <p><strong>但产品力这一环没跟上。</strong>主网仍是邀请制，Nyx 每个钱包存入上限 100 USDC、0.05 WETH；2026 年 8 月披露的 V5 证明漏洞至今没有确认闭环。需求要落地，得先有一个敢放心用的产品。</p>
+      <p><strong>更关键的变化是：ETH 主网自己下场了，而且不只是转账。</strong></p>
+      <p><strong>协议层：</strong>2026 年 8 月 10 日 Vitalik 更新的技术路线图把隐私列为一级事项，EIP-8182 提议在协议层建共享隐私池——这一层确实主要是转账。</p>
+      <p><strong>钱包层：</strong>以太坊基金会的 Kohaku 计划推出 SDK，把隐私直接做进钱包。</p>
+      <p><strong>机构层：</strong>2026 年 7 月，<strong>以太坊基金会的隐私团队整建制离职</strong>，成立营利公司 EthSystems，投资方包括 Joe Lubin、Bitmine 和 SharpLink，业务是帮银行和资产管理人用 ZK 证明在以太坊上交易，<strong>不暴露交易、持仓和客户身份</strong>——这一层早已不只是转账。</p>
+      <p>所以 Aztec 面对的不是"主网抢走转账生意"，而是三条线同时被占：<strong>转账归协议层、入口归钱包层、机构归 EthSystems</strong>。它剩下的位置是开放的可编程隐私——让任何开发者部署私有合约。这个位置目前还没被上面三者覆盖，但"有位置"和"能变成生意"是两件事。</p>
+      <p>所以长期预期要从"隐私爆发、Aztec 受益"，下调为"<strong>隐私会爆发，但 Aztec 必须证明自己不可替代</strong>"。</p>
+    </div>
+
+    <figure class="fig">
+      <svg viewBox="0 0 720 288" role="img" aria-label="AZTEC 代币分配与解锁时间表">
+        <text x="0" y="16" class="fg-t">103.5 亿枚怎么分，什么时候能动</text>
+        <rect x="0.0" y="26" width="107.6" height="38" fill="#b87030"/><rect x="107.6" y="26" width="196.2" height="38" fill="#9e3a1e"/><rect x="303.8" y="26" width="151.6" height="38" fill="#7a2d17"/><rect x="455.5" y="26" width="84.3" height="38" fill="#6d4a7a"/><rect x="539.8" y="26" width="77.3" height="38" fill="#2e6b45"/><rect x="617.0" y="26" width="103.0" height="38" fill="#b8b0a0"/><path d="M107.6 74 v8 H455.4 v-8" stroke="#9e3a1e" stroke-width="1.6" fill="none"/><text x="281" y="98" class="fg-c" style="text-anchor:middle;fill:#9e3a1e">投资者 + 团队 = 48.3%（2026 年 11 月起解锁）</text>
+        <g class="fg-sm">
+          <text x="0" y="122" style="fill:#b87030">■ 公开拍卖 14.95%</text>
+          <text x="150" y="122" style="fill:#9e3a1e">■ 投资者与早期支持者 27.25%</text>
+          <text x="368" y="122" style="fill:#7a2d17">■ 团队 21.06%</text>
+          <text x="510" y="122" style="fill:#6d4a7a">■ 基金会 11.71%</text>
+          <text x="636" y="122" style="fill:#2e6b45">■ 生态 10.73%</text>
+          <text x="646" y="50" class="fg-sm" style="text-anchor:middle;fill:#4a4a4a">其他</text>
+        </g>
+        <text x="0" y="164" class="fg-t">解锁：2026 年 11 月是分水岭</text>
+        <rect x="40" y="188" width="213" height="16" rx="3" fill="#e2ddd2"/>
+        <rect x="253" y="188" width="427" height="16" rx="3" fill="#9e3a1e" opacity=".85"/>
+        <line x1="253" y1="176" x2="253" y2="216" stroke="#9e3a1e" stroke-width="2"/>
+        <circle cx="253" cy="196" r="6" fill="#9e3a1e"/>
+        <line x1="218" y1="188" x2="218" y2="150" stroke="#62706a" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="218" y="144" class="fg-sm" style="text-anchor:middle;fill:#62706a">现在 · 2026-09</text>
+        <text x="146" y="182" class="fg-sm" style="text-anchor:middle">12 个月锁定</text>
+        <text x="466" y="182" class="fg-sm" style="text-anchor:middle;fill:#9e3a1e">24 个月线性释放 · 约 2.08 亿枚／月</text>
+        <g class="fg-sm" style="fill:#62706a">
+          <text x="40" y="228">2025-11-13 公募</text>
+          <text x="253" y="228" style="text-anchor:middle;fill:#9e3a1e">2026-11-13 解禁</text>
+          <text x="680" y="228" style="text-anchor:end">2028-11 释放完</text>
+        </g>
+        <text x="0" y="258" class="fg-s">每月释放约 2.08 亿枚，相当于当前流通量（约 29.2 亿枚）的 7%。团队另有网络活动与路线里程碑条件，路线延迟可能延长锁定。</text>
+        <text x="0" y="276" class="fg-s">基金会另有 7.71%（约 7.98 亿枚）在同一时间窗解锁；生态资助至少 90 天，可按里程碑延长。</text>
+        </svg>
+      <figcaption>官方口径：近一半的供应量压在 2026 年 11 月之后的两年里线性释放，这是这条线上最确定的变量。</figcaption>
+    </figure>
+    <figure class="fig">
+      <svg viewBox="0 0 720 590" role="img" aria-label="AZTEC 链上筹码三分与持有集中度">
+        <text x="0" y="18" class="fg-t">链上实测：筹码分三类（2026-09-11）</text>
+<text x="140" y="56" class="fg-t" style="text-anchor:end;fill:#9e3a1e">项目方</text><rect x="150" y="38" width="243.7" height="26" rx="3" fill="#9e3a1e"/><text x="496" y="57" class="fg-t" style="fill:#9e3a1e">33.92 亿</text><text x="600" y="57" class="fg-t" style="fill:#9e3a1e">32.8%</text><text x="150" y="86" class="fg-sm" style="fill:#3a4a42">协议合约 14.48 亿（治理／金库／奖励）＋ 团队归属按官方比例折算 19.44 亿</text><text x="140" y="132" class="fg-t" style="text-anchor:end;fill:#b87030">机构</text><rect x="150" y="114" width="336.0" height="26" rx="3" fill="#b87030"/><text x="496" y="133" class="fg-t" style="fill:#b87030">46.76 亿</text><text x="600" y="133" class="fg-t" style="fill:#b87030">45.2%</text><text x="150" y="162" class="fg-sm" style="fill:#3a4a42">投资者归属按官方比例折算 25.16 亿 ＋ 其余大额地址 17.09 亿 ＋ Uniswap v4 池子 4.51 亿（市场流动性）</text><text x="140" y="208" class="fg-t" style="text-anchor:end;fill:#2e6b45">散户</text><rect x="150" y="190" width="164.0" height="26" rx="3" fill="#2e6b45"/><text x="496" y="209" class="fg-t" style="fill:#2e6b45">22.82 亿</text><text x="600" y="209" class="fg-t" style="fill:#2e6b45">22.0%</text><text x="150" y="238" class="fg-sm" style="fill:#3a4a42">约 14,700 个地址，不含任何协议合约与流动性池</text>
+        <rect x="0" y="272" width="232" height="64" rx="7" fill="#eef4f0"/>
+        <text x="14" y="296" class="fg-sm" style="fill:#62706a">持币地址总数</text>
+        <text x="14" y="324" class="fg-t">14,821 个</text>
+        <rect x="244" y="272" width="232" height="64" rx="7" fill="#f4ead8"/>
+        <text x="258" y="296" class="fg-sm" style="fill:#62706a">前 35 个地址合计</text>
+        <text x="258" y="324" class="fg-t" style="fill:#b87030">60.4%</text>
+        <rect x="488" y="272" width="232" height="64" rx="7" fill="#f5e7e2"/>
+        <text x="502" y="296" class="fg-sm" style="fill:#62706a">协议侧锁定合计</text>
+        <text x="502" y="324" class="fg-t" style="fill:#9e3a1e">44.9%</text>
+
+        <text x="0" y="372" class="fg-t">集中度：多少地址，拿着多少币</text>
+        <text x="140" y="404" class="fg-sm" style="text-anchor:end;fill:#3a4a42">10 个 · 0.07%</text>
+        <rect x="150" y="390" width="150" height="19" rx="3" fill="#9e3a1e"/>
+        <text x="310" y="404" class="fg-sm" style="fill:#9e3a1e">37.24%</text>
+        <text x="140" y="442" class="fg-sm" style="text-anchor:end;fill:#3a4a42">100 个 · 0.67%</text>
+        <rect x="150" y="428" width="313" height="19" rx="3" fill="#9e3a1e"/>
+        <text x="473" y="442" class="fg-sm" style="fill:#9e3a1e">77.86%</text>
+        <text x="140" y="480" class="fg-sm" style="text-anchor:end;fill:#3a4a42">296 个 · 2.00%</text>
+        <rect x="150" y="466" width="369" height="19" rx="3" fill="#9e3a1e"/>
+        <text x="529" y="480" class="fg-sm" style="fill:#9e3a1e">91.71%</text>
+        <text x="140" y="518" class="fg-sm" style="text-anchor:end;fill:#3a4a42">1,500 个 · 10.10%</text>
+        <rect x="150" y="504" width="400" height="19" rx="3" fill="#9e3a1e"/>
+        <text x="560" y="518" class="fg-sm" style="fill:#9e3a1e">99.39%</text>
+        <rect x="0" y="540" width="720" height="30" rx="6" fill="#e6f0ea"/>
+        <text x="360" y="560" class="fg-c" style="text-anchor:middle;fill:#1f4530">反过来说：其余 89.90% 的地址（13,321 个）合计只有 0.61%</text>
+        </svg>
+      <figcaption>把链上地址归成三类：<strong>项目方（协议合约＋团队归属）约三分之一，机构（投资者归属＋大额地址＋做市流动性）约四成半，散户只剩两成二</strong>。Uniswap v4 池子（4.51 亿枚）按市场流动性归入机构一侧——它是做市与初始流动性，不属于散户持仓。团队与投资者的归属合约（66 个，共 44.60 亿枚）按官方分配比例折算拆分：链上能读到每个合约的分配额与受益人，但读不到它是团队还是机构。下面的集中度按 1,500 个地址实测（覆盖 99.39% 的供应）：<strong>124 个地址（0.84%）就拿着 80% 的代币，296 个地址（2%）拿着 91.71%</strong>。<strong>只有 14,821 个地址在持币</strong>，而公募参与者超过 16,700 人。</figcaption>
+    </figure>
+
+    <div class="ev ev-judge">
+      <span class="ev-label" style="color:var(--amber)">投机视角：机构的大筹码要怎么离场</span>
+      <p>投资者与早期支持者持有 28.2 亿枚、团队持有 21.8 亿枚，合计 50 亿枚（占总量 48.3%）。按条款自公募日起锁定 12 个月，<strong>2026 年 11 月 13 日起进入 24 个月线性释放</strong>。</p>
+      <p><strong>人性那一条是这样推的：</strong>手里压着几十亿枚，直接砸盘等于把自己的价格打没；更理性的做法是制造叙事、在上涨里派发。所以解禁窗口前后值得盯——这可能是这条线上少有的"事件驱动"机会。</p>
+      <p><strong>但反面必须一起说：</strong>2018 到 2022 年三轮融资累计只有 1.19 亿美元，即便价格再跌一大截，早期轮次仍可能是浮盈的。"认亏离场"对他们同样是选项，也就是说——<strong>拉盘不是必然，只是可能</strong>。这个可能成立还需要两个前提：筹码足够集中、有人愿意做市值；这两点目前都没有证据。</p>
+    </div>
+
+    <div class="ev ev-action">
+      <span class="ev-label" style="color:var(--blue)">两条线分别盯什么</span>
+      <p><strong>长期线盯三件：</strong>V5 漏洞是否闭环、主网上是否出现真实付费、ETH 主网的隐私方案落到什么程度（会不会连可编程隐私一起吃）。</p>
+      <p><strong>短期线盯两件：</strong>2026 年 11 月起的解锁节奏与实际抛压、解禁前后有没有出现集中的叙事动作。</p>
+      <p>两者不能互相借力：产品力没改善，不因为"要炒作"就变成长期看好；筹码有机会，也不代表方向判断被修复。</p>
+    </div>
+
+    <p class="ev-src">这一段只列观察条件，不构成买卖建议；仓位怎么处理属于各人自己的决定。分配与解锁条款来自官方经济白皮书与 MiCA 文件；ETH 路线图来自 Vitalik 2026-08-10 的 Strawmap 更新与 EIP-8182；EthSystems 分拆与 Kohaku SDK 来自公开报道（2026-07 与 2026-08）；当前流通量取官方供给端点 2026-09-09 读数。</p>
+  </div>
+</details>
+
+<details class="section" id="az5">
+  <summary class="question"><span class="qnum" style="background:var(--blue)">5</span>结论</summary>
+  <div class="section-body">
+    <div class="verdict"><span class="v-eq">五件事要分开看：赛道、项目、时机、它怎么赚钱、现在拿它当什么。</span><ol>
+      <li>前两条是方法——把赛道、项目、时机拆开，不让一个判断替另一个背书。</li>
+      <li>中间一条是事实——它的赚钱路径清楚，缺的不是逻辑，是规模和采用。</li>
+      <li>后两条是判断——这条路线最大的受益者是 ETH 本身，而这笔仓位现在的性质是跟投加等事件。</li>
+    </ol></div>
+
+    <figure class="fig">
+      <svg viewBox="0 0 720 420" role="img" aria-label="Aztec 复盘的五个结论"><text x="0" y="16" class="fg-t">五句话</text><circle cx="34" cy="38" r="15" fill="#b87030"/><text x="34" y="43" class="fg-c" style="text-anchor:middle;fill:#fffdf8">①</text><text x="66" y="44" class="fg-t" style="fill:#b87030;font-size:19px">赛道逻辑和项目要解耦</text><text x="66" y="68" class="fg-sm" style="fill:#3a4a42">隐私需求被验证了，不等于 Aztec 吃到了它。</text><circle cx="34" cy="116" r="15" fill="#b87030"/><text x="34" y="121" class="fg-c" style="text-anchor:middle;fill:#fffdf8">②</text><text x="66" y="122" class="fg-t" style="fill:#b87030;font-size:19px">项目和时机要解耦</text><text x="66" y="146" class="fg-sm" style="fill:#3a4a42">产品在跑，但买在错误的预期里，一样跌 59%。</text><line x1="66" y1="82" x2="720" y2="82" stroke="#e8e2d6"/><circle cx="34" cy="194" r="15" fill="#2e6b45"/><text x="34" y="199" class="fg-c" style="text-anchor:middle;fill:#fffdf8">③</text><text x="66" y="200" class="fg-t" style="fill:#2e6b45;font-size:19px">这个项目怎么赚钱，逻辑和路径是清楚的</text><text x="66" y="224" class="fg-sm" style="fill:#3a4a42">网络费用、质押、治理——路径清楚，缺的是规模和采用。</text><line x1="66" y1="160" x2="720" y2="160" stroke="#e8e2d6"/><circle cx="34" cy="272" r="15" fill="#235d7d"/><text x="34" y="277" class="fg-c" style="text-anchor:middle;fill:#fffdf8">④</text><text x="66" y="278" class="fg-t" style="fill:#235d7d;font-size:19px">长期增长路线被 ETH 吸收了，对 ETH 持有是好事</text><text x="66" y="302" class="fg-sm" style="fill:#3a4a42">协议层隐私池、钱包层 Kohaku、机构层 EthSystems——这条路线最大的受益者是 ETH 本身。</text><line x1="66" y1="238" x2="720" y2="238" stroke="#e8e2d6"/><circle cx="34" cy="350" r="15" fill="#6d4a7a"/><text x="34" y="355" class="fg-c" style="text-anchor:middle;fill:#fffdf8">⑤</text><text x="66" y="356" class="fg-t" style="fill:#6d4a7a;font-size:19px">现在是跟投 a16z 和 V 神，等解锁后炒作离场</text><text x="66" y="380" class="fg-sm" style="fill:#3a4a42">投资者与团队 50 亿枚自 2026-11 起解锁；可以当成一个 meme 或者期权去持有。</text><line x1="66" y1="316" x2="720" y2="316" stroke="#e8e2d6"/></svg>
+    </figure>
+
+    <div class="ev ev-action">
+      <span class="ev-label" style="color:var(--blue)">所以这次研究怎么做</span>
+      只做长期筛选：谁在 2027—2029 年最可能兑现。时机、价格和市场周期单独放，不和长期判断混在一起。
+    </div>
+
+    <a class="go" href="#" data-goto="report" data-open="rq3">下一页 → 汇报 03 时机解耦</a>
+    <p class="ev-src">这一段是本次复盘的结论，不构成买卖建议；仓位怎么处理属于各人自己的决定。数字口径与来源见前四段。</p>
+  </div>
+</details>
+
+</div>
+</section>
+</body></html>

@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>探寻之旅</title>
+<style>
+:root{
+  --paper:#f7f2e7;--deep:#eee4d3;--ink:#24382c;--wood:#245b43;
+  --sage:#dfe9dc;--fire:#c78942;--fire-glow:rgba(199,137,66,.4);
+  --rust:#a65338;--rust-dim:rgba(166,83,56,.35);--muted:#8a957e;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--paper);color:var(--ink);font-family:"PingFang SC","Noto Sans SC",sans-serif}
+
+/* 幻灯片 */
+#deck{width:100%;height:100%}
+.slide{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity .7s;display:flex;flex-direction:column}
+.slide.active{opacity:1;pointer-events:auto}
+
+/* 起点页 */
+.s0{overflow:hidden}
+.s0 svg{position:absolute;left:0;right:0;top:80px;bottom:60px;width:100%;height:calc(100% - 140px)}
+.s0-question{position:absolute;top:0;left:0;right:0;padding:24px 7vw 0;z-index:2}
+.s0-question h1{font:700 clamp(28px,4vw,46px)/1.3 "Noto Serif SC","Songti SC",serif;color:var(--wood);margin:0}
+.s0-ui{position:absolute;bottom:20px;left:0;right:0;text-align:center;z-index:2}
+.s0-ui .sub{font:400 clamp(16px,1.6vw,19px)/1.7 "PingFang SC",sans-serif;color:var(--muted)}
+.s0-ui .hint{font:300 11px "PingFang SC",sans-serif;color:rgba(138,149,126,.45);margin-top:3px;letter-spacing:.08em}
+
+/* 内容页 */
+.content-slide .strip-bar{height:72px;min-height:72px;background:var(--deep);border-bottom:1px solid rgba(36,56,44,.06);display:flex;align-items:center;justify-content:center}
+.content-slide .strip-bar svg{width:min(88vw,860px);height:52px}
+.content-slide .body{flex:1;display:flex;align-items:center;justify-content:center;padding:28px 8vw 52px;overflow-y:auto}
+.page-inner{max-width:700px;width:100%}
+.big-q{font:700 clamp(28px,4vw,46px)/1.35 "Noto Serif SC","Songti SC",serif;color:var(--wood);margin-bottom:22px}
+.divider{width:44px;height:2px;background:linear-gradient(90deg,var(--wood),transparent);margin:18px 0;opacity:.35}
+.personal{font:400 clamp(18px,2vw,22px)/2 "PingFang SC",sans-serif;color:var(--ink);opacity:.82;max-width:680px}
+.personal em{font-style:normal;color:var(--wood);font-weight:600}
+.personal .hl{color:var(--fire);font-weight:600}
+.personal p{margin-bottom:13px}
+
+/* 左图右文 */
+.lr-layout{display:flex;gap:clamp(24px,4vw,48px);max-width:1100px;width:100%;align-items:center}
+.lr-left{flex:0 0 46%;max-width:500px}
+.lr-left img{width:100%;border-radius:10px;border:1px solid rgba(36,56,44,.08);box-shadow:0 2px 12px rgba(36,56,44,.06);cursor:zoom-in}
+.lr-left svg{width:100%;height:auto}
+.lr-right{flex:1;min-width:0}
+.lr-right .big-q{font-size:clamp(24px,3.4vw,38px)}
+.lr-right .personal{font-size:clamp(17px,1.8vw,21px)}
+.lr-right .personal p{margin-bottom:10px}
+@media(max-width:768px){.lr-layout{flex-direction:column;gap:16px}.lr-left{flex:none;width:100%;max-width:none}}
+
+/* 导航 */
+#nav{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:200;display:flex;gap:7px;background:rgba(238,228,211,.85);backdrop-filter:blur(6px);padding:7px 14px;border-radius:16px;border:1px solid rgba(36,56,44,.06)}
+#nav button{width:8px;height:8px;border-radius:50%;border:1.5px solid var(--muted);background:transparent;cursor:pointer;transition:all .3s;padding:0}
+#nav button.active{background:var(--fire);border-color:var(--fire)}
+
+/* 图片放大弹框 */
+#lightbox{position:fixed;inset:0;background:rgba(36,56,44,.85);z-index:300;display:flex;align-items:center;justify-content:center;cursor:zoom-out;backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .3s}
+#lightbox.show{opacity:1;pointer-events:auto}
+#lightbox img{max-width:92vw;max-height:90vh;border-radius:8px;box-shadow:0 8px 40px rgba(0,0,0,.3);object-fit:contain;transform:scale(.95);transition:transform .3s}
+#lightbox.show img{transform:scale(1)}
+</style>
+</head>
+<body>
+<a class="site-home-link" href="fde-search.html" aria-label="← 返回探寻之旅">← 返回探寻之旅</a>
+<style>
+  .site-home-link{position:fixed;z-index:9999;top:16px;left:16px;display:inline-flex;align-items:center;gap:6px;padding:9px 12px;border:1px solid rgba(32,36,30,.18);border-radius:999px;background:rgba(255,255,255,.88);backdrop-filter:blur(12px);color:#20241e;text-decoration:none;font:600 14px/1.2 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;box-shadow:0 10px 28px rgba(0,0,0,.08)}
+  .site-home-link:hover{background:#fff}
+  @media(max-width:640px){.site-home-link{top:10px;left:10px;padding:8px 10px;font-size:13px}}
+</style>
+
+
+<div id="deck">
+
+  <!-- ═══ 第 0 页：分叉树 ═══ -->
+  <div class="slide s0 active" data-i="0">
+    <div class="s0-question"><h1>怎么找到下一个海力士？</h1></div>
+    <svg id="tree" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid meet"></svg>
+    <div class="s0-ui">
+      <div class="sub">我们一起看看，这段路可以怎么走</div>
+      <div class="hint">按 → 开始</div>
+    </div>
+  </div>
+
+  <!-- ═══ 第 1 页：Aztec 引入 ═══ -->
+  <div class="slide content-slide" data-i="1">
+    <div class="strip-bar"><svg class="ministrip" viewBox="0 0 860 52"></svg></div>
+    <div class="body"><div class="page-inner" style="text-align:center">
+      <div class="big-q">在正式分享之前，<br>先和大家一起回顾一个项目</div>
+      <div class="divider" style="margin:24px auto"></div>
+      <div class="personal" style="max-width:520px;margin:0 auto">
+        <p><em>Aztec</em>——我们一起经历过的。</p>
+        <p>看好了方向，钱没赚到。</p>
+        <p>这次重新出发之前，<br><span class="hl">想先一起看看那次经历</span></p>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ 第 2 页：Aztec 简述（左图右文） ═══ -->
+  <div class="slide content-slide" data-i="2">
+    <div class="strip-bar"><svg class="ministrip" viewBox="0 0 860 52"></svg></div>
+    <div class="body"><div class="lr-layout">
+      <div class="lr-left">
+        <svg viewBox="0 0 380 340" xmlns="http://www.w3.org/2000/svg">
+          <text x="190" y="22" text-anchor="middle" font-size="14" font-weight="700" fill="#245b43" font-family="Noto Serif SC,Songti SC,serif">Aztec 的教训</text>
+
+          <!-- 第一层：长期判断 -->
+          <rect x="55" y="36" width="270" height="62" rx="10" fill="#eef4f0" stroke="#245b43" stroke-width="1.5"/>
+          <text x="190" y="57" text-anchor="middle" font-size="11" font-weight="600" fill="#8a957e" font-family="PingFang SC,sans-serif">长期判断</text>
+          <text x="190" y="82" text-anchor="middle" font-size="15" font-weight="700" fill="#245b43" font-family="PingFang SC,sans-serif">我认为大概率会发生</text>
+
+          <!-- ≠ 第一道缝 -->
+          <text x="175" y="115" text-anchor="middle" font-size="18" font-weight="700" fill="#a65338" font-family="PingFang SC,sans-serif">≠</text>
+          <text x="220" y="115" font-size="11" fill="#8a957e" font-family="PingFang SC,sans-serif">不等于</text>
+
+          <!-- 第二层：一定发生 -->
+          <rect x="55" y="124" width="270" height="55" rx="10" fill="rgba(199,137,66,.06)" stroke="#c78942" stroke-width="1.2"/>
+          <text x="190" y="146" text-anchor="middle" font-size="12" font-weight="600" fill="#8a957e" font-family="PingFang SC,sans-serif">一定会发生</text>
+          <text x="190" y="167" text-anchor="middle" font-size="14" fill="#c78942" font-family="PingFang SC,sans-serif">也可能不发生</text>
+
+          <!-- ≠ 第二道缝 -->
+          <text x="175" y="197" text-anchor="middle" font-size="18" font-weight="700" fill="#a65338" font-family="PingFang SC,sans-serif">≠</text>
+          <text x="220" y="197" font-size="11" fill="#8a957e" font-family="PingFang SC,sans-serif">不等于</text>
+
+          <!-- 第三层：标的 -->
+          <rect x="55" y="206" width="270" height="55" rx="10" fill="rgba(166,83,56,.05)" stroke="#a65338" stroke-width="1.5"/>
+          <text x="190" y="228" text-anchor="middle" font-size="12" font-weight="600" fill="#8a957e" font-family="PingFang SC,sans-serif">这家企业能承接</text>
+          <text x="190" y="249" text-anchor="middle" font-size="16" font-weight="700" fill="#a65338" font-family="PingFang SC,sans-serif">✗ 没有</text>
+
+          <!-- 底部 -->
+          <line x1="90" y1="276" x2="290" y2="276" stroke="rgba(36,91,67,.1)" stroke-width="1"/>
+          <text x="190" y="299" text-anchor="middle" font-size="13" font-weight="600" fill="#c78942" font-family="PingFang SC,sans-serif">每一步都可能断——这次要搞清楚</text>
+          <rect x="80" y="310" width="220" height="24" rx="6" fill="rgba(36,91,67,.05)"/>
+          <text x="190" y="327" text-anchor="middle" font-size="12" font-weight="600" fill="#245b43" font-family="PingFang SC,sans-serif">175 家 → 认真筛 → 9 家</text>
+        </svg>
+      </div>
+      <div class="lr-right">
+        <div class="big-q">认为它会发生，就等于选对了吗？</div>
+        <div class="divider"></div>
+        <div class="personal">
+          <p>Aztec，我们一起经历过的项目</p>
+          <p>我仍旧相信：这个世界大概率需要<br>可被编程的隐私执行环境</p>
+          <div class="divider"></div>
+          <p>但<em>「大概率会发生」不等于「一定会发生」</em></p>
+          <p><em>「一定会发生」不等于「这家企业能承接」</em></p>
+          <p>从一个判断到一家标的<br>中间每一步都可能断</p>
+          <div class="divider"></div>
+          <p>175 家随便挑 9 家很简单，但不想交差</p>
+          <p>这就是接下来<em>我们一起走的路</em></p>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ 第 3 页：Aztec 复盘（完整内容，可滚动） ═══ -->
+  <div class="slide content-slide" data-i="3">
+    <div class="strip-bar"><svg class="ministrip" viewBox="0 0 860 52"></svg></div>
+    <div class="body" style="overflow-y:auto;align-items:flex-start;padding-top:16px">
+      <div style="max-width:860px;width:100%">
+        <div class="big-q">Aztec 复盘：看好了方向，钱没赚到</div>
+        <iframe id="aztec-frame" src="fde-aztec.html" style="width:100%;border:none;min-height:calc(100vh - 160px)" onload="try{this.style.height=this.contentDocument.body.scrollHeight+'px'}catch(e){}"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 第 4 页：态度（左图右文） ═══ -->
+  <div class="slide content-slide" data-i="4">
+    <div class="strip-bar"><svg class="ministrip" viewBox="0 0 860 52"></svg></div>
+    <div class="body"><div class="lr-layout">
+      <div class="lr-left">
+        <svg viewBox="0 0 380 340" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="50" width="155" height="155" rx="10" fill="rgba(138,149,126,.05)" stroke="rgba(138,149,126,.15)" stroke-width="1" stroke-dasharray="4 3"/>
+          <text x="98" y="80" text-anchor="middle" font-size="12" fill="#8a957e" font-family="PingFang SC,sans-serif">不是</text>
+          <text x="98" y="112" text-anchor="middle" font-size="16" fill="#8a957e" font-family="PingFang SC,sans-serif" text-decoration="line-through">老师</text>
+          <text x="98" y="145" text-anchor="middle" font-size="16" fill="#8a957e" font-family="PingFang SC,sans-serif" text-decoration="line-through">分析师</text>
+          <text x="98" y="178" text-anchor="middle" font-size="16" fill="#8a957e" font-family="PingFang SC,sans-serif" text-decoration="line-through">预言家</text>
+          <text x="190" y="133" text-anchor="middle" font-size="22" fill="#c78942" font-family="PingFang SC,sans-serif">→</text>
+          <rect x="205" y="50" width="155" height="155" rx="10" fill="rgba(36,91,67,.05)" stroke="#245b43" stroke-width="1.5"/>
+          <text x="283" y="80" text-anchor="middle" font-size="12" fill="#245b43" font-family="PingFang SC,sans-serif">而是</text>
+          <text x="283" y="112" text-anchor="middle" font-size="16" font-weight="600" fill="#245b43" font-family="PingFang SC,sans-serif">发现者</text>
+          <text x="283" y="145" text-anchor="middle" font-size="16" font-weight="600" fill="#245b43" font-family="PingFang SC,sans-serif">研究者</text>
+          <text x="283" y="178" text-anchor="middle" font-size="16" font-weight="600" fill="#245b43" font-family="PingFang SC,sans-serif">翻译者</text>
+          <line x1="283" y1="205" x2="220" y2="238" stroke="rgba(199,137,66,.2)" stroke-width="1"/>
+          <rect x="60" y="238" width="260" height="46" rx="8" fill="rgba(199,137,66,.08)" stroke="rgba(199,137,66,.25)" stroke-width="1"/>
+          <text x="190" y="266" text-anchor="middle" font-size="15" font-weight="600" fill="#c78942" font-family="PingFang SC,sans-serif">和大家一起聊聊</text>
+          <text x="190" y="318" text-anchor="middle" font-size="13" fill="#8a957e" font-family="PingFang SC,sans-serif">诚实 · 平等 · 谦虚</text>
+        </svg>
+      </div>
+      <div class="lr-right" id="att-right">
+        <div class="big-q">为什么我要在推荐之前，<br>先复盘一次失败？</div>
+        <div class="divider"></div>
+        <div class="personal" style="margin-bottom:6px">
+          <p>按道理，Aztec 亏了钱，应该翻篇<br>不该主动展示失败</p>
+        </div>
+        <div class="att-card" style="opacity:0;transform:translateY(8px);transition:all .4s ease;margin-top:12px;padding:12px 16px;background:rgba(36,91,67,.05);border:1px solid rgba(36,91,67,.15);border-radius:8px">
+          <span style="font:600 clamp(16px,1.8vw,19px)/1.7 'PingFang SC',sans-serif;color:#245b43">对逻辑真相的追求，不应该因为标的失败就被否定</span>
+        </div>
+        <div class="att-card" style="opacity:0;transform:translateY(8px);transition:all .4s ease;margin-top:10px;padding:12px 16px;background:rgba(36,91,67,.05);border:1px solid rgba(36,91,67,.15);border-radius:8px">
+          <span style="font:600 clamp(16px,1.8vw,19px)/1.7 'PingFang SC',sans-serif;color:#245b43">海量信息、AI 协同、各种干扰——很容易偏离<br>需要不断回到第一性原理</span>
+        </div>
+        <div class="att-card" style="opacity:0;transform:translateY(8px);transition:all .4s ease;margin-top:10px;padding:12px 16px;background:rgba(199,137,66,.06);border:1px solid rgba(199,137,66,.2);border-radius:8px">
+          <span style="font:600 clamp(16px,1.8vw,19px)/1.7 'PingFang SC',sans-serif;color:#c78942">宁可做好给不出结论的准备，也不为了交差勉强凑答案</span>
+        </div>
+        <div id="att-hint" style="margin-top:14px;font:300 11px 'PingFang SC',sans-serif;color:rgba(138,149,126,.4);text-align:center;letter-spacing:.08em;transition:opacity .3s">点击继续</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ 第 5 页：游戏规则（左图右文） ═══ -->
+  <div class="slide content-slide" data-i="5">
+    <div class="strip-bar"><svg class="ministrip" viewBox="0 0 860 52"></svg></div>
+    <div class="body"><div class="lr-layout">
+      <div class="lr-left">
+        <img src="assets/fde-journey-9-horses.jpg" alt="9选1赛马">
+      </div>
+      <div class="lr-right">
+        <div class="big-q">这个游戏怎么玩？</div>
+        <div class="divider"></div>
+        <div class="personal">
+          <p>邱总设了一个游戏<br>让大家参与进来，也看看各自看 AI 的眼光</p>
+          <div class="divider"></div>
+          <p>研究员给出 <span class="hl">9 家候选</span><br>每人独立选一家，四个月后比涨幅<br>收益率最高 → <span class="hl">赢一部 iPhone</span></p>
+          <p style="opacity:.7;font-size:.88em;line-height:1.7">不交流、不记名，统一交邱总统计<br>允许多人选同一家；无人最高则无人获得；并列最高同时获得</p>
+          <div class="divider"></div>
+          <p><em>但有件事值得一起想想：</em></p>
+          <p>游戏比的是 <span class="hl">四个月涨幅</span><br>研究看的是 <span class="hl">2027–2029 兑现潜力</span></p>
+          <p>两个问题先分开——混在一起，谁都研究不清楚</p>
+          <p>接下来是研究过程中的思路和发现<br>最后选哪家，是<em>每个人自己的决定</em></p>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ 第 6 页：认知时间线（左图右滚动） ═══ -->
+  <div class="slide content-slide" data-i="6">
+    <div class="strip-bar"><svg class="ministrip" viewBox="0 0 860 52"></svg></div>
+    <div class="body" style="padding:0;overflow:hidden">
+      <div style="display:flex;height:100%">
+        <div style="flex:0 0 34%;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(36,91,67,.02)">
+          <img src="assets/fde-journey-ten-stops-overview.jpg" alt="十站全景" style="width:100%;border-radius:10px;border:1px solid rgba(36,56,44,.08);box-shadow:0 2px 16px rgba(36,56,44,.06)">
+        </div>
+        <div style="flex:1;overflow-y:auto;padding:24px 5vw 40px 28px">
+          <div class="big-q" style="font-size:clamp(22px,3.2vw,34px)">我们是怎么一步步走到这里的？</div>
+          <div class="divider"></div>
+          <div id="timeline" style="border-left:2px solid rgba(36,91,67,.12);margin-left:8px;padding-left:20px"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 第 7 页：时机解耦 ═══ -->
+  <div class="slide content-slide" data-i="7">
+    <div class="strip-bar"><svg class="ministrip" viewBox="0 0 860 52"></svg></div>
+    <div class="body" style="overflow-y:auto;align-items:flex-start;padding-top:20px"><div class="page-inner" style="max-width:800px">
+      <div class="big-q">想拿到 iPhone，需要做对几件事？</div>
+      <div class="divider"></div>
+
+      <!-- 公式拆解图 -->
+      <svg viewBox="0 0 800 420" style="width:100%;margin-bottom:20px" xmlns="http://www.w3.org/2000/svg">
+        <style>
+          .f-title{font:700 22px "Noto Serif SC","Songti SC",serif;fill:#245b43}
+          .f-label{font:600 17px "PingFang SC",sans-serif;fill:#24382c}
+          .f-sub{font:400 15px "PingFang SC",sans-serif;fill:#8a957e}
+          .f-hl{font:700 17px "PingFang SC",sans-serif;fill:#c78942}
+          .f-sm{font:400 14px "PingFang SC",sans-serif;fill:#8a957e}
+        </style>
+
+        <!-- 公式 -->
+        <rect x="120" y="8" width="560" height="48" rx="8" fill="#245b43"/>
+        <text x="400" y="38" text-anchor="middle" font-size="20" font-weight="700" fill="#f7f2e7" font-family="Noto Serif SC,Songti SC,serif">拿到 iPhone ＝ 选对项目 × 选对时机</text>
+
+        <!-- 两列 -->
+        <!-- 左列：选对项目 -->
+        <rect x="30" y="82" width="340" height="280" rx="10" fill="#eef4f0" stroke="#2e6b45" stroke-width="1.5"/>
+        <text x="200" y="114" text-anchor="middle" class="f-title">选对项目</text>
+        <line x1="80" y1="126" x2="320" y2="126" stroke="rgba(36,91,67,.15)" stroke-width="1"/>
+        <text x="200" y="152" text-anchor="middle" class="f-label">长期增长潜力</text>
+        <text x="200" y="176" text-anchor="middle" class="f-sub">需求真实、可持续</text>
+        <text x="200" y="198" text-anchor="middle" class="f-sub">2027–2029 年的兑现可能性</text>
+        <text x="200" y="220" text-anchor="middle" class="f-sub">商业模式能不能跑通</text>
+        <line x1="80" y1="240" x2="320" y2="240" stroke="rgba(36,91,67,.15)" stroke-width="1"/>
+        <rect x="100" y="254" width="200" height="36" rx="6" fill="#245b43"/>
+        <text x="200" y="278" text-anchor="middle" font-size="14" font-weight="700" fill="#f7f2e7" font-family="PingFang SC,sans-serif">我们一起研究的部分</text>
+        <text x="200" y="310" text-anchor="middle" class="f-sub">确定性相对更高</text>
+        <text x="200" y="330" text-anchor="middle" class="f-sub">可以用逻辑和证据推导</text>
+        <text x="200" y="350" text-anchor="middle" class="f-hl">← 这次分享的重点</text>
+
+        <!-- 乘号 -->
+        <text x="400" y="220" text-anchor="middle" font-size="28" font-weight="300" fill="#8a957e" font-family="Noto Serif SC,serif">×</text>
+
+        <!-- 右列：选对时机 -->
+        <rect x="430" y="82" width="340" height="280" rx="10" fill="#f4ead8" stroke="#c78942" stroke-width="1.5"/>
+        <text x="600" y="114" text-anchor="middle" class="f-title" style="fill:#8a5a20">选对时机</text>
+        <line x1="480" y1="126" x2="720" y2="126" stroke="rgba(199,137,66,.2)" stroke-width="1"/>
+        <text x="600" y="152" text-anchor="middle" class="f-label" style="fill:#8a5a20">4 个月内会涨</text>
+        <text x="600" y="176" text-anchor="middle" class="f-sub">事件催化、市场情绪</text>
+        <text x="600" y="198" text-anchor="middle" class="f-sub">板块轮动、资金流向</text>
+        <text x="600" y="220" text-anchor="middle" class="f-sub">炒作周期、随机性</text>
+        <line x1="480" y1="240" x2="720" y2="240" stroke="rgba(199,137,66,.2)" stroke-width="1"/>
+        <rect x="500" y="254" width="200" height="36" rx="6" fill="#c78942"/>
+        <text x="600" y="278" text-anchor="middle" font-size="14" font-weight="700" fill="#f7f2e7" font-family="PingFang SC,sans-serif">每个人自己判断</text>
+        <text x="600" y="310" text-anchor="middle" class="f-sub">不确定性很高</text>
+        <text x="600" y="330" text-anchor="middle" class="f-sub">很大程度取决于运气</text>
+        <text x="600" y="350" text-anchor="middle" class="f-sm" style="fill:#a65338">这次研究不覆盖这部分</text>
+
+        <!-- 底部说明 -->
+        <rect x="100" y="382" width="600" height="32" rx="6" fill="rgba(36,56,44,.04)"/>
+        <text x="400" y="403" text-anchor="middle" class="f-sub" style="fill:#24382c">好项目也可能 4 个月不涨。好时机也可能选到差项目。两件事分开想。</text>
+      </svg>
+
+      <div class="personal">
+        <p>Aztec 那一笔就是最好的例子：看好了方向，钱没赚到。错得最直接的是<span class="hl">时机</span>——时机重要，重要到能决定一笔判断的结果。</p>
+        <p>但这次研究不解决时机。我们要一起看的是：如果 AI 和 Agent 真被大规模用起来，<span class="hl">哪 9 家企业最可能长成下一个海力士</span>。这是「什么值得拥有」。</p>
+        <p>「什么是好时机」是另一个独立的判断——这家企业是不是处于一个可以买的好时机，<em>交给每个人自己</em>。两个问题混在一起，谁都研究不清楚，所以先拆开。</p>
+        <div class="divider"></div>
+        <p><em>说直白一点：</em></p>
+        <p>想拿到 iPhone，两边都得对。左边我们可以一起研究、一起讨论；右边更大程度取决于随机性和运气——这部分谁也没法替谁做主。</p>
+        <p>接下来的分享集中在左边。大家听完之后，右边怎么判断，是每个人自己的选择。</p>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ 第 8 页：为什么时机重要（左图右文） ═══ -->
+  <div class="slide content-slide" data-i="8">
+    <div class="strip-bar"><svg class="ministrip" viewBox="0 0 860 52"></svg></div>
+    <div class="body"><div class="lr-layout">
+      <div class="lr-left">
+        <img src="assets/fde-journey-earnings-reactions.jpg" alt="财报后的价格反应" style="width:100%;border-radius:10px;border:1px solid rgba(36,56,44,.08);box-shadow:0 2px 12px rgba(36,56,44,.06)">
+      </div>
+      <div class="lr-right">
+        <div class="big-q">数据好就一定会涨吗？</div>
+        <div class="divider"></div>
+        <div class="personal">
+          <p>同样一份好财报<br>有人涨 4%，有人跌 9.6%</p>
+          <p>区别不在数字本身<br>在于<em>价格里已经装了多少期待</em></p>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:14px">
+          <div style="flex:1;padding:10px 12px;border-top:3px solid #245b43;background:rgba(36,91,67,.04);border-radius:0 0 8px 8px">
+            <div style="font:700 15px 'PingFang SC',sans-serif;color:#245b43;margin-bottom:3px">装的是过去的预期</div>
+            <div style="font:400 14px/1.6 'PingFang SC',sans-serif;color:#8a957e">现实已经变好<br>市场还没更新</div>
+            <div style="font:600 14px 'PingFang SC',sans-serif;color:#245b43;margin-top:4px">做到现实 → 可能涨</div>
+          </div>
+          <div style="flex:1;padding:10px 12px;border-top:3px solid #c78942;background:rgba(199,137,66,.04);border-radius:0 0 8px 8px">
+            <div style="font:700 15px 'PingFang SC',sans-serif;color:#8a5a20;margin-bottom:3px">装的是当下的预期</div>
+            <div style="font:400 14px/1.6 'PingFang SC',sans-serif;color:#8a957e">价格匹配了价值</div>
+            <div style="font:600 14px 'PingFang SC',sans-serif;color:#8a5a20;margin-top:4px">做到预期 → 大致持平</div>
+          </div>
+          <div style="flex:1;padding:10px 12px;border-top:3px solid #a65338;background:rgba(166,83,56,.04);border-radius:0 0 8px 8px">
+            <div style="font:700 15px 'PingFang SC',sans-serif;color:#a65338;margin-bottom:3px">装的是未来的预期</div>
+            <div style="font:400 14px/1.6 'PingFang SC',sans-serif;color:#8a957e">市场提前交易<br>更远的增长</div>
+            <div style="font:600 14px 'PingFang SC',sans-serif;color:#a65338;margin-top:4px">必须超预期 → 否则跌</div>
+          </div>
+        </div>
+        <div style="margin-top:12px;padding:10px 14px;background:rgba(36,56,44,.04);border-left:3px solid #245b43;border-radius:0 8px 8px 0">
+          <span style="font:400 clamp(14px,1.6vw,17px)/1.7 'PingFang SC',sans-serif;color:#24382c">投研问「有没有长期增长潜力」<br>时机问「价格里已经装了多少期待」<br><em style="font-style:normal;color:#245b43;font-weight:600">两个课题，分开回答</em></span>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ 第 9 页：选择困难——两个例子 ═══ -->
+  <div class="slide content-slide" data-i="9">
+    <div class="strip-bar"><svg class="ministrip" viewBox="0 0 860 52"></svg></div>
+    <div class="body" style="overflow-y:auto;align-items:flex-start;padding-top:16px">
+      <div class="page-inner" style="max-width:960px">
+        <div class="big-q">这个好，那个也好——怎么选？</div>
+        <div class="divider"></div>
+        <div style="display:flex;gap:18px;margin-top:8px">
+
+          <!-- 左卡：金山办公 -->
+          <div style="flex:1;background:rgba(36,91,67,.04);border:1.5px solid rgba(36,91,67,.15);border-radius:12px;padding:16px 18px">
+            <div style="font:700 19px 'Noto Serif SC',serif;color:#245b43;margin-bottom:2px">金山办公</div>
+            <div style="font:400 14px 'PingFang SC',sans-serif;color:#8a957e;margin-bottom:12px">688111.SH · 用数据选 → 该入选</div>
+            <svg viewBox="0 0 360 220" style="width:100%" xmlns="http://www.w3.org/2000/svg">
+              <text x="180" y="16" text-anchor="middle" font-size="12" fill="#8a957e" font-family="PingFang SC,sans-serif">FY2021–2025 收入（亿元）· 年年在涨</text>
+              <rect x="20" y="118" width="52" height="82" rx="4" fill="#245b43" opacity=".55"/>
+              <text x="46" y="112" text-anchor="middle" font-size="13" font-weight="600" fill="#245b43" font-family="PingFang SC,sans-serif">32.8</text>
+              <text x="46" y="214" text-anchor="middle" font-size="11" fill="#8a957e" font-family="PingFang SC,sans-serif">2021</text>
+              <rect x="88" y="103" width="52" height="97" rx="4" fill="#245b43" opacity=".65"/>
+              <text x="114" y="97" text-anchor="middle" font-size="13" font-weight="600" fill="#245b43" font-family="PingFang SC,sans-serif">38.9</text>
+              <text x="114" y="214" text-anchor="middle" font-size="11" fill="#8a957e" font-family="PingFang SC,sans-serif">2022</text>
+              <rect x="156" y="86" width="52" height="114" rx="4" fill="#245b43" opacity=".75"/>
+              <text x="182" y="80" text-anchor="middle" font-size="13" font-weight="600" fill="#245b43" font-family="PingFang SC,sans-serif">45.6</text>
+              <text x="182" y="214" text-anchor="middle" font-size="11" fill="#8a957e" font-family="PingFang SC,sans-serif">2023</text>
+              <rect x="224" y="72" width="52" height="128" rx="4" fill="#245b43" opacity=".85"/>
+              <text x="250" y="66" text-anchor="middle" font-size="13" font-weight="600" fill="#245b43" font-family="PingFang SC,sans-serif">51.2</text>
+              <text x="250" y="214" text-anchor="middle" font-size="11" fill="#8a957e" font-family="PingFang SC,sans-serif">2024</text>
+              <rect x="292" y="52" width="52" height="148" rx="4" fill="#245b43"/>
+              <text x="318" y="46" text-anchor="middle" font-size="13" font-weight="700" fill="#245b43" font-family="PingFang SC,sans-serif">59.3</text>
+              <text x="318" y="214" text-anchor="middle" font-size="11" fill="#8a957e" font-family="PingFang SC,sans-serif">2025</text>
+            </svg>
+            <div style="font:600 15px 'PingFang SC',sans-serif;color:#245b43;margin-top:8px;text-align:center">收入连续五年增长，利润也是</div>
+            <div style="font:400 14px 'PingFang SC',sans-serif;color:#8a957e;margin-top:4px;text-align:center">看数据，它该入选</div>
+          </div>
+
+          <!-- 右卡：奥比中光 -->
+          <div style="flex:1;background:rgba(199,137,66,.04);border:1.5px solid rgba(199,137,66,.2);border-radius:12px;padding:16px 18px">
+            <div style="font:700 19px 'Noto Serif SC',serif;color:#8a5a20;margin-bottom:2px">奥比中光</div>
+            <div style="font:400 14px 'PingFang SC',sans-serif;color:#8a957e;margin-bottom:12px">688322.SH · 用逻辑选 → 该入选</div>
+            <svg viewBox="0 0 360 220" style="width:100%" xmlns="http://www.w3.org/2000/svg">
+              <text x="180" y="16" text-anchor="middle" font-size="12" fill="#8a957e" font-family="PingFang SC,sans-serif">增强逻辑链</text>
+              <!-- 逻辑链：AI越强 → 具身放量 → 每台要视觉 → 订单增加 -->
+              <rect x="10" y="32" width="155" height="40" rx="8" fill="rgba(199,137,66,.08)" stroke="#c78942" stroke-width="1.2"/>
+              <text x="88" y="57" text-anchor="middle" font-size="14" font-weight="600" fill="#c78942" font-family="PingFang SC,sans-serif">AI 越强</text>
+              <defs><marker id="arro" markerWidth="7" markerHeight="5" refX="4" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#c78942"/></marker></defs>
+              <line x1="170" y1="52" x2="195" y2="52" stroke="#c78942" stroke-width="1.5" marker-end="url(#arro)"/>
+              <rect x="200" y="32" width="155" height="40" rx="8" fill="rgba(199,137,66,.08)" stroke="#c78942" stroke-width="1.2"/>
+              <text x="278" y="57" text-anchor="middle" font-size="14" font-weight="600" fill="#c78942" font-family="PingFang SC,sans-serif">具身智能放量</text>
+              <line x1="278" y1="72" x2="278" y2="92" stroke="#c78942" stroke-width="1.5" marker-end="url(#arro)"/>
+              <rect x="110" y="96" width="245" height="40" rx="8" fill="rgba(199,137,66,.08)" stroke="#c78942" stroke-width="1.2"/>
+              <text x="233" y="121" text-anchor="middle" font-size="14" font-weight="600" fill="#c78942" font-family="PingFang SC,sans-serif">每台机器人都要视觉传感器</text>
+              <line x1="233" y1="136" x2="233" y2="156" stroke="#c78942" stroke-width="1.5" marker-end="url(#arro)"/>
+              <rect x="110" y="160" width="245" height="40" rx="8" fill="rgba(199,137,66,.12)" stroke="#c78942" stroke-width="1.5"/>
+              <text x="233" y="185" text-anchor="middle" font-size="14" font-weight="700" fill="#8a5a20" font-family="PingFang SC,sans-serif">订单与消费越多</text>
+            </svg>
+            <div style="font:600 15px 'PingFang SC',sans-serif;color:#8a5a20;margin-top:8px;text-align:center">视觉传感器是机器人的眼睛</div>
+            <div style="font:400 14px 'PingFang SC',sans-serif;color:#8a957e;margin-top:4px;text-align:center">看逻辑，它也该入选</div>
+          </div>
+
+        </div>
+        <!-- 收束 -->
+        <div style="margin-top:18px;padding:14px 20px;background:rgba(166,83,56,.04);border:1.5px solid rgba(166,83,56,.15);border-radius:10px;text-align:center">
+          <div style="font:700 clamp(17px,2vw,21px)/1.4 'Noto Serif SC',serif;color:#a65338">标准不同，答案不同</div>
+          <div style="font:400 clamp(15px,1.7vw,18px)/1.7 'PingFang SC',sans-serif;color:#24382c;margin-top:4px">用数据选，金山好；用逻辑选，奥比好——175 家各有各的好</div>
+          <div style="font:400 clamp(15px,1.7vw,18px)/1.7 'PingFang SC',sans-serif;color:#a65338;margin-top:2px"><em style="font-style:normal;font-weight:600">尺子太多，选不出来</em></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 第 10 页：筛选价值观（左图右文） ═══ -->
+  <div class="slide content-slide" data-i="10">
+    <div class="strip-bar"><svg class="ministrip" viewBox="0 0 860 52"></svg></div>
+    <div class="body"><div class="lr-layout">
+      <div class="lr-left">
+        <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+          <!-- 顶部：候选池 -->
+          <rect x="110" y="16" width="180" height="40" rx="8" fill="rgba(36,91,67,.06)" stroke="#245b43" stroke-width="1.2"/>
+          <text x="200" y="42" text-anchor="middle" font-size="15" font-weight="600" fill="#245b43" font-family="PingFang SC,sans-serif">175 家候选</text>
+
+          <!-- 漏斗线 -->
+          <line x1="150" y1="56" x2="120" y2="110" stroke="rgba(36,91,67,.12)" stroke-width="1.2"/>
+          <line x1="250" y1="56" x2="280" y2="110" stroke="rgba(36,91,67,.12)" stroke-width="1.2"/>
+
+          <!-- 核心问题框 -->
+          <rect x="50" y="115" width="300" height="80" rx="12" fill="rgba(199,137,66,.08)" stroke="#c78942" stroke-width="2"/>
+          <text x="200" y="145" text-anchor="middle" font-size="13" fill="#8a957e" font-family="PingFang SC,sans-serif">核心只有一个问题</text>
+          <text x="200" y="172" text-anchor="middle" font-size="16" font-weight="700" fill="#c78942" font-family="PingFang SC,sans-serif">AI 强 10 倍、便宜 10 倍</text>
+
+          <!-- 分叉 -->
+          <line x1="140" y1="195" x2="100" y2="240" stroke="#245b43" stroke-width="1.5"/>
+          <line x1="260" y1="195" x2="300" y2="240" stroke="#a65338" stroke-width="1.5"/>
+
+          <!-- 左：变大 -->
+          <rect x="30" y="244" width="150" height="52" rx="10" fill="rgba(36,91,67,.06)" stroke="#245b43" stroke-width="1.5"/>
+          <text x="105" y="266" text-anchor="middle" font-size="15" font-weight="700" fill="#245b43" font-family="PingFang SC,sans-serif">生意变大</text>
+          <text x="105" y="286" text-anchor="middle" font-size="12" fill="#8a957e" font-family="PingFang SC,sans-serif">被增强 → 留下</text>
+
+          <!-- 右：消失 -->
+          <rect x="220" y="244" width="150" height="52" rx="10" fill="rgba(166,83,56,.05)" stroke="#a65338" stroke-width="1.2" stroke-dasharray="4 3"/>
+          <text x="295" y="266" text-anchor="middle" font-size="15" font-weight="700" fill="#a65338" font-family="PingFang SC,sans-serif">生意消失</text>
+          <text x="295" y="286" text-anchor="middle" font-size="12" fill="#8a957e" font-family="PingFang SC,sans-serif">被消化 → 淘汰</text>
+
+          <!-- 箭头到 9 家 -->
+          <defs><marker id="arrf" markerWidth="8" markerHeight="6" refX="4" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#c78942"/></marker></defs>
+          <line x1="105" y1="296" x2="200" y2="338" stroke="#c78942" stroke-width="2" marker-end="url(#arrf)"/>
+
+          <!-- 9家 -->
+          <rect x="130" y="344" width="140" height="40" rx="8" fill="rgba(199,137,66,.08)" stroke="#c78942" stroke-width="1.5"/>
+          <text x="200" y="370" text-anchor="middle" font-size="16" font-weight="700" fill="#c78942" font-family="Noto Serif SC,Songti SC,serif">9 家</text>
+        </svg>
+      </div>
+      <div class="lr-right">
+        <div class="big-q">怎么从上百家里，选出这 9 家？</div>
+        <div class="divider"></div>
+        <div class="personal">
+          <p>尺子太多，选不出来<br>最后我们把所有标准收敛成<em>一个问题</em>：</p>
+          <p style="font-size:1.05em"><span class="hl">如果 AI 再强 10 倍、便宜 10 倍<br>这门生意是变大，还是消失？</span></p>
+          <div class="divider"></div>
+          <p>被增强的留下，被消化的淘汰</p>
+          <p><em>这个标准不只适用于企业——对个人也一样</em></p>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ 第 11 页：升华（三栏收束） ═══ -->
+  <div class="slide content-slide" data-i="11">
+    <div class="strip-bar"><svg class="ministrip" viewBox="0 0 860 52"></svg></div>
+    <div class="body" style="overflow-y:auto;align-items:flex-start;padding-top:16px">
+      <div class="page-inner" style="max-width:920px">
+        <div class="big-q">不只是企业，也是个人</div>
+        <div class="divider"></div>
+
+        <!-- 三栏：研究员工种 -->
+        <div style="display:flex;gap:14px;margin-bottom:0">
+          <div style="flex:1;background:rgba(36,91,67,.04);border:1px solid rgba(36,91,67,.12);border-radius:10px;padding:14px 16px">
+            <div style="font:700 17px 'PingFang SC',sans-serif;color:#245b43;margin-bottom:8px;text-align:center">数据研究员</div>
+            <p style="font:400 15px/1.7 'PingFang SC',sans-serif;color:#24382c;margin:0 0 3px">· 数据采集与清洗</p>
+            <p style="font:400 15px/1.7 'PingFang SC',sans-serif;color:#24382c;margin:0 0 3px">· 建模与统计分析</p>
+            <p style="font:400 15px/1.7 'PingFang SC',sans-serif;color:#24382c;margin:0 0 8px">· 量化策略与回测</p>
+            <div style="font:400 14px 'PingFang SC',sans-serif;color:#8a957e;border-top:1px solid rgba(36,91,67,.08);padding-top:6px;text-align:center">壁垒：工具与技术</div>
+          </div>
+          <div style="flex:1;background:rgba(36,91,67,.04);border:1px solid rgba(36,91,67,.12);border-radius:10px;padding:14px 16px">
+            <div style="font:700 17px 'PingFang SC',sans-serif;color:#245b43;margin-bottom:8px;text-align:center">行业研究员</div>
+            <p style="font:400 15px/1.7 'PingFang SC',sans-serif;color:#24382c;margin:0 0 3px">· 行业跟踪与覆盖</p>
+            <p style="font:400 15px/1.7 'PingFang SC',sans-serif;color:#24382c;margin:0 0 3px">· 深度报告撰写</p>
+            <p style="font:400 15px/1.7 'PingFang SC',sans-serif;color:#24382c;margin:0 0 8px">· 专家网络与调研</p>
+            <div style="font:400 14px 'PingFang SC',sans-serif;color:#8a957e;border-top:1px solid rgba(36,91,67,.08);padding-top:6px;text-align:center">壁垒：信息与人脉</div>
+          </div>
+          <div style="flex:1;background:rgba(36,91,67,.04);border:1px solid rgba(36,91,67,.12);border-radius:10px;padding:14px 16px">
+            <div style="font:700 17px 'PingFang SC',sans-serif;color:#245b43;margin-bottom:8px;text-align:center">项目研究员</div>
+            <p style="font:400 15px/1.7 'PingFang SC',sans-serif;color:#24382c;margin:0 0 3px">· 尽职调查与访谈</p>
+            <p style="font:400 15px/1.7 'PingFang SC',sans-serif;color:#24382c;margin:0 0 3px">· 财务分析与估值</p>
+            <p style="font:400 15px/1.7 'PingFang SC',sans-serif;color:#24382c;margin:0 0 8px">· 风险评估与决策</p>
+            <div style="font:400 14px 'PingFang SC',sans-serif;color:#8a957e;border-top:1px solid rgba(36,91,67,.08);padding-top:6px;text-align:center">壁垒：经验与直觉</div>
+          </div>
+        </div>
+
+        <!-- 收束：AI 打破壁垒 -->
+        <svg viewBox="0 0 920 90" style="width:100%;margin:0" xmlns="http://www.w3.org/2000/svg">
+          <line x1="150" y1="2" x2="460" y2="38" stroke="rgba(199,137,66,.25)" stroke-width="1.5"/>
+          <line x1="460" y1="2" x2="460" y2="38" stroke="rgba(199,137,66,.25)" stroke-width="1.5"/>
+          <line x1="770" y1="2" x2="460" y2="38" stroke="rgba(199,137,66,.25)" stroke-width="1.5"/>
+          <rect x="348" y="32" width="224" height="28" rx="6" fill="#c78942"/>
+          <text x="460" y="51" text-anchor="middle" font-size="13" font-weight="700" fill="#f7f2e7" font-family="PingFang SC,sans-serif">AI 打破所有工种壁垒</text>
+          <defs><marker id="arr3" markerWidth="8" markerHeight="6" refX="4" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#245b43"/></marker></defs>
+          <line x1="460" y1="60" x2="460" y2="86" stroke="#245b43" stroke-width="2" marker-end="url(#arr3)"/>
+        </svg>
+
+        <!-- 本质 -->
+        <div style="text-align:center;padding:2px 0 14px">
+          <div style="display:inline-block;background:rgba(36,91,67,.06);border:1.5px solid #245b43;border-radius:10px;padding:12px 32px">
+            <div style="font:700 20px 'Noto Serif SC',serif;color:#245b43;margin-bottom:2px">回到最本质的工作</div>
+            <div style="font:600 18px 'PingFang SC',sans-serif;color:#c78942">学习能力 × 解决问题</div>
+          </div>
+        </div>
+
+        <!-- 结语 -->
+        <div class="personal" style="text-align:center;max-width:620px;margin:0 auto">
+          <p>还沉迷在某个工种的技巧里——<span class="hl">迟早会被 AI 取代</span><br>这是事实</p>
+          <p><em>实事求是，客观求变</em>：主动"蒸馏"自己</p>
+          <p>把能外包的交出去，扩展能力边界<br>时间和精力，留给最本质的问题：<br><span class="hl">能不能快速学习？能不能真正解决问题？</span></p>
+          <div class="divider" style="margin:14px auto"></div>
+          <p style="font:400 clamp(15px,1.6vw,17px)/1.9 'Noto Serif SC',serif;color:#24382c"><em>"革自己命的人最好是自己，<br>至少下手知道轻重"</em></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══ 第 12 页：品味与主观能动性（点击展开） ═══ -->
+  <div class="slide content-slide" data-i="12">
+    <div class="strip-bar"><svg class="ministrip" viewBox="0 0 860 52"></svg></div>
+    <div class="body"><div class="lr-layout">
+      <div class="lr-left">
+        <svg viewBox="0 0 400 380" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="190" r="6" fill="#245b43"/>
+          <text x="18" y="194" text-anchor="end" font-size="11" font-weight="600" fill="#245b43" font-family="PingFang SC,sans-serif">你</text>
+          <line x1="46" y1="190" x2="90" y2="190" stroke="rgba(36,91,67,.15)" stroke-width="1.2"/>
+          <circle cx="90" cy="190" r="3" fill="rgba(36,91,67,.2)"/>
+          <line x1="93" y1="188" x2="150" y2="130" stroke="rgba(138,149,126,.12)" stroke-width="1"/>
+          <line x1="93" y1="192" x2="150" y2="250" stroke="rgba(138,149,126,.12)" stroke-width="1"/>
+          <line x1="93" y1="190" x2="150" y2="190" stroke="#c78942" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="150" cy="130" r="2.5" fill="rgba(138,149,126,.15)"/>
+          <circle cx="150" cy="250" r="2.5" fill="rgba(138,149,126,.15)"/>
+          <circle cx="150" cy="190" r="3" fill="#c78942"/>
+          <line x1="152" y1="128" x2="200" y2="80" stroke="rgba(138,149,126,.08)" stroke-width=".8"/>
+          <line x1="152" y1="132" x2="200" y2="150" stroke="rgba(138,149,126,.08)" stroke-width=".8"/>
+          <line x1="152" y1="248" x2="200" y2="220" stroke="rgba(138,149,126,.08)" stroke-width=".8"/>
+          <line x1="152" y1="252" x2="200" y2="300" stroke="rgba(138,149,126,.08)" stroke-width=".8"/>
+          <text x="200" y="78" font-size="10" fill="rgba(166,83,56,.3)" font-family="PingFang SC,sans-serif">追热点</text>
+          <text x="200" y="152" font-size="10" fill="rgba(166,83,56,.3)" font-family="PingFang SC,sans-serif">跟风</text>
+          <text x="200" y="222" font-size="10" fill="rgba(166,83,56,.3)" font-family="PingFang SC,sans-serif">犹豫</text>
+          <text x="200" y="302" font-size="10" fill="rgba(166,83,56,.3)" font-family="PingFang SC,sans-serif">放弃</text>
+          <line x1="153" y1="190" x2="220" y2="190" stroke="#c78942" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="220" cy="190" r="3" fill="#c78942"/>
+          <line x1="222" y1="188" x2="270" y2="150" stroke="rgba(138,149,126,.08)" stroke-width=".8"/>
+          <line x1="222" y1="192" x2="270" y2="230" stroke="rgba(138,149,126,.08)" stroke-width=".8"/>
+          <text x="272" y="152" font-size="10" fill="rgba(166,83,56,.3)" font-family="PingFang SC,sans-serif">短视</text>
+          <text x="272" y="232" font-size="10" fill="rgba(166,83,56,.3)" font-family="PingFang SC,sans-serif">从众</text>
+          <line x1="223" y1="190" x2="300" y2="190" stroke="#c78942" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="300" cy="190" r="3" fill="#c78942"/>
+          <line x1="303" y1="190" x2="360" y2="190" stroke="#c78942" stroke-width="2.5" stroke-linecap="round" filter="url(#glow)"/>
+          <circle cx="365" cy="190" r="8" fill="rgba(199,137,66,.15)"/>
+          <circle cx="365" cy="190" r="4.5" fill="#c78942">
+            <animate attributeName="r" values="4;6;4" dur="2.5s" repeatCount="indefinite"/>
+          </circle>
+          <text x="382" y="194" font-size="12" font-weight="600" fill="#c78942" font-family="PingFang SC,sans-serif">终局</text>
+          <rect x="40" y="320" width="320" height="40" rx="8" fill="rgba(199,137,66,.06)" stroke="rgba(199,137,66,.2)" stroke-width="1"/>
+          <text x="200" y="344" text-anchor="middle" font-size="13" font-weight="600" fill="#c78942" font-family="PingFang SC,sans-serif">每个路口都选向同一个方向——这就是品味</text>
+        </svg>
+      </div>
+      <div class="lr-right" id="taste-right">
+        <div class="big-q">你想去哪里，你想怎么去</div>
+        <div class="divider"></div>
+        <div class="personal" style="margin-bottom:6px">
+          <p>AI 能帮你执行一切<br>但<em>往哪走</em>，只能你自己定</p>
+        </div>
+        <div class="taste-card" style="opacity:0;transform:translateY(8px);transition:all .4s ease;margin-top:12px;padding:12px 16px;background:rgba(199,137,66,.06);border:1px solid rgba(199,137,66,.2);border-radius:8px">
+          <div style="font:700 17px 'PingFang SC',sans-serif;color:#c78942;margin-bottom:4px">品味</div>
+          <span style="font:400 clamp(15px,1.7vw,18px)/1.7 'PingFang SC',sans-serif;color:#24382c">在诸多可能的方向中，反复选向同一个终局<br>不是审美，是方向感</span>
+        </div>
+        <div class="taste-card" style="opacity:0;transform:translateY(8px);transition:all .4s ease;margin-top:10px;padding:12px 16px;background:rgba(36,91,67,.05);border:1px solid rgba(36,91,67,.15);border-radius:8px">
+          <div style="font:700 17px 'PingFang SC',sans-serif;color:#245b43;margin-bottom:4px">主观能动性</div>
+          <span style="font:400 clamp(15px,1.7vw,18px)/1.7 'PingFang SC',sans-serif;color:#24382c">你想不想做这件事？选择什么路径去做？<br>AI 不会替你决定要不要出发</span>
+        </div>
+        <div class="taste-card" style="opacity:0;transform:translateY(8px);transition:all .4s ease;margin-top:10px;padding:12px 16px;background:rgba(36,91,67,.04);border:1px solid rgba(36,91,67,.1);border-radius:8px">
+          <span style="font:400 clamp(15px,1.7vw,18px)/1.7 'PingFang SC',sans-serif;color:#24382c"><em style="font-style:normal;color:#245b43;font-weight:600">对人如此，对企业也如此</em><br>接下来看看企业层面——同一个问题，不同的答案</span>
+        </div>
+        <div id="taste-hint" style="margin-top:14px;font:300 11px 'PingFang SC',sans-serif;color:rgba(138,149,126,.4);text-align:center;letter-spacing:.08em;transition:opacity .3s">点击继续</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ 第 13 页：护城河（点击轮播） ═══ -->
+  <div class="slide content-slide" data-i="13">
+    <div class="strip-bar"><svg class="ministrip" viewBox="0 0 860 52"></svg></div>
+    <div class="body" style="padding:0;overflow:hidden">
+      <div style="display:flex;height:100%">
+        <div style="flex:0 0 50%;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(36,91,67,.02)">
+          <img id="moat-img" src="assets/fde-journey-endogenous-logic-v2.jpg" alt="" style="width:100%;border-radius:10px;border:1px solid rgba(36,56,44,.08);box-shadow:0 2px 16px rgba(36,56,44,.06);transition:opacity .3s">
+        </div>
+        <div id="moat-right" style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:24px 5vw 24px 28px;cursor:pointer">
+          <div class="big-q" style="font-size:clamp(18px,2.4vw,26px);margin-bottom:12px">AI 时代什么变得越来越重要？</div>
+          <div class="personal" style="margin-bottom:16px;font-size:clamp(15px,1.7vw,18px)">
+            <p>AI 把执行成本降到无限低——做事变便宜了<br><span class="hl">做事以外的东西变贵了</span></p>
+          </div>
+          <div id="moat-card" style="padding:16px 20px;background:rgba(36,91,67,.05);border:1.5px solid rgba(36,91,67,.15);border-radius:10px;transition:opacity .3s">
+            <div id="moat-title" style="font:700 clamp(19px,2.2vw,24px)/1.4 'Noto Serif SC',serif;color:#245b43;margin-bottom:6px">数据及其内生逻辑</div>
+            <div id="moat-text" style="font:400 clamp(15px,1.7vw,18px)/1.8 'PingFang SC',sans-serif;color:#24382c">模型越商品化，所有人用的 AI 都一样聪明<br>区分你的是你喂给 AI 的数据——和数据之间的因果逻辑</div>
+          </div>
+          <div style="display:flex;gap:8px;justify-content:center;margin-top:18px">
+            <span class="moat-dot" style="width:8px;height:8px;border-radius:50%;background:#c78942;border:1.5px solid #c78942;transition:all .3s"></span>
+            <span class="moat-dot" style="width:8px;height:8px;border-radius:50%;background:transparent;border:1.5px solid #8a957e;transition:all .3s"></span>
+            <span class="moat-dot" style="width:8px;height:8px;border-radius:50%;background:transparent;border:1.5px solid #8a957e;transition:all .3s"></span>
+            <span class="moat-dot" style="width:8px;height:8px;border-radius:50%;background:transparent;border:1.5px solid #8a957e;transition:all .3s"></span>
+            <span class="moat-dot" style="width:8px;height:8px;border-radius:50%;background:transparent;border:1.5px solid #8a957e;transition:all .3s"></span>
+          </div>
+          <div id="moat-hint" style="margin-top:8px;font:300 11px 'PingFang SC',sans-serif;color:rgba(138,149,126,.4);text-align:center;letter-spacing:.08em;transition:opacity .3s">点击切换下一个</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 第 14 页：共识（左图右文） ═══ -->
+  <div class="slide content-slide" data-i="14">
+    <div class="strip-bar"><svg class="ministrip" viewBox="0 0 860 52"></svg></div>
+    <div class="body"><div class="lr-layout">
+      <div class="lr-left">
+        <svg viewBox="0 0 400 420" xmlns="http://www.w3.org/2000/svg">
+          <text x="200" y="20" text-anchor="middle" font-size="12" fill="#8a957e" font-family="PingFang SC,sans-serif" letter-spacing=".08em">研究假设</text>
+          <rect x="20" y="38" width="165" height="100" rx="10" fill="rgba(36,91,67,.05)" stroke="#245b43" stroke-width="1.5"/>
+          <text x="103" y="62" text-anchor="middle" font-size="11" font-weight="600" fill="#8a957e" font-family="PingFang SC,sans-serif">共识一</text>
+          <line x1="63" y1="70" x2="143" y2="70" stroke="rgba(36,91,67,.1)" stroke-width="1"/>
+          <text x="103" y="94" text-anchor="middle" font-size="15" font-weight="700" fill="#245b43" font-family="PingFang SC,sans-serif">AI 持续变强</text>
+          <text x="103" y="116" text-anchor="middle" font-size="15" font-weight="700" fill="#245b43" font-family="PingFang SC,sans-serif">持续变便宜</text>
+          <rect x="215" y="38" width="165" height="100" rx="10" fill="rgba(199,137,66,.04)" stroke="#c78942" stroke-width="1.5"/>
+          <text x="298" y="62" text-anchor="middle" font-size="11" font-weight="600" fill="#c78942" font-family="PingFang SC,sans-serif">共识二</text>
+          <line x1="258" y1="70" x2="338" y2="70" stroke="rgba(199,137,66,.15)" stroke-width="1"/>
+          <text x="298" y="94" text-anchor="middle" font-size="15" font-weight="700" fill="#245b43" font-family="PingFang SC,sans-serif">Agent 大规模</text>
+          <text x="298" y="116" text-anchor="middle" font-size="15" font-weight="700" fill="#245b43" font-family="PingFang SC,sans-serif">进入真实工作</text>
+          <line x1="103" y1="138" x2="200" y2="200" stroke="rgba(199,137,66,.2)" stroke-width="1.5"/>
+          <line x1="298" y1="138" x2="200" y2="200" stroke="rgba(199,137,66,.2)" stroke-width="1.5"/>
+          <circle cx="200" cy="200" r="5" fill="rgba(199,137,66,.15)"/>
+          <circle cx="200" cy="200" r="2.5" fill="#c78942"/>
+          <defs><marker id="arrc" markerWidth="8" markerHeight="6" refX="4" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#c78942"/></marker></defs>
+          <line x1="200" y1="205" x2="200" y2="242" stroke="#c78942" stroke-width="2" marker-end="url(#arrc)"/>
+          <rect x="60" y="250" width="280" height="65" rx="10" fill="rgba(199,137,66,.08)" stroke="#c78942" stroke-width="2"/>
+          <text x="200" y="276" text-anchor="middle" font-size="13" fill="#c78942" font-family="PingFang SC,sans-serif">研究重心和投资重心</text>
+          <text x="200" y="302" text-anchor="middle" font-size="19" font-weight="700" fill="#c78942" font-family="Noto Serif SC,Songti SC,serif">从「造」→「用」</text>
+          <line x1="200" y1="315" x2="200" y2="355" stroke="rgba(199,137,66,.3)" stroke-width="1.5" stroke-dasharray="5 3"/>
+          <rect x="90" y="360" width="220" height="42" rx="8" fill="rgba(199,137,66,.04)" stroke="rgba(199,137,66,.12)" stroke-width="1"/>
+          <text x="200" y="386" text-anchor="middle" font-size="13" font-weight="600" fill="rgba(199,137,66,.35)" font-family="PingFang SC,sans-serif">这 9 家，全在「用」这一侧</text>
+        </svg>
+      </div>
+      <div class="lr-right">
+        <div class="big-q">后面的推导，站在什么上面？</div>
+        <div class="divider"></div>
+        <div class="personal">
+          <p>后面所有推导都站在两个前提上</p>
+          <p>不要求被证明，但需要我们先达成共识<br>如果不认为这两件事会发生——<br>后面的 9 家就没有讨论的基础</p>
+        </div>
+        <div style="margin-top:14px;padding:14px 18px;background:rgba(36,91,67,.05);border:1px solid rgba(36,91,67,.15);border-radius:8px">
+          <div style="font:700 17px 'PingFang SC',sans-serif;color:#245b43;margin-bottom:4px">AI 会持续变强、变便宜</div>
+          <span style="font:400 clamp(15px,1.7vw,18px)/1.7 'PingFang SC',sans-serif;color:#24382c">模型能力已经跨过「够用」的门槛<br>使用成本还在继续下降<br>这一条应该不需要太多论证</span>
+        </div>
+        <div style="margin-top:10px;padding:14px 18px;background:rgba(199,137,66,.06);border:1px solid rgba(199,137,66,.2);border-radius:8px">
+          <div style="font:700 17px 'PingFang SC',sans-serif;color:#c78942;margin-bottom:4px">Agent 会大规模进入真实工作</div>
+          <span style="font:400 clamp(15px,1.7vw,18px)/1.7 'PingFang SC',sans-serif;color:#24382c">越来越多的工作会被交出去<br>走进千行百业、走进千家万户<br>不只是对话，而是<em style="font-style:normal;color:#245b43;font-weight:600">接手真实的生产和交付</em></span>
+        </div>
+        <div style="margin-top:14px;padding:12px 16px;background:rgba(199,137,66,.04);border-left:3px solid #c78942;border-radius:0 8px 8px 0">
+          <span style="font:400 clamp(15px,1.7vw,18px)/1.8 'PingFang SC',sans-serif;color:#24382c">如果这两条成立 →<br>过去投的是上游：芯片、大模型、训练<br><em style="font-style:normal;color:#c78942;font-weight:600">接下来的 9 家，全部站在「用」这一侧</em></span>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ 第 15 页：收束·扣题（左图右文） ═══ -->
+  <div class="slide content-slide" data-i="15">
+    <div class="strip-bar"><svg class="ministrip" viewBox="0 0 860 52"></svg></div>
+    <div class="body" style="overflow-y:auto;align-items:flex-start;padding-top:20px"><div class="lr-layout" style="align-items:flex-start">
+      <div class="lr-left" style="flex:0 0 40%">
+        <svg viewBox="0 0 420 400" xmlns="http://www.w3.org/2000/svg">
+          <defs><filter id="ge"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+
+          <!-- 起点 -->
+          <circle cx="30" cy="200" r="8" fill="#245b43" opacity=".3"/>
+          <circle cx="30" cy="200" r="4" fill="#245b43"/>
+          <text x="8" y="204" text-anchor="end" font-size="12" font-weight="700" fill="#245b43" font-family="PingFang SC,sans-serif">我们</text>
+
+          <!-- 金色主干 -->
+          <path d="M34,200 Q65,198 100,200" stroke="#c78942" stroke-width="3" fill="none" stroke-linecap="round" filter="url(#ge)"/>
+          <path d="M100,200 Q140,196 185,198" stroke="#c78942" stroke-width="3" fill="none" stroke-linecap="round" filter="url(#ge)"/>
+          <path d="M185,198 Q220,202 260,200" stroke="#c78942" stroke-width="3" fill="none" stroke-linecap="round" filter="url(#ge)"/>
+          <path d="M260,200 Q295,196 330,198" stroke="#c78942" stroke-width="3" fill="none" stroke-linecap="round" filter="url(#ge)"/>
+          <path d="M330,198 Q360,202 390,200" stroke="#c78942" stroke-width="3" fill="none" stroke-linecap="round" filter="url(#ge)"/>
+
+          <!-- 岔路1 (x=100) -->
+          <circle cx="100" cy="200" r="3" fill="#c78942"/>
+          <line x1="100" y1="200" x2="145" y2="120" stroke="rgba(166,83,56,.12)" stroke-width="1"/>
+          <line x1="145" y1="120" x2="178" y2="90" stroke="rgba(166,83,56,.07)" stroke-width=".7"/>
+          <text x="150" y="112" font-size="10" fill="rgba(166,83,56,.28)" font-family="PingFang SC,sans-serif">追热点</text>
+          <text x="181" y="86" font-size="9" fill="rgba(166,83,56,.18)" font-family="PingFang SC,sans-serif">造智能已炒</text>
+          <line x1="100" y1="200" x2="138" y2="278" stroke="rgba(166,83,56,.1)" stroke-width=".8"/>
+          <text x="141" y="286" font-size="10" fill="rgba(166,83,56,.25)" font-family="PingFang SC,sans-serif">共识赛道</text>
+
+          <!-- 岔路2 (x=185) -->
+          <circle cx="185" cy="198" r="3" fill="#c78942"/>
+          <line x1="185" y1="198" x2="225" y2="128" stroke="rgba(166,83,56,.12)" stroke-width="1"/>
+          <text x="228" y="124" font-size="10" fill="rgba(166,83,56,.28)" font-family="PingFang SC,sans-serif">赛道对≠标的对</text>
+          <line x1="185" y1="198" x2="215" y2="265" stroke="rgba(166,83,56,.08)" stroke-width=".7"/>
+          <text x="218" y="272" font-size="9" fill="rgba(166,83,56,.18)" font-family="PingFang SC,sans-serif">看好方向就够了？</text>
+
+          <!-- 岔路3 (x=260) -->
+          <circle cx="260" cy="200" r="3" fill="#c78942"/>
+          <line x1="260" y1="200" x2="298" y2="288" stroke="rgba(166,83,56,.12)" stroke-width="1"/>
+          <line x1="298" y1="288" x2="332" y2="316" stroke="rgba(166,83,56,.07)" stroke-width=".7"/>
+          <text x="301" y="296" font-size="10" fill="rgba(166,83,56,.28)" font-family="PingFang SC,sans-serif">随便交差</text>
+          <text x="335" y="322" font-size="9" fill="rgba(166,83,56,.18)" font-family="PingFang SC,sans-serif">凑 9 家</text>
+          <line x1="260" y1="200" x2="293" y2="138" stroke="rgba(166,83,56,.08)" stroke-width=".7"/>
+          <text x="296" y="134" font-size="9" fill="rgba(166,83,56,.18)" font-family="PingFang SC,sans-serif">过程产物</text>
+
+          <!-- 岔路4 (x=330) -->
+          <circle cx="330" cy="198" r="3" fill="#c78942"/>
+          <line x1="330" y1="198" x2="365" y2="135" stroke="rgba(166,83,56,.12)" stroke-width="1"/>
+          <text x="368" y="131" font-size="10" fill="rgba(166,83,56,.28)" font-family="PingFang SC,sans-serif">被消化的</text>
+          <line x1="330" y1="198" x2="362" y2="262" stroke="rgba(166,83,56,.08)" stroke-width=".7"/>
+          <text x="365" y="269" font-size="9" fill="rgba(166,83,56,.18)" font-family="PingFang SC,sans-serif">概念故事</text>
+
+          <!-- 终点：9家 -->
+          <circle cx="395" cy="200" r="10" fill="rgba(199,137,66,.15)"/>
+          <circle cx="395" cy="200" r="5" fill="#c78942" filter="url(#ge)">
+            <animate attributeName="r" values="4;7;4" dur="2.5s" repeatCount="indefinite"/>
+          </circle>
+          <text x="395" y="226" text-anchor="middle" font-size="15" font-weight="700" fill="#c78942" font-family="Noto Serif SC,Songti SC,serif">9 家</text>
+
+          <!-- 底部 -->
+          <rect x="55" y="348" width="310" height="36" rx="8" fill="rgba(199,137,66,.06)" stroke="rgba(199,137,66,.18)" stroke-width="1"/>
+          <text x="210" y="371" text-anchor="middle" font-size="13" font-weight="600" fill="#c78942" font-family="PingFang SC,sans-serif">每一步说「不」，就是在找主干</text>
+        </svg>
+      </div>
+      <div class="lr-right">
+        <div class="big-q">一路说「不」，最后剩下什么？</div>
+        <div class="divider"></div>
+        <div class="personal">
+          <p>一开始面对的是成百上千条路</p>
+          <p>一步一步走过来，每一步都在选<br><em>说「不」比说「是」更多</em></p>
+          <div class="divider"></div>
+          <p>不追共识赛道，不因为看好方向就觉得标的对<br>不为交差随便挑，不留被消化的中间工序<br>不选只有故事没有护城河的</p>
+          <div class="divider"></div>
+          <p>每砍掉一条枝丫<br>离主干就近一步</p>
+        </div>
+        <div style="margin-top:16px;padding:14px 20px;background:rgba(199,137,66,.06);border:1.5px solid rgba(199,137,66,.2);border-radius:10px;text-align:center">
+          <div style="font:700 clamp(19px,2.2vw,24px)/1.4 'Noto Serif SC',serif;color:#c78942">三个市场，9 家企业</div>
+          <div style="font:400 clamp(15px,1.7vw,18px)/1.7 'PingFang SC',sans-serif;color:#24382c;margin-top:4px">接下来，逐家看</div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+</div>
+
+<div id="nav">
+  <button class="active" data-i="0"></button>
+  <button data-i="1"></button>
+  <button data-i="2"></button>
+  <button data-i="3"></button>
+  <button data-i="4"></button>
+  <button data-i="5"></button>
+  <button data-i="6"></button>
+  <button data-i="7"></button>
+  <button data-i="8"></button>
+  <button data-i="9"></button>
+  <button data-i="10"></button>
+  <button data-i="11"></button>
+  <button data-i="12"></button>
+  <button data-i="13"></button>
+  <button data-i="14"></button>
+  <button data-i="15"></button>
+</div>
+
+<div id="lightbox"><img id="lb-img" src="" alt=""></div>
+
+<script>
+(function(){
+  // ══════════════════════════════════════
+  //  分叉树数据
+  // ══════════════════════════════════════
+
+  // ══════════════════════════════════════
+  //  分叉树：只有岔路和陷阱，没有正确路径
+  // ══════════════════════════════════════
+
+  const ROOT = {x:80, y:300};
+
+  // 主干分叉节点（起点往右展开）
+  const FORKS = [
+    {x:200, y:300},
+    {x:340, y:260},
+    {x:340, y:380},
+    {x:500, y:180},
+    {x:500, y:320},
+    {x:500, y:450},
+    {x:660, y:120},
+    {x:660, y:250},
+    {x:660, y:370},
+    {x:660, y:500},
+    {x:820, y:200},
+    {x:820, y:350},
+    {x:820, y:460},
+  ];
+
+  // 陷阱终点（放大、突出的错误终点）
+  const TRAPS = [
+    {x:920, y:52,  label:'追别人炒过的 AI',       size:15, bold:true},
+    {x:950, y:130, label:'思维定式',               size:13, bold:false},
+    {x:1050,y:90,  label:'造智能 · 共识赛道',      size:14, bold:true},
+    {x:880, y:540, label:'随便挑 9 家交差',         size:15, bold:true},
+    {x:1020,y:480, label:'为了交差',               size:12, bold:false},
+    {x:1060,y:540, label:'应付了事',               size:13, bold:false},
+    {x:1000,y:200, label:'过程产物',               size:16, bold:true},
+    {x:1080,y:260, label:'思考不清楚',             size:12, bold:false},
+    {x:960, y:310, label:'概念股 · 只看故事',       size:14, bold:true},
+    {x:1060,y:370, label:'赛道对 ≠ 标的对',        size:15, bold:true},
+    {x:1000,y:430, label:'中间商被 AI 取代',       size:13, bold:true},
+    {x:720, y:55,  label:'大厂已是共识',           size:11, bold:false},
+    {x:570, y:540, label:'量涨价跌',               size:12, bold:false},
+    {x:440, y:120, label:'泡沫？',                 size:13, bold:false},
+    {x:780, y:550, label:'把炒作当趋势',           size:12, bold:false},
+    {x:1100,y:160, label:'只选贵的',               size:11, bold:false},
+  ];
+
+  // 所有线段（从某点到某点）
+  const BRANCHES = [
+    // 从起点分叉
+    [ROOT, FORKS[0]],
+    // 从第一个节点分叉
+    [FORKS[0], FORKS[1]],
+    [FORKS[0], FORKS[2]],
+    // 继续分叉
+    [FORKS[1], FORKS[3]],
+    [FORKS[1], FORKS[4]],
+    [FORKS[2], FORKS[5]],
+    [FORKS[2], {x:440, y:440}],
+    // 再分叉
+    [FORKS[3], FORKS[6]],
+    [FORKS[3], {x:600, y:200}],
+    [FORKS[4], FORKS[7]],
+    [FORKS[4], FORKS[8]],
+    [FORKS[5], FORKS[9]],
+    [FORKS[5], {x:600, y:530}],
+    // 末端分叉
+    [FORKS[6], {x:780, y:60}],
+    [FORKS[6], {x:760, y:150}],
+    [FORKS[7], FORKS[10]],
+    [FORKS[7], {x:780, y:280}],
+    [FORKS[8], FORKS[11]],
+    [FORKS[8], FORKS[12]],
+    [FORKS[9], {x:780, y:530}],
+    [FORKS[9], {x:730, y:550}],
+    // 到陷阱终点
+    [{x:780,y:60},  TRAPS[0]],
+    [{x:760,y:150}, TRAPS[1]],
+    [TRAPS[0],      TRAPS[2]],
+    [FORKS[10],     TRAPS[6]],
+    [FORKS[10],     TRAPS[8]],
+    [TRAPS[6],      TRAPS[7]],
+    [FORKS[11],     TRAPS[9]],
+    [FORKS[11],     TRAPS[10]],
+    [FORKS[12],     TRAPS[3]],
+    [FORKS[12],     TRAPS[10]],
+    [{x:780,y:530}, TRAPS[3]],
+    [{x:780,y:530}, TRAPS[14]],
+    [TRAPS[3],      TRAPS[4]],
+    [TRAPS[3],      TRAPS[5]],
+    [{x:600,y:200}, TRAPS[11]],
+    [{x:600,y:530}, TRAPS[12]],
+    [{x:440,y:440}, {x:540,y:500}],
+    [FORKS[3],      TRAPS[13]],
+    [TRAPS[8],      TRAPS[15]],
+  ];
+
+  function curvePath(a, b){
+    const mx = (a.x+b.x)/2;
+    return `M${a.x},${a.y} C${mx},${a.y} ${mx},${b.y} ${b.x},${b.y}`;
+  }
+
+  const treeSvg = document.getElementById('tree');
+  let html = `<defs>
+    <filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>`;
+
+  // 画所有分支线条
+  BRANCHES.forEach(([a,b])=>{
+    html += `<path d="${curvePath(a,b)}" fill="none" stroke="rgba(36,91,67,.16)" stroke-width="1.3" stroke-linecap="round"/>`;
+  });
+
+  // 画分叉节点
+  FORKS.forEach(f=>{
+    html += `<circle cx="${f.x}" cy="${f.y}" r="3" fill="rgba(36,91,67,.2)"/>`;
+  });
+
+  // 画陷阱终点（放大突出）
+  TRAPS.forEach(t=>{
+    const fw = t.bold ? '700' : '400';
+    const op = t.bold ? .55 : .35;
+    html += `<circle cx="${t.x}" cy="${t.y}" r="${t.bold?4:2.5}" fill="rgba(166,83,56,${t.bold?.35:.2})"/>`;
+    const ty = t.y < 300 ? t.y - (t.bold?12:8) : t.y + (t.bold?18:14);
+    html += `<text x="${t.x}" y="${ty}" text-anchor="middle" font-size="${t.size}" font-weight="${fw}" fill="rgba(166,83,56,${op})" font-family="PingFang SC,sans-serif">${t.label}</text>`;
+  });
+
+  // 起点标记
+  html += `<circle cx="${ROOT.x}" cy="${ROOT.y}" r="10" fill="#245b43" opacity=".35"/>`;
+  html += `<circle cx="${ROOT.x}" cy="${ROOT.y}" r="5" fill="#245b43"/>`;
+  html += `<text x="${ROOT.x-20}" y="${ROOT.y+6}" text-anchor="end" font-size="18" font-weight="700" fill="#245b43" font-family="Noto Serif SC,Songti SC,serif">我们</text>`;
+
+  // 终点标记（极淡，几乎看不见，只有一个问号）
+  html += `<text x="1120" y="305" text-anchor="middle" font-size="20" font-weight="300" fill="rgba(199,137,66,.15)" font-family="Noto Serif SC,Songti SC,serif">？</text>`;
+
+  treeSvg.innerHTML = html;
+
+  // ══════════════════════════════════════
+  //  顶部缩略路径条
+  // ══════════════════════════════════════
+  const TOTAL_STEPS = 15; // 总步数（后续加页时改这个）
+
+  function buildMiniStrip(svg, litUpTo){
+    const W=860, H=52, pad=40;
+    const N=TOTAL_STEPS;
+    const pts=[];
+    for(let i=0;i<N;i++) pts.push({x:pad+i*((W-pad*2)/(N-1)), y:H/2+[-2,3,-1,2,-3,0,1,-2,2,-1,2,-2,3,-1,2][i]});
+
+    let s=`<defs><filter id="mg"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>`;
+    // 小错误分支装饰
+    for(let i=0;i<N-1;i++){
+      const p=pts[i];
+      s+=`<line x1="${p.x}" y1="${p.y}" x2="${p.x+30}" y2="${p.y-14}" stroke="rgba(36,91,67,.06)" stroke-width=".5"/>`;
+      s+=`<line x1="${p.x}" y1="${p.y}" x2="${p.x+25}" y2="${p.y+12}" stroke="rgba(36,91,67,.06)" stroke-width=".5"/>`;
+    }
+    // 路径段
+    for(let i=0;i<N-1;i++){
+      const a=pts[i], b=pts[i+1];
+      const mx=(a.x+b.x)/2;
+      const d=`M${a.x},${a.y} C${mx},${a.y} ${mx},${b.y} ${b.x},${b.y}`;
+      if(i<litUpTo){
+        s+=`<path d="${d}" fill="none" stroke="#c78942" stroke-width="2.5" stroke-linecap="round" filter="url(#mg)"/>`;
+        s+=`<circle cx="${a.x}" cy="${a.y}" r="3.5" fill="#c78942" filter="url(#mg)"/>`;
+        if(i===litUpTo-1) s+=`<circle cx="${b.x}" cy="${b.y}" r="4.5" fill="#c78942" filter="url(#mg)"><animate attributeName="r" values="3.5;5.5;3.5" dur="2s" repeatCount="indefinite"/></circle>`;
+      } else {
+        s+=`<path d="${d}" fill="none" stroke="rgba(36,91,67,.1)" stroke-width=".8" stroke-dasharray="3 2"/>`;
+        s+=`<circle cx="${a.x}" cy="${a.y}" r="2" fill="none" stroke="rgba(36,91,67,.12)" stroke-width=".8"/>`;
+      }
+    }
+    const last=pts[N-1];
+    if(litUpTo>=N-1) s+=`<circle cx="${last.x}" cy="${last.y}" r="4" fill="#c78942" filter="url(#mg)"/>`;
+    else s+=`<circle cx="${last.x}" cy="${last.y}" r="2" fill="none" stroke="rgba(36,91,67,.12)" stroke-width=".8"/>`;
+    s+=`<text x="20" y="${H/2+4}" text-anchor="end" font-size="10" font-weight="600" fill="#245b43" font-family="PingFang SC,sans-serif">我们</text>`;
+    const ec=litUpTo>=N-1?'#c78942':'#8a957e';
+    s+=`<text x="${W-18}" y="${H/2+4}" text-anchor="start" font-size="10" fill="${ec}" font-family="PingFang SC,sans-serif">9 家</text>`;
+    svg.innerHTML=s;
+  }
+
+  const ministrips = document.querySelectorAll('.ministrip');
+  ministrips.forEach((svg,i)=>{
+    buildMiniStrip(svg, i+1);
+  });
+
+  // ══════════════════════════════════════
+  //  翻页 + 路径点亮
+  // ══════════════════════════════════════
+  const slides=document.querySelectorAll('.slide');
+  const dots=document.querySelectorAll('#nav button');
+  let cur=0, busy=false;
+
+  function go(to){
+    if(to<0||to>=slides.length||to===cur||busy)return;
+    busy=true;
+    slides[cur].classList.remove('active');
+    dots[cur].classList.remove('active');
+
+    setTimeout(()=>{
+      slides[to].classList.add('active');
+      dots[to].classList.add('active');
+      cur=to;
+      busy=false;
+    },400);
+  }
+
+  document.addEventListener('keydown',e=>{
+    if(['ArrowRight','ArrowDown',' '].includes(e.key)){e.preventDefault();go(cur+1);}
+    if(['ArrowLeft','ArrowUp'].includes(e.key)){e.preventDefault();go(cur-1);}
+  });
+  let ty=0;
+  document.addEventListener('touchstart',e=>{ty=e.touches[0].clientY},{passive:true});
+  document.addEventListener('touchend',e=>{const d=ty-e.changedTouches[0].clientY;if(Math.abs(d)>40){d>0?go(cur+1):go(cur-1)}},{passive:true});
+  document.addEventListener('click',e=>{
+    if(e.target.closest('#nav')){const b=e.target.closest('button[data-i]');if(b)go(parseInt(b.dataset.i));return;}
+    if(e.target.closest('.body'))return;
+    go(cur+1);
+  });
+
+  // ── 步进式时间线 ──
+  (function(){
+    const TL_DATA = [
+      {when:'2026 年 4 月',title:'面对烈火',q:'AI 到底改变了什么？',pts:['Openclaw 是当下的 Roger Bannister 时刻，焚毁了人类思维限制','应对思路两个：向前试错，跟上变化；向后扎根，找到不变'],next:'我们要思考和应对的到底是什么？'},
+      {when:'2026 年 4 月',title:'硅基智能体的降临',q:'我们要思考和应对的到底是什么？',pts:['硅基智能体是人类第一次面对「会自己进化」的技术革命','今天围绕 AI 做优化的很多公司和产品，可能都是过程产物','一个新物种需要衣食住行——理解未来十年的一条主线'],next:'如果造智能有浪潮，什么是最被需要的？'},
+      {when:'深入衣与住',title:'HBM 与投研框架',q:'如果造智能有浪潮，什么是最被需要的？',pts:['算力行业解决「算得快」，HBM 解决「喂得上」','五个问题框架：什么阶段、钱流向哪、能否持续、谁在赚钱、我们怎么办','AI 正三角结构，说明还在铺基础设施阶段'],next:'AI 会对支付造成什么变革？',img:'assets/fde-journey-value-chain.jpg',imgAlt:'价值传导链：电力→算力→智力→能力'},
+      {when:'2026 年 5 月',title:'支付深度',q:'AI 会对支付造成什么变革？',pts:['交易的发起者不再是人','Visa、SWIFT、支付宝都隐含同一个前提：交易发起者是人','Agent 的交易特征天然逼近货币最终形态的天花板'],next:'AI 与区块链的关系，会怎么演变？'},
+      {when:'接着',title:'Crypto + AI',q:'AI 与区块链的关系，会怎么演变？',pts:['区块链的文化基调恰好是 Agent 最需要的接入方式','AI 正在吞噬软件吞噬的世界','所有以人为唯一主体的事物都值得重做一遍'],next:'市场有点过于狂热了，是否存在风险？'},
+      {when:'2026 年 6 月',title:'泡沫研究',q:'市场有点过于狂热了，是否存在风险？',pts:['以史为鉴：用互联网泡沫的第一性原理审视 AI','泡沫是分层的——真实需求和概念炒作要分开看'],next:'泡沫为什么存在？原理是什么？如何应对？'},
+      {when:'2026 年 6 月 22 日',title:'研究站',q:'泡沫为什么存在？原理是什么？如何应对？',pts:['以史为鉴，参考 5 次技术革命，存在非理性繁荣','生产率红利不来自技术本身，来自围绕技术重新设计的组织形态','人对新技术的反应从来没变过。制造危机的不是技术，是人的反应'],next:'造 AI 的算力是否平衡？中国因素的优势是什么？'},
+      {when:'2026 年 7 月',title:'供需研究和中国因素',q:'造 AI 的算力是否平衡？中国因素的优势是什么？',pts:['AI 供需整体倾向于平衡或过剩，偶尔局部紧张','英伟达的生意越做越大，但垄断难以持续','从电力-芯片-大模型，中国企业正在登上大舞台'],next:'时机对吗？接下来怎么办？'},
+      {when:'2026 年 8 月',title:'阶段性复盘',q:'时机对吗？接下来怎么办？',pts:['AI 仍存在非理性繁荣反转的风险，是对人反应过度的修正','AI 利润正从造 AI 向用 AI 的基建和应用层过渡迁移','Deepseek 是天时地利人和的项目，值得关注'],next:'说不够，需要体验和共创'},
+      {when:'2026 年 8 月中旬至今',title:'FDE',q:'说不够，需要体验和共创',pts:['AI 已阶段性够用，重点从造 AI 切到用 AI','变革存在阻碍：看不见→看不懂→看不起→来不及','想通过报销一起体验 AI 变革的困难与新形态的优势'],next:'下一个海力士是哪个企业？'},
+      {when:'2026 年 9 月',title:'春种夏耘秋收冬藏',q:'下一个海力士是哪个企业？',pts:['海力士是 2023 年春种，2026 年秋收——有什么企业是我们现在可以春种的？','如何找到最有潜力的 9 家企业'],next:'落到现在：从三个市场找出 9 家。'},
+    ];
+
+    const tl = document.getElementById('timeline');
+    if(!tl) return;
+
+    TL_DATA.forEach((s, i) => {
+      const el = document.createElement('div');
+      el.style.cssText = 'margin-bottom:22px';
+      el.innerHTML = `
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+          <span style="width:9px;height:9px;border-radius:50%;background:#245b43;flex:none;margin-left:-25px"></span>
+          <span style="font:400 13px 'PingFang SC',sans-serif;color:#8a957e;letter-spacing:.06em">${s.when}</span>
+        </div>
+        <div style="font:700 clamp(17px,2vw,21px)/1.35 'Noto Serif SC','Songti SC',serif;color:#245b43;margin-bottom:4px">${s.title}</div>
+        <div style="font:400 14px/1.6 'PingFang SC',sans-serif;color:#8a957e;margin-bottom:5px">${s.q}</div>
+        <ul style="margin:0 0 5px 14px;padding:0;list-style:none">${s.pts.map(p=>`<li style="font:400 15px/1.7 'PingFang SC',sans-serif;color:#24382c;margin-bottom:3px;position:relative;padding-left:12px"><span style="position:absolute;left:0;top:9px;width:5px;height:5px;border-radius:50%;background:#245b43"></span>${p}</li>`).join('')}</ul>
+        ${s.img ? `<img src="${s.img}" alt="${s.imgAlt||''}" style="width:100%;border-radius:5px;border:1px solid rgba(36,56,44,.08);margin:5px 0">` : ''}
+        <div style="font:400 13px/1.5 'PingFang SC',sans-serif;color:#c78942;margin-top:3px">→ ${s.next}</div>
+        ${i === TL_DATA.length - 1 ? `<div style="margin-top:10px;font:600 15px 'Noto Serif SC',serif;color:#c78942">这就是我们一起走到今天的路。</div>` : ''}
+      `;
+      tl.appendChild(el);
+    });
+  })();
+
+  // ── 品味页点击展开 ──
+  (function(){
+    const cards=document.querySelectorAll('.taste-card');
+    const hint=document.getElementById('taste-hint');
+    const panel=document.getElementById('taste-right');
+    let cur=0;
+    if(!panel||!cards.length)return;
+    panel.addEventListener('click',function(e){
+      e.stopPropagation();
+      if(cur>=cards.length)return;
+      cards[cur].style.opacity='1';cards[cur].style.transform='translateY(0)';
+      cur++;
+      if(cur>=cards.length&&hint)hint.style.opacity='0';
+    });
+  })();
+
+  // ── 护城河轮播 ──
+  (function(){
+    const MOATS=[
+      {img:'assets/fde-journey-endogenous-logic-v2.jpg',t:'数据及其内生逻辑',d:'模型越商品化，所有人用的 AI 都一样聪明<br>区分你的是你喂给 AI 的数据——和数据之间的因果逻辑'},
+      {img:'assets/fde-journey-deliver-result-v2.jpg',t:'交付结果',d:'AI 吃掉的是过程，留下的是结果<br>以前付钱买「有人帮你做」，以后付钱买「做完了」'},
+      {img:'assets/fde-journey-distribution-channel.jpg',t:'分发渠道',d:'生产成本趋近于零<br>瓶颈从「谁能做」变成「谁能让用户看到并选择」'},
+      {img:'assets/fde-journey-agentization-v3.jpg',t:'Agent 化',d:'你的产品能不能被 Agent 直接调用，本身就是护城河<br>API-first、机器可直接用——不选还需要人操作的竞品'},
+      {img:'assets/fde-journey-selective-transparency-v2.jpg',t:'隐私',d:'AI 越强，观察和推断越多——行为暴露越多<br>谁能做到选择性透明：该看的看、不该看的不看'}
+    ];
+    const img=document.getElementById('moat-img'),ti=document.getElementById('moat-title'),tx=document.getElementById('moat-text'),cd=document.getElementById('moat-card'),dots=document.querySelectorAll('.moat-dot'),hint=document.getElementById('moat-hint'),panel=document.getElementById('moat-right');
+    if(!img||!panel)return;
+    let cur=0,seen=new Set([0]);
+    function show(i){
+      const m=MOATS[i];
+      img.style.opacity='0';cd.style.opacity='0';
+      setTimeout(()=>{img.src=m.img;ti.textContent=m.t;tx.innerHTML=m.d;img.style.opacity='1';cd.style.opacity='1'},200);
+      dots.forEach((d,j)=>{d.style.background=j===i?'#c78942':'transparent';d.style.borderColor=j===i?'#c78942':'#8a957e'});
+    }
+    panel.addEventListener('click',function(e){
+      e.stopPropagation();
+      cur=(cur+1)%MOATS.length;seen.add(cur);show(cur);
+      if(seen.size>=MOATS.length&&hint)hint.style.opacity='0';
+    });
+  })();
+
+  // ── 态度页点击展开 ──
+  (function(){
+    const cards = document.querySelectorAll('.att-card');
+    const hint = document.getElementById('att-hint');
+    const panel = document.getElementById('att-right');
+    let attCur = 0;
+    if(!panel || !cards.length) return;
+    panel.addEventListener('click', function(e){
+      e.stopPropagation();
+      if(attCur >= cards.length) return;
+      cards[attCur].style.opacity = '1';
+      cards[attCur].style.transform = 'translateY(0)';
+      attCur++;
+      if(attCur >= cards.length && hint) hint.style.opacity = '0';
+    });
+  })();
+
+  // Aztec 复盘内容现在通过 iframe src 直接加载（不再用 fetch，避免 file:// 协议限制）
+
+  // ── 图片点击放大 ──
+  (function(){
+    var lb=document.getElementById('lightbox'),lbi=document.getElementById('lb-img');
+    if(!lb||!lbi)return;
+    lb.addEventListener('click',function(){lb.classList.remove('show')});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')lb.classList.remove('show')});
+    document.querySelectorAll('.slide img').forEach(function(img){
+      img.style.cursor='zoom-in';
+      img.addEventListener('click',function(e){
+        e.stopPropagation();
+        lbi.src=this.src;
+        lb.classList.add('show');
+      });
+    });
+  })();
+})();
+</script>
+</body>
+</html>
