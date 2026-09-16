@@ -5,23 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI非理性繁荣深度研究</title>
   <style>
-    :root{color-scheme:light;--ink:#171a16;--muted:#60675e;--line:#d9ddd3;--paper:#f6f3ec;--paper2:#ece8de;--green:#244f38;--blue:#243f63;--gold:#a76627}
+    :root{color-scheme:light;--ink:#171a16;--muted:#60675e;--line:#d9ddd3;--paper:#f6f3ec;--paper2:#ece8de;--green:#244f38;--blue:#243f63;--gold:#a76627;--rust:#7a4a1f}
     *{box-sizing:border-box}
     body{margin:0;min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC",sans-serif;color:var(--ink);background:radial-gradient(circle at 25% 15%,rgba(167,102,39,.14),transparent 34%),linear-gradient(135deg,var(--paper),var(--paper2));}
     main{min-height:100vh;display:flex;flex-direction:column;justify-content:center;width:min(1180px,calc(100% - 40px));margin:0 auto;padding:56px 0}
     .eyebrow{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:800}
     h1{margin:14px 0 10px;font-size:clamp(38px,6vw,76px);line-height:1.02;letter-spacing:0;font-weight:900}
     .lead{max-width:760px;margin:0 0 34px;color:var(--muted);font-size:18px;line-height:1.8}
-    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
     .choice-card{min-height:340px;display:flex;flex-direction:column;justify-content:flex-end;padding:30px;border:1px solid rgba(23,26,22,.14);border-radius:8px;text-decoration:none;color:inherit;background:rgba(255,255,255,.52);box-shadow:0 24px 70px rgba(30,35,26,.10);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
     .choice-card:hover{transform:translateY(-3px);box-shadow:0 30px 90px rgba(30,35,26,.16);border-color:rgba(23,26,22,.28)}
     .choice-card.ai{background:linear-gradient(145deg,rgba(255,255,255,.72),rgba(226,237,231,.74))}
     .choice-card.china{background:linear-gradient(145deg,rgba(255,255,255,.72),rgba(237,229,216,.78))}
+    .choice-card.fde{background:linear-gradient(145deg,rgba(255,255,255,.72),rgba(244,234,214,.82))}
     .kicker{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:850;color:var(--gold)}
     h2{margin:10px 0 12px;font-size:clamp(27px,3vw,42px);line-height:1.15;letter-spacing:0}
     p{margin:0;color:var(--muted);font-size:16px;line-height:1.75}
     .enter{margin-top:28px;font-weight:850;color:var(--green)}
     .china .enter{color:var(--blue)}
+    .fde .enter{color:var(--rust)}
     @media(max-width:760px){main{justify-content:flex-start;padding:36px 0}.grid{grid-template-columns:1fr}.choice-card{min-height:260px;padding:24px}.lead{font-size:16px}}
   </style>
 </head>
@@ -29,22 +31,26 @@
   <main>
     <div class="eyebrow">Research Map</div>
     <h1>AI非理性繁荣深度研究</h1>
-    <p class="lead">两条推导链并行阅读：一条从供需结构判断繁荣的基本盘，一条从中国变量观察产业链和护城河的重估。</p>
+    <p class="lead">三条研究线并行阅读：供需结构、中国变量，以及从探寻之旅走到方向优先九家。</p>
     <section class="grid" aria-label="研究入口">
       <a class="choice-card ai" href="ai-supply-demand.html">
-  <span class="kicker">Supply / Demand</span>
-  <h2>AI供需研究</h2>
-  <p>从训练成本、芯片产能、推理供给和真实需求出发，拆解 AI 繁荣是否具备持续基础。</p>
-  <span class="enter">进入研究 →</span>
-</a>
-
-<a class="choice-card china" href="china-factor.html">
-  <span class="kicker">China Factor</span>
-  <h2>中国产业崛起之路</h2>
-  <p>从中国变量、国产模型、硬件约束和产业链重构出发，观察 NVIDIA 护城河受到的结构性冲击。</p>
-  <span class="enter">进入研究 →</span>
-</a>
-
+        <span class="kicker">Supply / Demand</span>
+        <h2>AI供需研究</h2>
+        <p>从训练成本、芯片产能、推理供给和真实需求出发，拆解 AI 繁荣是否具备持续基础。</p>
+        <span class="enter">进入研究 →</span>
+      </a>
+      <a class="choice-card china" href="china-factor.html">
+        <span class="kicker">China Factor</span>
+        <h2>中国产业崛起之路</h2>
+        <p>从中国变量、国产模型、硬件约束和产业链重构出发，观察 NVIDIA 护城河受到的结构性冲击。</p>
+        <span class="enter">进入研究 →</span>
+      </a>
+      <a class="choice-card fde" href="fde-search.html">
+        <span class="kicker">FDE / Direction First</span>
+        <h2>探寻之旅</h2>
+        <p>先走一遍怎么找到下一个海力士，再看方向优先选出的九家。</p>
+        <span class="enter">进入研究 →</span>
+      </a>
     </section>
   </main>
 </body>
