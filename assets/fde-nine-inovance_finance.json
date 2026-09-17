@@ -1,0 +1,33 @@
+{
+  "company": "汇川技术",
+  "ticker": "300124.SZ",
+  "unit": "yi_cny",
+  "checked": "2026-09-15",
+  "revenue_basis": "营业总收入",
+  "profit_basis": "归母净利润（未调整）",
+  "source": "https://emweb.securities.eastmoney.com/PC_HSF10/NewFinanceAnalysis/Index?type=web&code=SZ300124",
+  "annual_report": "http://file.finance.sina.com.cn/211.154.219.97:9494/MRGG/CNSESZ_STOCK/2026/2026-4/2026-04-28/12222831.PDF",
+  "half_report": "http://static.cninfo.com.cn/finalpage/2026-08-29/1225524609.PDF",
+  "api": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_DMSK_FN_INCOME&filter=(SECURITY_CODE=\"300124\")",
+  "annual": [
+    {"start": "2021-01-01", "end": "2021-12-31", "revenue": 17943256595.29, "profit": 3573404586.07},
+    {"start": "2022-01-01", "end": "2022-12-31", "revenue": 23008312443.12, "profit": 4319762362.29},
+    {"start": "2023-01-01", "end": "2023-12-31", "revenue": 30419925397.64, "profit": 4741863347.20},
+    {"start": "2024-01-01", "end": "2024-12-31", "revenue": 37040952138.72, "profit": 4285493340.70},
+    {"start": "2025-01-01", "end": "2025-12-31", "revenue": 45104844200.13, "profit": 5050002089.89}
+  ],
+  "latest": {
+    "start": "2026-01-01",
+    "end": "2026-06-30",
+    "kind": "半年累计",
+    "revenue": 24675250997.63,
+    "profit": 2809924122.46,
+    "deduct": 2756053764.48,
+    "yoy_revenue": 0.2031,
+    "yoy_profit": -0.0535,
+    "yoy_deduct": 0.0315,
+    "prior_revenue": 20509357782.99,
+    "prior_profit": 2968778046.74
+  },
+  "note": "C档年度柱与东方财富、2025年报摘要一致。2026H1 收入 +20.31%，归母 -5.35%，扣非 +3.15%。集团利润不是机器人分部利润。"
+}

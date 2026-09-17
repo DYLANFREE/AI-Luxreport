@@ -1,0 +1,35 @@
+{
+  "company": "小马智行",
+  "ticker": "PONY",
+  "cik": "0001969302",
+  "unit": "mn_usd",
+  "checked": "2026-09-15",
+  "revenue_basis": "Total revenues",
+  "profit_basis": "归属于 Pony AI Inc. 净利润（未调整）",
+  "source": "https://www.sec.gov/Archives/edgar/data/1969302/000110465926046406/pony-20251231x20f.htm",
+  "source_latest": "https://ir.pony.ai/news-releases/news-release-details/pony-ai-inc-reports-second-quarter-2026-financial-results-total",
+  "source_latest_sec": "https://www.sec.gov/Archives/edgar/data/1969302/000110465926098113/tm2623382d1_ex99-1.htm",
+  "facts": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001969302.json",
+  "annual": [
+    {"start": "2022-01-01", "end": "2022-12-31", "revenue": 68386000, "profit": -148018000},
+    {"start": "2023-01-01", "end": "2023-12-31", "revenue": 71899000, "profit": -124812000},
+    {"start": "2024-01-01", "end": "2024-12-31", "revenue": 75025000, "profit": -274121000},
+    {"start": "2025-01-01", "end": "2025-12-31", "revenue": 90001000, "profit": -133969000, "consolidated_loss": -76758000}
+  ],
+  "latest": {
+    "start": "2026-04-01",
+    "end": "2026-06-30",
+    "kind": "单季",
+    "revenue": 36220000,
+    "profit": -59844000,
+    "consolidated_loss": -45350000,
+    "nci_income": 14500000,
+    "yoy_revenue": 0.6883,
+    "prior_revenue": 21455000,
+    "prior_profit": -53098000,
+    "robotaxi": 12073000,
+    "robotruck": 13329000,
+    "solutions": 10818000
+  },
+  "note": "年度柱与 20-F / SEC companyfacts 一致，利润用归母。FY2025 合并净亏损 7676 万美元，归母 1.3397 亿美元，差额是少数股东。2026Q2 公告收入 3622 万美元；归母亏损 5984 万美元，合并净亏损 4535 万美元。集团收入不等于 Robotaxi 收入。"
+}

@@ -1,0 +1,30 @@
+{
+  "company": "Tempus AI",
+  "ticker": "TEM",
+  "cik": "0001717115",
+  "unit": "yi_usd",
+  "checked": "2026-09-15",
+  "revenue_basis": "Total revenue",
+  "profit_basis": "公司股东净利润 / 亏损（未调整）",
+  "lead": "集团收入来自诊断检测和数据及应用。检测量、并购、数据合同不是同一条链。单列 AI 产品不是集团收入。",
+  "source": "https://www.sec.gov/Archives/edgar/data/1717115/000119312526066961/0001193125-26-066961-index.html",
+  "source_latest": "https://investors.tempus.com/news-releases/news-release-details/tempus-reports-second-quarter-2026-results",
+  "facts": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001717115.json",
+  "annual": [
+    {"start": "2022-01-01", "end": "2022-12-31", "revenue": 321000000, "profit": -289811000, "source": "https://www.sec.gov/Archives/edgar/data/1717115/000095017025025603/0000950170-25-025603-index.html"},
+    {"start": "2023-01-01", "end": "2023-12-31", "revenue": 532000000, "profit": -214118000},
+    {"start": "2024-01-01", "end": "2024-12-31", "revenue": 693000000, "profit": -705809000},
+    {"start": "2025-01-01", "end": "2025-12-31", "revenue": 1272000000, "profit": -245028000}
+  ],
+  "latest": {
+    "start": "2026-04-01",
+    "end": "2026-06-30",
+    "kind": "单季",
+    "revenue": 382000000,
+    "profit": null,
+    "yoy_revenue": 0.216,
+    "diagnostics": 289000000,
+    "data_apps": 93000000
+  },
+  "note": "年度收入与利润沿用 C 档 3.2 co-18（显示值亿美元约数；利润原始金额见 SEC）。FY2025 同比 +83.4%，含 Ambry 并购。2026Q2 收入 3.82 亿美元、同比 +21.6%；诊断检测 2.89、数据及应用 0.93。Q2 净利润本批未取得。Insights 净收入留存 126% 只对数据授权客户群，不是全公司续费率。"
+}

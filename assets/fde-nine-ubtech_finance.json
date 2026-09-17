@@ -1,0 +1,24 @@
+{
+  "company": "优必选",
+  "ticker": "09880.HK",
+  "unit": "yi_cny",
+  "checked": "2026-09-15",
+  "revenue_basis": "营业收入",
+  "profit_basis": "归母净利润（未调整）",
+  "source": "https://emweb.securities.eastmoney.com/PC_HKF10/FinancialAnalysis/index?type=web&code=09880",
+  "annual": [
+    {"start": "2021-01-01", "end": "2021-12-31", "revenue": 817230000, "profit": -920180000},
+    {"start": "2022-01-01", "end": "2022-12-31", "revenue": 1008272000, "profit": -974809000},
+    {"start": "2023-01-01", "end": "2023-12-31", "revenue": 1055698000, "profit": -1234048000},
+    {"start": "2024-01-01", "end": "2024-12-31", "revenue": 1305361000, "profit": -1123590000},
+    {"start": "2025-01-01", "end": "2025-12-31", "revenue": 2000999000, "profit": -703191000}
+  ],
+  "latest": {
+    "start": "2026-01-01",
+    "end": "2026-06-30",
+    "kind": "半年累计",
+    "revenue": 1269000000,
+    "yoy_revenue_175": 1.042
+  },
+  "note": "年度与 H1 收入沿用 C 档 3.2 supp-17 对照的东方财富港股财务汇总。H1 归母本批未取得。集团收入不等于工业人形岗位收入。"
+}

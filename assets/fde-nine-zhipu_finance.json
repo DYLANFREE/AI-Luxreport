@@ -1,0 +1,28 @@
+{
+  "company": "智谱",
+  "ticker": "02513",
+  "unit": "yi_cny",
+  "checked": "2026-09-15",
+  "revenue_basis": "营运收入 / 营业额",
+  "profit_basis": "股东应占溢利（未调整）",
+  "source": "https://emweb.securities.eastmoney.com/PC_HKF10/FinancialAnalysis/index?type=web&code=02513",
+  "api": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_HKF10_FN_INCOME&filter=(SECURITY_CODE=\"02513\")",
+  "annual": [
+    {"start": "2022-01-01", "end": "2022-12-31", "revenue": 57409000, "profit": -143374000, "continuing": -143650000},
+    {"start": "2023-01-01", "end": "2023-12-31", "revenue": 124538000, "profit": -787960000, "continuing": -787957000},
+    {"start": "2024-01-01", "end": "2024-12-31", "revenue": 312414000, "profit": -2956491000, "continuing": -2958007000},
+    {"start": "2025-01-01", "end": "2025-12-31", "revenue": 724334000, "profit": -4698203000, "continuing": -4718167000}
+  ],
+  "latest": {
+    "start": "2026-01-01",
+    "end": "2026-06-30",
+    "kind": "半年累计",
+    "revenue": 953892000,
+    "profit": -2071326000,
+    "continuing": -2071992000,
+    "yoy_revenue": 3.99689,
+    "prior_revenue": 190877000,
+    "prior_profit": -2351173000
+  },
+  "note": "C档年度柱与东方财富港股财务汇总一致。FY2025 持续经营税后亏损 47.18 亿，股东应占 46.98 亿；图用股东应占。2026H1 股东应占亏损 20.71 亿，对 2025H1 股东应占 23.51 亿收窄 11.9%。媒体写的「归母同比收窄 12.1%」更接近持续经营口径。"
+}

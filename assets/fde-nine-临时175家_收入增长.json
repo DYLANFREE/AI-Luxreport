@@ -1,0 +1,1227 @@
+[
+ {
+  "company": "天润云",
+  "revFY": "+8.6%",
+  "revH1": "+7.3%",
+  "src": "公司2025年度业绩公告/2026中期业绩公告（证券之星公告摘要）",
+  "growing": true
+ },
+ {
+  "company": "百融智能",
+  "revFY": "-0.3%",
+  "revH1": "-43%",
+  "src": "中国经济网（2025财报/2026中期业绩）",
+  "growing": false
+ },
+ {
+  "company": "百望股份",
+  "revFY": "+10.5%",
+  "revH1": "-14.4%",
+  "src": "财经网（2025年度业绩）、经济观察网（2026中报）",
+  "growing": false
+ },
+ {
+  "company": "金蝶国际",
+  "revFY": "+12.0%",
+  "revH1": "+13.6%",
+  "src": "公司2025年报/2026中期业绩（新华财经/证券之星）",
+  "growing": true
+ },
+ {
+  "company": "金山软件",
+  "revFY": "-6%",
+  "revH1": "+6%",
+  "src": "证券之星2025年报摘要、证券时报（2026上半年营收49.27亿）",
+  "growing": true
+ },
+ {
+  "company": "百度集团",
+  "revFY": "-3%",
+  "revH1": "-4%",
+  "src": "界面新闻（2025财年收入1291亿）、观点网/经济通（2026Q2收入313亿）",
+  "growing": false
+ },
+ {
+  "company": "范式智能",
+  "revFY": "+35.6%",
+  "revH1": "+43.4%",
+  "src": "格隆汇（2025年报71.35亿）、中国日报（2026中报）",
+  "growing": true
+ },
+ {
+  "company": "中控技术",
+  "revFY": "-11.66%",
+  "revH1": "-5.10%",
+  "src": "同花顺快讯（2025年报80.73亿）、证券日报（2026半年报）",
+  "growing": false
+ },
+ {
+  "company": "用友网络",
+  "revFY": "+0.32%",
+  "revH1": "+4.08%",
+  "src": "光明网/东方财富（2025年报91.82亿）、华尔街见闻（2026半年报37.27亿）",
+  "growing": true
+ },
+ {
+  "company": "广联达",
+  "revFY": "-1.7%",
+  "revH1": "-6.12%",
+  "src": "中证网（2025年报60.97亿，对比2024年报62.03亿）、公司2026半年报摘要",
+  "growing": false
+ },
+ {
+  "company": "税友股份",
+  "revFY": "+5.57%",
+  "revH1": "+9.72%",
+  "src": "上海证券报（2025年报20.54亿）、东方财富（2026半年报）",
+  "growing": true
+ },
+ {
+  "company": "科大讯飞",
+  "revFY": "+16.12%",
+  "revH1": "+6.52%",
+  "src": "界面新闻（2025年报271.05亿）、观点网/界面（2026半年报116.2亿）",
+  "growing": true
+ },
+ {
+  "company": "福昕软件",
+  "revFY": "+50.0%",
+  "revH1": "+11.44%",
+  "src": "财中社（2025年报10.7亿）、东方财富（2026半年报）",
+  "growing": true
+ },
+ {
+  "company": "万兴科技",
+  "revFY": "+6.46%",
+  "revH1": "-7.09%",
+  "src": "中国证券报·中证网（2025年报15.33亿/2026半年报7.06亿）",
+  "growing": false
+ },
+ {
+  "company": "昆仑万维",
+  "revFY": "+44.78%",
+  "revH1": "+43.55%",
+  "src": "中证网（2025年报）、中国新闻社（2026半年报53.59亿）",
+  "growing": true
+ },
+ {
+  "company": "深信服",
+  "revFY": "+6.96%",
+  "revH1": "+32.85%",
+  "src": "人民财讯/证券时报（2025年报80.43亿）、新浪财经（2026半年报39.98亿）",
+  "growing": true
+ },
+ {
+  "company": "新大陆",
+  "revFY": "+13.08%",
+  "revH1": "+40.24%",
+  "src": "证券之星2025年报摘要（87.58亿）、东方财富（2026半年报）",
+  "growing": true
+ },
+ {
+  "company": "Salesforce",
+  "revFY": "+10%",
+  "revH1": "+11%",
+  "src": "Salesforce FY2026Q4/FY2027Q2业绩公告（FY26收入415.25亿美元；FY27Q2收入113.45亿美元）",
+  "growing": true
+ },
+ {
+  "company": "ServiceNow",
+  "revFY": "+21%",
+  "revH1": "+24%",
+  "src": "ServiceNow 2025Q4/全年业绩公告（FY25收入132.78亿美元）、2026Q2业绩（39.87亿美元）",
+  "growing": true
+ },
+ {
+  "company": "Workday",
+  "revFY": "+13.1%",
+  "revH1": "+12.8%",
+  "src": "Workday FY2026Q4/全年业绩公告（FY26收入95.52亿美元）、FY2027Q2业绩公告（26.49亿美元）",
+  "growing": true
+ },
+ {
+  "company": "Veeva",
+  "revFY": "+12.3%",
+  "revH1": "+18%",
+  "src": "Veeva FY2026Q4/全年（31.95亿美元）及FY2027Q2（9.28亿美元）业绩电话会（Motley Fool）",
+  "growing": true
+ },
+ {
+  "company": "群核科技",
+  "revFY": "+8.6%",
+  "revH1": "+1.5%",
+  "src": "财联社/21经济网(聆讯后资料集)、央广财经(2026中期)",
+  "growing": true
+ },
+ {
+  "company": "医脉通",
+  "revFY": "+15.0%",
+  "revH1": "+1.0%",
+  "src": "公司2025年度业绩公告、公司2026中期业绩公告",
+  "growing": true
+ },
+ {
+  "company": "梅斯健康",
+  "revFY": "+3.74%",
+  "revH1": "-6.2%",
+  "src": "21世纪经济报道(2025年报)、智通财经(2026中期)",
+  "growing": false
+ },
+ {
+  "company": "医渡科技",
+  "revFY": "-11.4%",
+  "revH1": "+14.6%",
+  "src": "东北证券研报(FY2025止2025/3/31)、证券日报(FY2026止2026/3/31最新)",
+  "growing": true
+ },
+ {
+  "company": "北森控股",
+  "revFY": "+10.6%",
+  "revH1": "+16.9%",
+  "src": "证券之星(FY2025止2025/3/31)、证券时报(FY2026止2026/3/31最新)",
+  "growing": true
+ },
+ {
+  "company": "深演智能",
+  "revFY": "+7.2%",
+  "revH1": "+43.6%",
+  "src": "月狐数据(招股书)、证券日报(2026中期)",
+  "growing": true
+ },
+ {
+  "company": "微盟集团",
+  "revFY": "+18.9%",
+  "revH1": "+12.1%",
+  "src": "中证网(2025年报)、中国经济时报(2026半年报)",
+  "growing": true
+ },
+ {
+  "company": "玄武云",
+  "revFY": "-28.7%",
+  "revH1": "+9.9%",
+  "src": "公司2025年报公告摘要、公司2026中期业绩公告摘要",
+  "growing": true
+ },
+ {
+  "company": "声通科技",
+  "revFY": "+7.0%",
+  "revH1": "+35.1%",
+  "src": "格隆汇(2025年度)、证券日报(2026中期)",
+  "growing": true
+ },
+ {
+  "company": "创新奇智",
+  "revFY": "+23.8%",
+  "revH1": "+18.6%",
+  "src": "21世纪经济报道(2025年报)、东方财富(2026半年报)",
+  "growing": true
+ },
+ {
+  "company": "轻松健康",
+  "revFY": "+32.9%",
+  "revH1": "-45.4%",
+  "src": "证券时报(2025年报)、上海证券报(2026中期)",
+  "growing": false
+ },
+ {
+  "company": "讯飞医疗",
+  "revFY": "+24.7%",
+  "revH1": "+49.4%",
+  "src": "证券之星(2025年报)、证券之星(2026半年报)",
+  "growing": true
+ },
+ {
+  "company": "奇安信",
+  "revFY": "+0.97%",
+  "revH1": "-14.09%",
+  "src": "证券日报(2025年报)、界面新闻(2026中报)",
+  "growing": false
+ },
+ {
+  "company": "拉卡拉",
+  "revFY": "-3.68%",
+  "revH1": "+22.81%",
+  "src": "国联民生证券研报(2025年报)、界面新闻(2026中报)",
+  "growing": true
+ },
+ {
+  "company": "东方财富",
+  "revFY": "+38.46%",
+  "revH1": "+44.48%",
+  "src": "上海证券报(2025年报)、新浪财经(2026半年报)",
+  "growing": true
+ },
+ {
+  "company": "恒生电子",
+  "revFY": "-12.13%",
+  "revH1": "-11.65%",
+  "src": "新浪财经(2025年报)、东方财富(2026半年报)",
+  "growing": false
+ },
+ {
+  "company": "长亮科技",
+  "revFY": "+12.76%",
+  "revH1": "+25.92%",
+  "src": "蓝鲸财经(2025年报)、东方财富(2026半年报)",
+  "growing": true
+ },
+ {
+  "company": "宇信科技",
+  "revFY": "-8.46%",
+  "revH1": "-8.75%",
+  "src": "新浪财经鹰眼预警(2025年报)、公司2026半年报摘要",
+  "growing": false
+ },
+ {
+  "company": "同花顺",
+  "revFY": "+44.00%",
+  "revH1": "+48.68%",
+  "src": "中证网(2025年报)、证券时报/人民财讯(2026半年报)",
+  "growing": true
+ },
+ {
+  "company": "财富趋势",
+  "revFY": "-5.25%",
+  "revH1": "-8.72%",
+  "src": "公司2025业绩快报(证券日报之声)、新浪财经(2026中报)",
+  "growing": false
+ },
+ {
+  "company": "广电运通",
+  "revFY": "+10.94%",
+  "revH1": "-2.86%",
+  "src": "同花顺(2025年报)、深圳商报(2026半年报)",
+  "growing": false
+ },
+ {
+  "company": "Cloudflare",
+  "revFY": "+29.85%",
+  "revH1": "+36%",
+  "src": "stockanalysis.com(FY2025)、Edgen.tech/Nasdaq(Q2 2026)",
+  "growing": true
+ },
+ {
+  "company": "地平线",
+  "revFY": "+57.7%",
+  "revH1": "+32.9%",
+  "src": "公司2025年报/2026半年报（经济参考网）",
+  "growing": true
+ },
+ {
+  "company": "Unity",
+  "revFY": "+2.0%",
+  "revH1": "+23.9%",
+  "src": "Unity Q4 2025/Q2 2026财报（stockanalysis）",
+  "growing": true
+ },
+ {
+  "company": "PTC",
+  "revFY": "+18%（FY2025，固定汇率）",
+  "revH1": "-7%（FY2026Q3）",
+  "src": "PTC财报（ptc.com/Quiver）",
+  "growing": false
+ },
+ {
+  "company": "翔宇医疗",
+  "revFY": "+3.3%",
+  "revH1": "+3.9%",
+  "src": "公司2025年报（中证网）/2026半年报（科创板日报）",
+  "growing": true
+ },
+ {
+  "company": "Tennant",
+  "revFY": "-6.5%",
+  "revH1": "+1.7%",
+  "src": "Tennant 2025年报/Q2 2026财报（stockanalysis/Quiver）",
+  "growing": true
+ },
+ {
+  "company": "亿航智能",
+  "revFY": "+11.7%",
+  "revH1": "-31.3%",
+  "src": "公司2025年报（上海证券报）/2026Q2财报",
+  "growing": false
+ },
+ {
+  "company": "NVIDIA",
+  "revFY": "+65%（FY2026）",
+  "revH1": "+85%（FY2027Q1）",
+  "src": "英伟达财报（C114/公司新闻稿）",
+  "growing": true
+ },
+ {
+  "company": "MiniMax",
+  "revFY": "+158.9%",
+  "revH1": "+283.1%",
+  "src": "公司2025年报/2026中期业绩（东方财富/证券之星）",
+  "growing": true
+ },
+ {
+  "company": "Accenture",
+  "revFY": "+7.4%（FY2025）",
+  "revH1": "+5.6%（FY2026Q3）",
+  "src": "Accenture财报（stockanalysis）",
+  "growing": true
+ },
+ {
+  "company": "Cognizant",
+  "revFY": "+7.0%",
+  "revH1": "+4.5%",
+  "src": "Cognizant 2025年报（BigGo）/Q2 2026（staffingindustry）",
+  "growing": true
+ },
+ {
+  "company": "EPAM",
+  "revFY": "+15.4%",
+  "revH1": "+4.5%",
+  "src": "EPAM 2025年报/Q2 2026财报（stockanalysis）",
+  "growing": true
+ },
+ {
+  "company": "Globant",
+  "revFY": "+1.6%",
+  "revH1": "-0.3%（上半年；Q2单季+0.04%基本持平）",
+  "src": "Globant 2025年报/Q2 2026财报",
+  "growing": false
+ },
+ {
+  "company": "Infosys",
+  "revFY": "+14.4%（卢比，FY2026）",
+  "revH1": "+2.4%（固定汇率，FY2027Q1）",
+  "src": "Infosys财报（stockanalysis/业绩会）",
+  "growing": true
+ },
+ {
+  "company": "Wipro",
+  "revFY": "+4.0%（卢比，FY2026）",
+  "revH1": "+10.6%（卢比合并，FY2027Q1；IT服务美元口径+1%）",
+  "src": "Wipro财报（Angel One/IIFL）",
+  "growing": true
+ },
+ {
+  "company": "Oracle",
+  "revFY": "+17%（FY2026）",
+  "revH1": "+21%（FY2026Q4）",
+  "src": "Oracle财报（TradingKey）",
+  "growing": true
+ },
+ {
+  "company": "SAP",
+  "revFY": "+7.7%",
+  "revH1": "+9.4%",
+  "src": "SAP 2025年报/Q2 2026财报（stockanalysis）",
+  "growing": true
+ },
+ {
+  "company": "Innodata",
+  "revFY": "+47.6%",
+  "revH1": "+57.8%",
+  "src": "Innodata 2025年报/Q2 2026财报",
+  "growing": true
+ },
+ {
+  "company": "润和软件",
+  "revFY": "+17.2%",
+  "revH1": "+7.5%",
+  "src": "公司2025年报/2026半年报（证券之星）",
+  "growing": true
+ },
+ {
+  "company": "赛意信息",
+  "revFY": "-13.5%",
+  "revH1": "+14.4%",
+  "src": "公司2025年报（东方财富）/2026半年报（蓝鲸财经）",
+  "growing": true
+ },
+ {
+  "company": "法本信息",
+  "revFY": "+18.3%",
+  "revH1": "+24.6%",
+  "src": "公司2025年报（中国日报）/2026半年报（证券之星）",
+  "growing": true
+ },
+ {
+  "company": "中科创达",
+  "revFY": "+44.5%",
+  "revH1": "+30.5%",
+  "src": "公司2025年报/2026半年报（证券之星）",
+  "growing": true
+ },
+ {
+  "company": "晶泰科技",
+  "revFY": "+201%",
+  "revH1": "-23.9%（总口径，授权费高基数；主业+73.8%）",
+  "src": "公司2025年报/2026中期业绩公告（证券之星）",
+  "growing": false
+ },
+ {
+  "company": "博雅互动",
+  "revFY": "+15.8%",
+  "revH1": "+16.05%",
+  "src": "公司2025年报/2026中期业绩公告（格隆汇、智通财经）",
+  "growing": true
+ },
+ {
+  "company": "海康威视",
+  "revFY": "+0.01%",
+  "revH1": "+11.97%",
+  "src": "公司2025年报（观点网）、2026半年报（中国证券报）",
+  "growing": true
+ },
+ {
+  "company": "Global Payments / Worldpay",
+  "revFY": "+6%（剔除剥离、固定汇率调整后净收入）",
+  "revH1": "+4%（2026Q2规范化调整后净收入同比）",
+  "src": "公司Q4/FY2025业绩发布、Q2 2026业绩发布（公司IR）",
+  "growing": true
+ },
+ {
+  "company": "宇树科技",
+  "revFY": "+335.36%",
+  "revH1": "+48%",
+  "src": "招股书/2025年报（界面新闻、东方财富）、2026半年报（新浪财经）",
+  "growing": true
+ },
+ {
+  "company": "埃斯顿",
+  "revFY": "+21.93%",
+  "revH1": "+1.14%",
+  "src": "公司2025年报（中国证券报）、2026半年报（观点网）",
+  "growing": true
+ },
+ {
+  "company": "绿的谐波",
+  "revFY": "+47.31%",
+  "revH1": "+38.64%",
+  "src": "公司2025年报（中国经营报）、2026半年报（东方财富）",
+  "growing": true
+ },
+ {
+  "company": "双环传动",
+  "revFY": "+3.77%",
+  "revH1": "+7.80%",
+  "src": "公司2025年报（上海证券报）、2026半年报（东方财富）",
+  "growing": true
+ },
+ {
+  "company": "兆威机电",
+  "revFY": "+12.52%",
+  "revH1": "+3.80%",
+  "src": "公司2025年报、2026半年报（中国证券报）",
+  "growing": true
+ },
+ {
+  "company": "拓普集团",
+  "revFY": "+11.21%",
+  "revH1": "+9.78%",
+  "src": "公司2025年报、2026半年报（证券日报）",
+  "growing": true
+ },
+ {
+  "company": "三花智控",
+  "revFY": "+10.97%",
+  "revH1": "+3.92%",
+  "src": "公司2025年报、2026半年报（证券时报、证券之星）",
+  "growing": true
+ },
+ {
+  "company": "汇川技术",
+  "revFY": "+21.77%",
+  "revH1": "+20.31%",
+  "src": "公司2025年报（证券之星）、2026半年报（中财网）",
+  "growing": true
+ },
+ {
+  "company": "奥比中光",
+  "revFY": "+66.66%",
+  "revH1": "+0.49%",
+  "src": "公司2025年报（中国证券报）、2026半年报（东方财富）",
+  "growing": true
+ },
+ {
+  "company": "柯力传感",
+  "revFY": "+20.33%",
+  "revH1": "+22.27%",
+  "src": "公司2025年报（麦姆斯咨询/电子工程专辑）、2026半年报（东方财富）",
+  "growing": true
+ },
+ {
+  "company": "鸣志电器",
+  "revFY": "+14.32%",
+  "revH1": "+19.21%",
+  "src": "公司2025年报（股百科）、2026半年报（东方财富）",
+  "growing": true
+ },
+ {
+  "company": "汉威科技",
+  "revFY": "+8.35%",
+  "revH1": "-9.40%（剔除汉威智源出表影响后+6.93%）",
+  "src": "公司2025年报（大河财立方）、2026半年报（大河财立方）",
+  "growing": false
+ },
+ {
+  "company": "优必选",
+  "revFY": "+53.3%",
+  "revH1": "+104.2%",
+  "src": "公司2025年报（证券之星）、2026中期报告（观点网）",
+  "growing": true
+ },
+ {
+  "company": "越疆科技",
+  "revFY": "+31.7%",
+  "revH1": "+106.6%",
+  "src": "公司2025年报（搜狐财经）、2026中期业绩（中国经营报）",
+  "growing": true
+ },
+ {
+  "company": "极智嘉",
+  "revFY": "+31.6%",
+  "revH1": "+25.3%",
+  "src": "公司2025财报（中国证券报）、2026中期业绩（观点网/新浪财经）",
+  "growing": true
+ },
+ {
+  "company": "仙工智能",
+  "revFY": "+30.4%",
+  "revH1": "+67.5%",
+  "src": "招股书（中国经营报）、2026半年报（界面新闻/新浪财经）",
+  "growing": true
+ },
+ {
+  "company": "梅卡曼德",
+  "revFY": "+44.6%",
+  "revH1": "未找到",
+  "src": "招股书（智通财经/老虎证券：2025收入3.888亿元，2024为2.688亿元）",
+  "growing": null
+ },
+ {
+  "company": "卧安机器人",
+  "revFY": "+47.7%",
+  "revH1": "+31.8%",
+  "src": "公司2025年报（极客公园）、2026半年报（观点网）",
+  "growing": true
+ },
+ {
+  "company": "微创机器人",
+  "revFY": "+114.2%",
+  "revH1": "+200%~230%（盈利预告）",
+  "src": "公司2025年报（经济观察报）、2026上半年盈利预告（证券之星/港股研究社）",
+  "growing": true
+ },
+ {
+  "company": "Atlassian",
+  "revFY": "+8.9%",
+  "revH1": "+28%",
+  "src": "Atlassian FY2026 Q4财报(Businesswire 2026-08-06)",
+  "growing": true
+ },
+ {
+  "company": "Monday.com",
+  "revFY": "+26.8%",
+  "revH1": "+24%",
+  "src": "monday.com 2025年报/2026Q1财报(新浪财经)",
+  "growing": true
+ },
+ {
+  "company": "HubSpot",
+  "revFY": "+19%",
+  "revH1": "+21.5%",
+  "src": "HubSpot 2025年报/FY2026 Q2财报(IR官网)",
+  "growing": true
+ },
+ {
+  "company": "Doximity",
+  "revFY": "+20%",
+  "revH1": "+7.3%",
+  "src": "Doximity财报/StockAnalysis",
+  "growing": true
+ },
+ {
+  "company": "GitLab",
+  "revFY": "+30.9%",
+  "revH1": "+21%",
+  "src": "GitLab FY2025年报/FY2027 Q2财报(觀點網)",
+  "growing": true
+ },
+ {
+  "company": "Klaviyo",
+  "revFY": "+32%",
+  "revH1": "+26%",
+  "src": "Klaviyo 2025年报/FY2026 Q2财报(Businesswire)",
+  "growing": true
+ },
+ {
+  "company": "Intuit",
+  "revFY": "+15.6%",
+  "revH1": "+14%",
+  "src": "Intuit FY2026 Q4财报(2026-08-25)",
+  "growing": true
+ },
+ {
+  "company": "Toast",
+  "revFY": "+24.1%",
+  "revH1": "+23.1%",
+  "src": "Toast财报/StockAnalysis",
+  "growing": true
+ },
+ {
+  "company": "PayPal",
+  "revFY": "+5.4%",
+  "revH1": "+5%",
+  "src": "PayPal 2025年报/Q2 2026财报(Quiver)",
+  "growing": true
+ },
+ {
+  "company": "Block",
+  "revFY": "+0.3%",
+  "revH1": "+9.3%",
+  "src": "Block Q2 2026财报/StockAnalysis",
+  "growing": true
+ },
+ {
+  "company": "Circle",
+  "revFY": "+64%",
+  "revH1": "-12%",
+  "src": "Circle 2025年报(2026-02-25)/Q2 2026财报(ChainCatcher)",
+  "growing": false
+ },
+ {
+  "company": "Coinbase",
+  "revFY": "+8.6%",
+  "revH1": "-17.3%",
+  "src": "Coinbase Q2 2026财报(Odaily)/StockAnalysis",
+  "growing": false
+ },
+ {
+  "company": "Robinhood",
+  "revFY": "+51.6%",
+  "revH1": "+32%",
+  "src": "Robinhood 2026Q2财报(IR官网)",
+  "growing": true
+ },
+ {
+  "company": "Microsoft",
+  "revFY": "+15%",
+  "revH1": "+21%",
+  "src": "微软FY2026 Q4财报(新浪财经/网易)",
+  "growing": true
+ },
+ {
+  "company": "Alphabet",
+  "revFY": "+14%",
+  "revH1": "+24%",
+  "src": "Alphabet 2025年报(DoNews)/2026Q2财报(财经M平方)",
+  "growing": true
+ },
+ {
+  "company": "FIS",
+  "revFY": "+1.3%",
+  "revH1": "+5.3%",
+  "src": "FIS 2025年报/Q2 2026财报(财报电话会)",
+  "growing": true
+ },
+ {
+  "company": "腾讯控股",
+  "revFY": "+14%",
+  "revH1": "+10%",
+  "src": "腾讯2025年报(证券时报)/2026中报(北京商报)",
+  "growing": true
+ },
+ {
+  "company": "商汤",
+  "revFY": "+32.9%",
+  "revH1": "+23.4%",
+  "src": "商汤2025年报(北京商报)/2026中期业绩(中证报)",
+  "growing": true
+ },
+ {
+  "company": "云知声",
+  "revFY": "+29%",
+  "revH1": "+38.7%",
+  "src": "云知声2025年报(财华社)/2026中期业绩(官网)",
+  "growing": true
+ },
+ {
+  "company": "迅策科技",
+  "revFY": "+103.3%",
+  "revH1": "+389%",
+  "src": "迅策2025年报(证券时报)/2026中期业绩(证券时报)",
+  "growing": true
+ },
+ {
+  "company": "汇量科技",
+  "revFY": "+35.7%",
+  "revH1": "+23.2%",
+  "src": "汇量科技2025年报(智通财经)/2026中期业绩(智通财经)",
+  "growing": true
+ },
+ {
+  "company": "OSL 集团",
+  "revFY": "+30.4%",
+  "revH1": "+66%",
+  "src": "OSL 2025年报(华创证券点评)/2026中期业绩(Foresight)",
+  "growing": true
+ },
+ {
+  "company": "Tesla",
+  "revFY": "-3%（2025年948亿美元）",
+  "revH1": "+26%（2026Q2）",
+  "src": "Al Jazeera、观点网报道公司财报",
+  "growing": true
+ },
+ {
+  "company": "Symbotic",
+  "revFY": "+26%（2025财年截至2025/9/27，22.47亿美元）",
+  "revH1": "+22%（2026财年Q3）",
+  "src": "公司Q4 FY2025/Q3 FY2026财报",
+  "growing": true
+ },
+ {
+  "company": "Serve Robotics",
+  "revFY": "+46%（2025年270万美元）",
+  "revH1": "+404%（2026Q2，320万美元）",
+  "src": "公司2025Q4/2026Q2财报电话会",
+  "growing": true
+ },
+ {
+  "company": "Cognex",
+  "revFY": "+8.7%（2025年9.94亿美元）",
+  "revH1": "+17%（2026Q2，2.91亿美元创纪录）",
+  "src": "公司2026Q2财报、StockAnalysis",
+  "growing": true
+ },
+ {
+  "company": "石头科技",
+  "revFY": "+56.5%（2025年186.95亿元）",
+  "revH1": "+23.3%（2026Q1）",
+  "src": "公司2025年报&2026一季报（国联民生研报）",
+  "growing": true
+ },
+ {
+  "company": "科沃斯",
+  "revFY": "+15%（2025年190亿元）",
+  "revH1": "+27.1%（2026Q1，49.02亿元）",
+  "src": "人民网、证券日报（公司财报）",
+  "growing": true
+ },
+ {
+  "company": "九号公司",
+  "revFY": "+49.9%（2025年212.8亿元）",
+  "revH1": "+22.3%（2026H1，143.58亿元）",
+  "src": "封面新闻、经济参考网（公司财报）",
+  "growing": true
+ },
+ {
+  "company": "机器人（新松）",
+  "revFY": "-0.4%（2025年41.22亿元）",
+  "revH1": "-12.6%（2026H1，14.51亿元）",
+  "src": "公司2025年报、2026半年报",
+  "growing": false
+ },
+ {
+  "company": "埃夫特",
+  "revFY": "-32.1%（2025年9.32亿元）",
+  "revH1": "+20.6%（2026Q1）",
+  "src": "新浪财经/东方财富（公司财报）",
+  "growing": true
+ },
+ {
+  "company": "拓斯达",
+  "revFY": "-12.6%（2025年25.10亿元）",
+  "revH1": "+48.5%（2026Q1，5.38亿元）",
+  "src": "公司2025年报&2026一季报（渤海证券研报）",
+  "growing": true
+ },
+ {
+  "company": "雷赛智能",
+  "revFY": "+18.3%（2025年18.7亿元）",
+  "revH1": "+34.5%（2026Q1，5.3亿元）",
+  "src": "公司2025年报&2026一季报（国金证券研报）",
+  "growing": true
+ },
+ {
+  "company": "中大力德",
+  "revFY": "+6.6%（2025年10.41亿元）",
+  "revH1": "+15.6%（2026H1，5.97亿元）",
+  "src": "新浪财经鹰眼、证券日报（公司财报）",
+  "growing": true
+ },
+ {
+  "company": "Deere",
+  "revFY": "-12%（2025财年截至2025/11/2，456.8亿美元）",
+  "revH1": "+5%（2026财年Q2，133.69亿美元）",
+  "src": "公司FY2025财报、Q2 FY2026财报电话会",
+  "growing": true
+ },
+ {
+  "company": "Teradyne",
+  "revFY": "+13%（2025年31.9亿美元）",
+  "revH1": "+104%（2026Q2，13.3亿美元；H1+95%）",
+  "src": "公司2025Q4/2026Q2财报（Quartr）",
+  "growing": true
+ },
+ {
+  "company": "Intuitive Surgical",
+  "revFY": "+20.5%（2025年100.65亿美元）",
+  "revH1": "+19%（2026Q2，28.92亿美元；H1+20.7%）",
+  "src": "公司2026Q2财报、StockAnalysis",
+  "growing": true
+ },
+ {
+  "company": "Rockwell Automation",
+  "revFY": "+0.9%（2025财年截至2025/9/30，83.4亿美元）",
+  "revH1": "+8%（2026财年Q3，23.13亿美元；有机+10%）",
+  "src": "公司Q3 FY2026财报电话会、StockAnalysis",
+  "growing": true
+ },
+ {
+  "company": "Ambarella",
+  "revFY": "+37.2%（2026财年截至2026/1/31，3.907亿美元）",
+  "revH1": "+13.2%（2027财年Q2截至2026/7/31，1.081亿美元；H1+14.9%）",
+  "src": "公司FY2026/Q2 FY2027财报（公司IR）",
+  "growing": true
+ },
+ {
+  "company": "禾赛",
+  "revFY": "+45.8%（2025年30.28亿元）",
+  "revH1": "+21.9%（2026Q2，8.61亿元）",
+  "src": "新浪财经/格隆汇、金融界（公司财报）",
+  "growing": true
+ },
+ {
+  "company": "小马智行",
+  "revFY": "+20%（2025年6.29亿元）",
+  "revH1": "+145%（2026Q1，2.36亿元）",
+  "src": "界面新闻、腾讯新闻（公司财报）",
+  "growing": true
+ },
+ {
+  "company": "文远知行",
+  "revFY": "+90%（2025年，近90%）",
+  "revH1": "+57.6%（2026Q1，1.14亿元）",
+  "src": "每日经济新闻、新浪财经（公司财报）",
+  "growing": true
+ },
+ {
+  "company": "Aurora",
+  "revFY": "n.m.（2025年约300万美元，2024年近零）",
+  "revH1": "约+67%（2026Q2推算；2026全年指引+400%）",
+  "src": "公司2025Q4/2026Q2财报电话会",
+  "growing": true
+ },
+ {
+  "company": "速腾聚创",
+  "revFY": "+17.7%（2025年19.41亿元）",
+  "revH1": "+30.2%（2026H1，10.2亿元）",
+  "src": "TechWeb、腾讯新闻（公司财报）",
+  "growing": true
+ },
+ {
+  "company": "鼎捷数智",
+  "revFY": "+4.39%",
+  "revH1": "+5.37%（2026H1营收11.01亿元）",
+  "src": "公司2026半年报/新浪财经",
+  "growing": true
+ },
+ {
+  "company": "三六零",
+  "revFY": "+9.37%",
+  "revH1": "+9.0%（2026H1营收41.7亿元）",
+  "src": "公司2026半年报（东方财富/财中社）",
+  "growing": true
+ },
+ {
+  "company": "华宇软件",
+  "revFY": "-0.59%",
+  "revH1": "+7.67%（2026H1营收6.38亿元）",
+  "src": "公司2026半年报（中证网）",
+  "growing": true
+ },
+ {
+  "company": "卫宁健康",
+  "revFY": "-24.3%",
+  "revH1": "+18.5%（2026H1营收9.94亿元）",
+  "src": "公司2026半年报（中证网）",
+  "growing": true
+ },
+ {
+  "company": "嘉和美康",
+  "revFY": "-31.73%",
+  "revH1": "-20.63%（2026H1营收1.74亿元）",
+  "src": "华创证券研报/公司2026半年报摘要",
+  "growing": false
+ },
+ {
+  "company": "汉得信息",
+  "revFY": "+5.57%",
+  "revH1": "+6.07%（2026H1营收16.70亿元）",
+  "src": "公司2026半年报（上证报）",
+  "growing": true
+ },
+ {
+  "company": "智云健康",
+  "revFY": "-53.5%",
+  "revH1": "-29.5%（2026H1收入6.29亿元）",
+  "src": "公司2025年报及2026中期业绩公告（证券之星/观点网）",
+  "growing": false
+ },
+ {
+  "company": "新火科技",
+  "revFY": "+451.8%（FY2025截至2025-09-30，86.6亿港元）",
+  "revH1": "-43.1%（截至2026-03-31六个月，19.66亿元）",
+  "src": "公司业绩公告（格隆汇/老虎证券）",
+  "growing": false
+ },
+ {
+  "company": "欧科云链",
+  "revFY": "-46.7%（FY2026截至2026-03-31，约1.92亿港元）",
+  "revH1": "未找到（最新中报尚未披露，最新可得为FY2026年报）",
+  "src": "格隆汇/证券之星",
+  "growing": false
+ },
+ {
+  "company": "UiPath",
+  "revFY": "+13%（FY2026截至2026-01-31，16.11亿美元）",
+  "revH1": "+13%（FY2027Q2营收4.10亿美元）",
+  "src": "UiPath官方财报新闻稿",
+  "growing": true
+ },
+ {
+  "company": "鹰瞳科技",
+  "revFY": "+10.8%",
+  "revH1": "-19.6%（2026H1收入6729.1万元）",
+  "src": "智通财经/公司2026中期业绩公告（观点网）",
+  "growing": false
+ },
+ {
+  "company": "金山办公",
+  "revFY": "+15.78%（59.29亿元）",
+  "revH1": "+24.69%",
+  "src": "证券时报/公司2026半年报",
+  "growing": true
+ },
+ {
+  "company": "泛微网络",
+  "revFY": "-3.17%",
+  "revH1": "+5.04%（2026H1营收8.49亿元）",
+  "src": "证券日报/公司2026半年报",
+  "growing": true
+ },
+ {
+  "company": "指南针",
+  "revFY": "+40.39%",
+  "revH1": "+33.82%（2026H1营收12.51亿元）",
+  "src": "上证报/公司2026半年报",
+  "growing": true
+ },
+ {
+  "company": "中望软件",
+  "revFY": "+0.60%（8.93亿元）",
+  "revH1": "+7.9%（2026H1营收3.6亿元）",
+  "src": "西部证券/湘财证券研报",
+  "growing": true
+ },
+ {
+  "company": "创业慧康",
+  "revFY": "-26.07%",
+  "revH1": "-21.15%（2026H1营收4.55亿元）",
+  "src": "界面新闻/证券日报",
+  "growing": false
+ },
+ {
+  "company": "中软国际",
+  "revFY": "+0.5%（170.27亿元）",
+  "revH1": "+5.20%（2026H1营收89.48亿元）",
+  "src": "公司2025年报及2026中期业绩公告（金吾财讯）",
+  "growing": true
+ },
+ {
+  "company": "软通动力",
+  "revFY": "+12.05%（350.90亿元）",
+  "revH1": "+17.91%（2026H1营收186.07亿元）",
+  "src": "证券日报",
+  "growing": true
+ },
+ {
+  "company": "京北方",
+  "revFY": "+4.38%（48.39亿元）",
+  "revH1": "-1.05%（2026H1营收23.36亿元）",
+  "src": "上证报/公司2026半年报（观点网）",
+  "growing": false
+ },
+ {
+  "company": "英矽智能",
+  "revFY": "-29.6%（5624万美元）",
+  "revH1": "+287%（2026H1收入1.06亿美元）",
+  "src": "金吾财讯/智通财经",
+  "growing": true
+ },
+ {
+  "company": "IBM / Confluent",
+  "revFY": "IBM +7.6%（FY2025营收675亿美元）；Confluent +21%（FY2025营收11.67亿美元）",
+  "revH1": "IBM Q2 2026营收171.6亿美元同比约+3.3%；Confluent 2026-03被IBM收购退市",
+  "src": "IBM 2025年报/2026Q2财报；Confluent Q4及FY2025财报",
+  "growing": true
+ },
+ {
+  "company": "Strategy",
+  "revFY": "+3.0%（FY2025营收4.77亿美元）",
+  "revH1": "+6.9%（2026Q2营收1.22亿美元）",
+  "src": "Odaily星球日报/stockanalysis",
+  "growing": true
+ },
+ {
+  "company": "Datadog",
+  "revFY": "+28%（FY2025，营收34.3亿美元）",
+  "revH1": "+36%（Q2 2026，营收11.2亿美元）",
+  "src": "Datadog财报",
+  "growing": true
+ },
+ {
+  "company": "Snowflake",
+  "revFY": "+28%（FY2026产品收入，截至2026年1月）",
+  "revH1": "+37%（Q2 FY2027产品收入，14.9亿美元）",
+  "src": "Snowflake财报/StockTitan",
+  "growing": true
+ },
+ {
+  "company": "MongoDB",
+  "revFY": "+23%（FY2026，营收24.6亿美元）",
+  "revH1": "+30%（Q2 FY2027，营收7.72亿美元）",
+  "src": "MongoDB财报/新浪财经",
+  "growing": true
+ },
+ {
+  "company": "Elastic",
+  "revFY": "+17%（FY2026，截至2026年4月，营收17.4亿美元）",
+  "revH1": "+18%（Q1 FY2027订阅收入）",
+  "src": "Elastic财报/Investing.com",
+  "growing": true
+ },
+ {
+  "company": "Twilio",
+  "revFY": "+14%（FY2025，营收50.7亿美元）",
+  "revH1": "+22%（Q2 2026，营收15.0亿美元）",
+  "src": "Twilio财报",
+  "growing": true
+ },
+ {
+  "company": "Okta",
+  "revFY": "+12%（FY2026，营收约29.2亿美元）",
+  "revH1": "+11%（Q2 FY2027，营收8.05亿美元）",
+  "src": "Okta财报/InnovestX",
+  "growing": true
+ },
+ {
+  "company": "CrowdStrike",
+  "revFY": "+22%（FY2026，营收48.1亿美元）",
+  "revH1": "+26%（Q2 FY2027，营收14.7亿美元）",
+  "src": "CrowdStrike财报/Benzinga",
+  "growing": true
+ },
+ {
+  "company": "Palo Alto",
+  "revFY": "+15%（FY2025，营收92.2亿美元）",
+  "revH1": "+34%（Q4 FY2026，营收34.1亿美元）",
+  "src": "证券之星（金吾财讯）",
+  "growing": true
+ },
+ {
+  "company": "Broadridge",
+  "revFY": "+6%（FY2025，营收68.9亿美元）",
+  "revH1": "+7%（Q4 FY2026，营收22.2亿美元）",
+  "src": "Broadridge财报/老虎证券",
+  "growing": true
+ },
+ {
+  "company": "CME",
+  "revFY": "+6%（2025年，营收65亿美元）",
+  "revH1": "+1%（Q2 2026，营收17亿美元）",
+  "src": "CME财报/Grafa",
+  "growing": true
+ },
+ {
+  "company": "Visa",
+  "revFY": "+11%（FY2025，营收400亿美元）",
+  "revH1": "+14%（Q3 FY2026，营收116亿美元）",
+  "src": "Visa财报/stockanalysis",
+  "growing": true
+ },
+ {
+  "company": "Mastercard",
+  "revFY": "+16%（2025年，净收入328亿美元）",
+  "revH1": "+14%（Q2 2026）",
+  "src": "Mastercard财报/lokmattimes",
+  "growing": true
+ },
+ {
+  "company": "AppLovin",
+  "revFY": "+70%（FY2025，营收54.8亿美元，软件平台口径）",
+  "revH1": "+53%（Q2 2026，营收19.2亿美元）",
+  "src": "stockanalysis/公司财报",
+  "growing": true
+ },
+ {
+  "company": "Palantir",
+  "revFY": "+56%（FY2025，营收44.75亿美元）",
+  "revH1": "+93%（Q2 2026）",
+  "src": "Palantir IR/公司财报",
+  "growing": true
+ },
+ {
+  "company": "Amazon",
+  "revFY": "+12%（FY2025，净销售额7169亿美元）",
+  "revH1": "+20%（Q2 2026净销售额）",
+  "src": "Amazon财报/老虎证券",
+  "growing": true
+ },
+ {
+  "company": "Meta",
+  "revFY": "+22%（FY2025，营收2009.7亿美元）",
+  "revH1": "+28%（Q2 2026，营收608亿美元）",
+  "src": "第一财经/Bitget",
+  "growing": true
+ },
+ {
+  "company": "Tempus AI",
+  "revFY": "+83%（FY2025，营收约12.7亿美元）",
+  "revH1": "+22%（Q2 2026，营收3.82亿美元）",
+  "src": "Tempus财报",
+  "growing": true
+ },
+ {
+  "company": "阿里巴巴",
+  "revFY": "+3%（FY2026，营收10236.7亿元）",
+  "revH1": "+9%（2026年6月季度，营收2689.53亿元）",
+  "src": "阿里财报/观点网",
+  "growing": true
+ },
+ {
+  "company": "智谱",
+  "revFY": "+131.9%（2025年，营收7.24亿元）",
+  "revH1": "未找到",
+  "src": "中国证券报·中证网",
+  "growing": true
+ },
+ {
+  "company": "美图公司",
+  "revFY": "+28.8%（2025年，营收39亿元）",
+  "revH1": "+22.1%（2026上半年，营收22.1亿元）",
+  "src": "鞭牛士/21经济网",
+  "growing": true
+ },
+ {
+  "company": "有赞",
+  "revFY": "+3%（2025年，营收14.9亿元）",
+  "revH1": "+7.8%（2026上半年，营收7.69亿元）",
+  "src": "壹览商业/老虎证券",
+  "growing": true
+ },
+ {
+  "company": "明源云",
+  "revFY": "-10.5%（2025年，营收12.84亿元）",
+  "revH1": "-13.3%（2026上半年，营收5.25亿元）",
+  "src": "证券之星/智通财经",
+  "growing": false
+ }
+]

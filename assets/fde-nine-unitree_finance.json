@@ -1,0 +1,23 @@
+{
+  "company": "宇树科技",
+  "ticker": "688836.SH",
+  "unit": "yi_cny",
+  "checked": "2026-09-15",
+  "revenue_basis": "营业总收入",
+  "profit_basis": "归母净利润（未调整）",
+  "source": "https://emweb.securities.eastmoney.com/PC_HSF10/NewFinanceAnalysis/Index?type=web&code=SH688836",
+  "annual": [
+    {"start": "2022-01-01", "end": "2022-12-31", "revenue": 122919512.07, "profit": -22100496.98},
+    {"start": "2023-01-01", "end": "2023-12-31", "revenue": 159134384.11, "profit": -11145126.25},
+    {"start": "2024-01-01", "end": "2024-12-31", "revenue": 392770657.05, "profit": 95474703.69},
+    {"start": "2025-01-01", "end": "2025-12-31", "revenue": 1699269304.88, "profit": 278210460.61}
+  ],
+  "latest": {
+    "start": "2026-01-01",
+    "end": "2026-06-30",
+    "kind": "半年累计",
+    "revenue": 1152000000,
+    "yoy_revenue_175": 0.48
+  },
+  "note": "年度与 H1 收入沿用 C 档 3.2 supp-27 对照的东方财富财务汇总。H1 归母本批未取得。科研平台采购不等于工厂替岗收入。"
+}
