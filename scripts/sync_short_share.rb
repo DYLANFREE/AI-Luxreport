@@ -13,6 +13,7 @@ SOURCE = WORKSPACE.join("与AI同行/09_AI泡沫全景/01_成果_暂定完成/�
 OUTPUT_NAME = "waiting-for-overreaction"
 OUTPUT = SITE.join(OUTPUT_NAME)
 STAGING = SITE.join(".#{OUTPUT_NAME}.staging")
+SERIES_TITLE = "AI 产业与投资研究"
 
 FILES = %w[index.html history-browser.js].freeze
 
@@ -27,6 +28,37 @@ end
 def clean_url_path(url)
   path = url.split(/[?#]/, 2).first.to_s
   URI.decode_www_form_component(path)
+end
+
+def decorate_series(html)
+  html = html.sub(/<title>(.*?)<\/title>/im) do
+    original = Regexp.last_match(1)
+    title = original.include?(SERIES_TITLE) ? original : "#{original}｜#{SERIES_TITLE}"
+    "<title>#{title}</title>"
+  end
+  html = html.sub(/<\/head>/i, "  <link rel=\"stylesheet\" href=\"../assets/research-series.css\">\n  <link rel=\"icon\" href=\"../assets/favicon.svg\" type=\"image/svg+xml\">\n</head>") unless html.include?("research-series.css")
+  header = <<~HTML
+    <header class="research-series-bar">
+      <a class="research-series-link" href="../index.html" aria-label="返回 AI 产业与投资研究首页">
+        <span class="research-series-mark" aria-hidden="true"></span>
+        <span class="research-series-name">#{SERIES_TITLE}</span>
+        <span class="research-series-home">研究首页 <span aria-hidden="true">→</span></span>
+      </a>
+    </header>
+  HTML
+  html.sub(/<body([^>]*)>/i) do
+    attributes = Regexp.last_match(1)
+    if attributes.match?(/\bclass=["']/i)
+      attributes = attributes.sub(/\bclass=(["'])(.*?)\1/i) do
+        quote = Regexp.last_match(1)
+        classes = Regexp.last_match(2)
+        %(class=#{quote}#{classes} research-series-page research-series-page--fixed-nav#{quote})
+      end
+    else
+      attributes = %(#{attributes} class="research-series-page research-series-page--fixed-nav")
+    end
+    "<body#{attributes}>\n#{header}"
+  end
 end
 
 def validate_local_refs!(html, root)
@@ -45,6 +77,16 @@ def validate_local_refs!(html, root)
     next if clean.empty?
 
     path = Pathname.new(clean)
+    allowed_parent_ref = {
+      "../index.html" => root.parent.join("index.html"),
+      "../assets/research-series.css" => root.parent.join("assets/research-series.css"),
+      "../assets/favicon.svg" => root.parent.join("assets/favicon.svg")
+    }[clean]
+    if allowed_parent_ref
+      missing << ref unless allowed_parent_ref.file?
+      next
+    end
+
     if path.absolute? || path.each_filename.any? { |part| part == ".." }
       escaped << ref
       next
@@ -86,7 +128,8 @@ FileUtils.mkdir_p(STAGING)
 FILES.each { |name| FileUtils.cp(SOURCE.join(name), STAGING.join(name)) }
 FileUtils.cp_r(SOURCE.join("assets"), STAGING.join("assets"))
 
-html = STAGING.join("index.html").read(encoding: "UTF-8")
+html = decorate_series(STAGING.join("index.html").read(encoding: "UTF-8"))
+STAGING.join("index.html").write(html, mode: "w", encoding: "UTF-8")
 script = STAGING.join("history-browser.js").read(encoding: "UTF-8")
 raise "Published files contain an absolute local path" if [html, script].any? { |content| content.include?("file:") || content.include?("/Users/") }
 
