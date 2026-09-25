@@ -10,6 +10,7 @@ SCRIPT_DIR = Pathname.new(__dir__).realpath
 SITE = SCRIPT_DIR.parent
 WORKSPACE = SITE.parent
 ASSETS = SITE.join("assets")
+SERIES_TITLE = "AI 产业与投资研究"
 
 REPORTS = [
   {
@@ -65,20 +66,43 @@ def resolve_source(clean, source_dir, fallback_dirs)
   nil
 end
 
-def inject_back_link(html)
-  back = <<~HTML
-    <a class="site-home-link" href="index.html" aria-label="返回首页">← 返回首页</a>
-    <style>
-      .site-home-link{position:fixed;z-index:9999;top:16px;left:16px;display:inline-flex;align-items:center;gap:6px;padding:9px 12px;border:1px solid rgba(32,36,30,.18);border-radius:999px;background:rgba(255,255,255,.88);backdrop-filter:blur(12px);color:#20241e;text-decoration:none;font:600 14px/1.2 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;box-shadow:0 10px 28px rgba(0,0,0,.08)}
-      .site-home-link:hover{background:#fff}
-      @media(max-width:640px){.site-home-link{top:10px;left:10px;padding:8px 10px;font-size:13px}}
-    </style>
+def series_header(current: false)
+  current_attribute = current ? ' aria-current="page"' : ""
+  action = current ? "系列首页" : "研究首页"
+  <<~HTML
+    <header class="research-series-bar">
+      <a class="research-series-link" href="index.html"#{current_attribute} aria-label="AI 产业与投资研究首页">
+        <span class="research-series-mark" aria-hidden="true"></span>
+        <span class="research-series-name">#{SERIES_TITLE}</span>
+        <span class="research-series-home">#{action} <span aria-hidden="true">→</span></span>
+      </a>
+    </header>
   HTML
+end
 
-  if html.match?(/<body[^>]*>/i)
-    html.sub(/<body[^>]*>/i) { |m| "#{m}\n#{back}" }
-  else
-    "#{back}\n#{html}"
+def decorate_report(html)
+  html = html.sub(/<title>(.*?)<\/title>/im) do
+    original = Regexp.last_match(1)
+    title = original.include?(SERIES_TITLE) ? original : "#{original}｜#{SERIES_TITLE}"
+    "<title>#{title}</title>"
+  end
+
+  unless html.include?('assets/research-series.css')
+    html = html.sub(/<\/head>/i, "  <link rel=\"stylesheet\" href=\"assets/research-series.css\">\n  <link rel=\"icon\" href=\"assets/favicon.svg\" type=\"image/svg+xml\">\n</head>")
+  end
+
+  html.sub(/<body([^>]*)>/i) do
+    attributes = Regexp.last_match(1)
+    if attributes.match?(/\bclass=["']/i)
+      attributes = attributes.sub(/\bclass=(["'])(.*?)\1/i) do
+        quote = Regexp.last_match(1)
+        classes = Regexp.last_match(2)
+        %(class=#{quote}#{classes} research-series-page#{quote})
+      end
+    else
+      attributes = %(#{attributes} class="research-series-page")
+    end
+    "<body#{attributes}>\n#{series_header}"
   end
 end
 
@@ -163,39 +187,53 @@ def home_page
     HTML
   end.join("\n")
 
+  cards << <<~HTML
+    <a class="choice-card fde" href="fde-search.html">
+      <span class="kicker">FDE / Direction First</span>
+      <h2>探寻之旅</h2>
+      <p>先走一遍怎么找到下一个海力士，再看方向优先选出的九家。</p>
+      <span class="enter">进入研究 →</span>
+    </a>
+  HTML
+
   <<~HTML
     <!DOCTYPE html>
     <html lang="zh-CN">
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>AI非理性繁荣深度研究</title>
+      <title>#{SERIES_TITLE}</title>
       <style>
-        :root{color-scheme:light;--ink:#171a16;--muted:#60675e;--line:#d9ddd3;--paper:#f6f3ec;--paper2:#ece8de;--green:#244f38;--blue:#243f63;--gold:#a76627}
+        :root{color-scheme:light;--ink:#171a16;--muted:#60675e;--line:#d9ddd3;--paper:#f6f3ec;--paper2:#ece8de;--green:#244f38;--blue:#243f63;--gold:#a76627;--rust:#7a4a1f}
         *{box-sizing:border-box}
         body{margin:0;min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC",sans-serif;color:var(--ink);background:radial-gradient(circle at 25% 15%,rgba(167,102,39,.14),transparent 34%),linear-gradient(135deg,var(--paper),var(--paper2));}
         main{min-height:100vh;display:flex;flex-direction:column;justify-content:center;width:min(1180px,calc(100% - 40px));margin:0 auto;padding:56px 0}
         .eyebrow{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:800}
         h1{margin:14px 0 10px;font-size:clamp(38px,6vw,76px);line-height:1.02;letter-spacing:0;font-weight:900}
         .lead{max-width:760px;margin:0 0 34px;color:var(--muted);font-size:18px;line-height:1.8}
-        .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+        .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
         .choice-card{min-height:340px;display:flex;flex-direction:column;justify-content:flex-end;padding:30px;border:1px solid rgba(23,26,22,.14);border-radius:8px;text-decoration:none;color:inherit;background:rgba(255,255,255,.52);box-shadow:0 24px 70px rgba(30,35,26,.10);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
         .choice-card:hover{transform:translateY(-3px);box-shadow:0 30px 90px rgba(30,35,26,.16);border-color:rgba(23,26,22,.28)}
         .choice-card.ai{background:linear-gradient(145deg,rgba(255,255,255,.72),rgba(226,237,231,.74))}
         .choice-card.china{background:linear-gradient(145deg,rgba(255,255,255,.72),rgba(237,229,216,.78))}
+        .choice-card.fde{background:linear-gradient(145deg,rgba(255,255,255,.72),rgba(244,234,214,.82))}
         .kicker{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:850;color:var(--gold)}
         h2{margin:10px 0 12px;font-size:clamp(27px,3vw,42px);line-height:1.15;letter-spacing:0}
         p{margin:0;color:var(--muted);font-size:16px;line-height:1.75}
         .enter{margin-top:28px;font-weight:850;color:var(--green)}
         .china .enter{color:var(--blue)}
+        .fde .enter{color:var(--rust)}
         @media(max-width:760px){main{justify-content:flex-start;padding:36px 0}.grid{grid-template-columns:1fr}.choice-card{min-height:260px;padding:24px}.lead{font-size:16px}}
       </style>
+      <link rel="stylesheet" href="assets/research-series.css">
+      <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
     </head>
-    <body>
+    <body class="research-series-page">
+      #{series_header(current: true)}
       <main>
         <div class="eyebrow">Research Map</div>
-        <h1>AI非理性繁荣深度研究</h1>
-        <p class="lead">两条推导链并行阅读：一条从供需结构判断繁荣的基本盘，一条从中国变量观察产业链和护城河的重估。</p>
+        <h1>#{SERIES_TITLE}</h1>
+        <p class="lead">三条研究线并行阅读：供需结构、中国变量，以及从探寻之旅走到方向优先九家。</p>
         <section class="grid" aria-label="研究入口">
           #{cards}
         </section>
@@ -210,7 +248,7 @@ results = []
 REPORTS.each do |report|
   source_html = File.read(report[:source], encoding: "UTF-8")
   site_html, copied = rewrite_local_refs(source_html, report)
-  site_html = inject_back_link(site_html)
+  site_html = decorate_report(site_html)
   SITE.join(report[:output]).write(site_html, mode: "w", encoding: "UTF-8")
   validation = validate!(site_html, report[:output])
   results << {
