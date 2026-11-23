@@ -196,6 +196,19 @@ def home_page
     </a>
   HTML
 
+  lead = "三条研究线并行阅读：供需结构、中国变量，以及从探寻之旅走到方向优先九家。"
+  if SITE.join("ji-ji-ji/index.html").file?
+    cards << <<~HTML
+      <a class="choice-card trilogy" href="ji-ji-ji/">
+        <span class="kicker">系列报告</span>
+        <h2>急·极·祭</h2>
+        <p>阅读《何其急》和《何其巨》。《祭》有待更新。</p>
+        <span class="enter">进入合集 →</span>
+      </a>
+    HTML
+    lead = "在这里读供需结构、中国变量、探寻之旅和《急·极·祭》。"
+  end
+
   <<~HTML
     <!DOCTYPE html>
     <html lang="zh-CN">
@@ -217,6 +230,9 @@ def home_page
         .choice-card.ai{background:linear-gradient(145deg,rgba(255,255,255,.72),rgba(226,237,231,.74))}
         .choice-card.china{background:linear-gradient(145deg,rgba(255,255,255,.72),rgba(237,229,216,.78))}
         .choice-card.fde{background:linear-gradient(145deg,rgba(255,255,255,.72),rgba(244,234,214,.82))}
+        .choice-card.trilogy{background:linear-gradient(145deg,#fffdf8,#e3ece1)}
+        .trilogy h2{color:var(--green)}
+        @media(min-width:761px) and (max-width:1213px){.grid:has(.trilogy){grid-template-columns:repeat(2,minmax(0,1fr))}}
         .kicker{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:850;color:var(--gold)}
         h2{margin:10px 0 12px;font-size:clamp(27px,3vw,42px);line-height:1.15;letter-spacing:0}
         p{margin:0;color:var(--muted);font-size:16px;line-height:1.75}
@@ -233,7 +249,7 @@ def home_page
       <main>
         <div class="eyebrow">Research Map</div>
         <h1>#{SERIES_TITLE}</h1>
-        <p class="lead">三条研究线并行阅读：供需结构、中国变量，以及从探寻之旅走到方向优先九家。</p>
+        <p class="lead">#{lead}</p>
         <section class="grid" aria-label="研究入口">
           #{cards}
         </section>
